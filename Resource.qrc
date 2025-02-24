@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/myres">
+        <file>res/style_light.qss</file>
+        <file>res/style-light.qss</file>
+    </qresource>
+</RCC>

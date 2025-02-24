@@ -1,0 +1,186 @@
+/* Global Styles */
+* {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    font-size: 14px;
+    outline: none;
+}
+
+QMainWindow {
+    background-color: #f8f9fa;
+}
+
+/* Menu Bar - Right Aligned */
+QMenuBar {
+    background-color: #2C3E50;
+    color: white;
+    padding: 2px;
+}
+
+QMenuBar::item {
+    background-color: transparent;
+    padding: 5px 10px;
+    color: white;
+    border-radius: 4px;
+}
+
+QMenuBar::item:selected {
+    background-color: #34495E;
+}
+
+QMenu {
+    background-color: #2C3E50;
+    border: 1px solid #34495E;
+    padding: 5px;
+}
+
+QMenu::item {
+    color: white;
+    padding: 5px 30px 5px 20px;
+    border-radius: 3px;
+}
+
+QMenu::item:selected {
+    background-color: #34495E;
+}
+
+/* Move File Menu to Right */
+QMenuBar::item:last {
+    position: absolute;
+    right: 0;
+}
+
+/* Sidebar Styles */
+#sideBar {
+    background-color: #2C3E50;
+    min-width: 250px;
+    max-width: 250px;
+    padding: 0;
+    border-right: 1px solid #34495E;
+}
+
+#sideBar QPushButton {
+    text-align: left;
+    padding: 15px 20px;
+    border: none;
+    border-radius: 0;
+    color: #ffffff;
+    background-color: transparent;
+    font-size: 14px;
+    margin: 2px 0;
+}
+
+#sideBar QPushButton:hover {
+    background-color: #34495E;
+}
+
+#sideBar QPushButton:checked {
+    background-color: #34495E;
+    border-left: 4px solid #3498DB;
+}
+
+/* Main Content Area */
+#stackedWidget {
+    background-color: #ffffff;
+}
+
+/* Labels */
+.page-title {
+    font-size: 24px;
+    color: #2C3E50;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+.stats-label {
+    font-size: 16px;
+    color: #2C3E50;
+    margin: 10px 0;
+    font-weight: 500;
+}
+
+/* Table Styles */
+.data-table {
+    background-color: white;
+    border: 1px solid #c0c7ce;  /* Darker border */
+    border-radius: 8px;
+    gridline-color: #c0c7ce;    /* Darker gridlines */
+}
+
+.data-table QHeaderView::section {
+    background-color: #f8f9fa;
+    padding: 12px;
+    border: none;
+    border-bottom: 2px solid #a0aab4;  /* Darker header border */
+    font-weight: bold;
+    color: #2C3E50;
+    text-align: left;
+}
+
+.data-table::item {
+    padding: 12px;
+    border-bottom: 1px solid #c0c7ce;  /* Darker row borders */
+}
+
+.data-table::item:selected {
+    background-color: #e7f5ff;
+    color: #2C3E50;
+}
+
+.data-table QHeaderView::section:horizontal {
+    padding-left: 12px;
+}
+
+/* Making vertical grid lines darker */
+.data-table::item:horizontal {
+    border-right: 1px solid #c0c7ce;
+}
+
+/* Scrollbars */
+QScrollBar:vertical {
+    border: none;
+    background-color: #f8f9fa;
+    width: 10px;
+    margin: 0;
+}
+
+QScrollBar::handle:vertical {
+    background-color: #cbd3da;
+    border-radius: 5px;
+    min-height: 20px;
+}
+
+QScrollBar::handle:vertical:hover {
+    background-color: #a8b2bc;
+}
+
+QScrollBar::add-line:vertical,
+QScrollBar::sub-line:vertical {
+    height: 0;
+}
+
+QScrollBar:horizontal {
+    border: none;
+    background-color: #f8f9fa;
+    height: 10px;
+    margin: 0;
+}
+
+QScrollBar::handle:horizontal {
+    background-color: #cbd3da;
+    border-radius: 5px;
+    min-width: 20px;
+}
+
+QScrollBar::handle:horizontal:hover {
+    background-color: #a8b2bc;
+}
+
+QScrollBar::add-line:horizontal,
+QScrollBar::sub-line:horizontal {
+    width: 0;
+}
+
+/* Table Alternating Row Colors */
+.data-table::item:alternate {
+    background-color: #f8f9fa;
+}
