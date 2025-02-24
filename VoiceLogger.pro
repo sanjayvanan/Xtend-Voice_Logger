@@ -11,20 +11,24 @@ CONFIG += c++17
 SOURCES += \
     apihandler.cpp \
     audioplayerdialog.cpp \
+    dashboard.cpp \
     login.cpp \
     main.cpp \
     mainwindow.cpp \
-    timetimecalls.cpp
+    timetimecalls.cpp \
 
 HEADERS += \
     apihandler.h \
     audioplayerdialog.h \
+    dashboard.h \
     login.h \
     mainwindow.h \
-    timetimecalls.h
+    timetimecalls.h \
+    mainwindow.h
 
 FORMS += \
     audioplayerdialog.ui \
+    dashboard.ui \
     login.ui \
     mainwindow.ui \
     timetimecalls.ui

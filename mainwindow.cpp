@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "dashboard.h"
 #include <QMessageBox>
 #include <QNetworkReply>
 #include <QNetworkRequest>
@@ -26,9 +27,41 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     setWindowTitle("Zosh Voice Logger");
 
-    // Initialize TimeTimeCalls widget
+    // Initialize widgets
+    dashboard = new Dashboard(this);
     timeTimeCalls = new TimeTimeCalls(this);
-    ui->stackedWidget->addWidget(timeTimeCalls);  // Add the widget to stacked widget
+
+    // Remove existing widgets from stacked widget
+    while (ui->stackedWidget->count() > 0) {
+        ui->stackedWidget->removeWidget(ui->stackedWidget->widget(0));
+    }
+
+    // Add widgets to stacked widget in the correct order
+    ui->stackedWidget->addWidget(dashboard);         // Index 0: Dashboard (from dashboard.ui)
+    ui->stackedWidget->addWidget(ui->pageCallLogs);  // Index 1: Call Logs
+    ui->stackedWidget->addWidget(ui->pageLiveCalls); // Index 2: Live Calls
+    ui->stackedWidget->addWidget(timeTimeCalls);     // Index 3: Time to Time Calls
+
+    // Connect button clicks to switch pages
+    connect(ui->btnDashboard, &QPushButton::clicked, [this]() {
+        ui->stackedWidget->setCurrentIndex(0);
+        dashboard->setSessionToken(sessionToken);  // Update dashboard when shown
+    });
+
+    connect(ui->btnCallLogs, &QPushButton::clicked, [this]() {
+        ui->stackedWidget->setCurrentIndex(1);
+    });
+
+    connect(ui->btnLiveCalls, &QPushButton::clicked, [this]() {
+        ui->stackedWidget->setCurrentIndex(2);
+        refreshLiveCalls(); // Fetch immediately
+        liveCallsTimer->start(); // Start periodic updates
+    });
+
+    connect(ui->btnTimeTime, &QPushButton::clicked, [this]() {
+        ui->stackedWidget->setCurrentIndex(3);
+        timeTimeCalls->setSessionToken(sessionToken);  // Pass the session token
+    });
 
     // Connect API handler signals
     connect(apiHandler, &APIHandler::logoutSuccessful,
@@ -46,31 +79,12 @@ MainWindow::MainWindow(QWidget *parent)
     connect(apiHandler, &APIHandler::waveFileReceived,
             this, &MainWindow::handleWaveFile);
 
-    // Connect button clicks to switch pages
-    connect(ui->btnDashboard, &QPushButton::clicked, [this]() {
-        ui->stackedWidget->setCurrentIndex(0);
-    });
-    
-    connect(ui->btnCallLogs, &QPushButton::clicked, [this]() {
-        ui->stackedWidget->setCurrentIndex(1);
-    });
-    
-    connect(ui->btnLiveCalls, &QPushButton::clicked, [this]() {
-        ui->stackedWidget->setCurrentIndex(2);
-        refreshLiveCalls(); // Fetch immediately
-        liveCallsTimer->start(); // Start periodic updates
-    });
-
-    connect(ui->btnTimeTime, &QPushButton::clicked, [this]() {
-        ui->stackedWidget->setCurrentIndex(3);  // Assuming TimeTimeCalls is the 4th widget
-        timeTimeCalls->setSessionToken(sessionToken);  // Pass the session token
-    });
-
     // Set up timer for live calls refresh
     liveCallsTimer->setInterval(5000); // Refresh every 5 seconds
     connect(liveCallsTimer, &QTimer::timeout,
             this, &MainWindow::refreshLiveCalls);
 
+    // Set default view
     ui->stackedWidget->setCurrentIndex(0);
 }
 
@@ -195,7 +209,7 @@ void MainWindow::updateLiveCallsTable(const QJsonObject &details)
     // Update status label
     QString status = details["status"].toString();
     QString message = details["message"].toString();
-    
+
     if (status == "0") {
         ui->labelLiveCallsStatus->setText("No active calls");
         return;
@@ -228,7 +242,7 @@ void MainWindow::updateLiveCallsTable(const QJsonObject &details)
         if (call["Reason"].toString() == "Connected") {
             QPushButton *listenButton = new QPushButton("Listen Live");
             listenButton->setProperty("callRefId", call["CallRef-ID"].toString());
-            
+
             connect(listenButton, &QPushButton::clicked, this, [this, call]() {
                 QString callRefId = call["CallRef-ID"].toString();
                 apiHandler->streamWaveFile(sessionToken, callRefId);
@@ -255,7 +269,7 @@ void MainWindow::handleWaveFile(const QByteArray &waveData)
     }
     tempWaveFile = new QTemporaryFile(this);
     tempWaveFile->setFileTemplate(QDir::tempPath() + "/voicelogger_live_XXXXXX.wav");
-    
+
     if (!tempWaveFile->open()) {
         QMessageBox::warning(this, "Error", "Could not create temporary file for playback");
         return;

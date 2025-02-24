@@ -8,6 +8,7 @@
 #include <QMediaPlayer>
 #include <QAudioOutput>
 #include <QTemporaryFile>
+#include "dashboard.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -49,6 +50,7 @@ private:
     QMediaPlayer *mediaPlayer = nullptr;
     QAudioOutput *audioOutput = nullptr;
     QTemporaryFile *tempWaveFile = nullptr;
+    Dashboard *dashboard;
     void fetchCallDetails();
     void updateCallDetailsTable(const QJsonObject &details);
 };
