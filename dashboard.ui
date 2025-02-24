@@ -33,7 +33,7 @@
    <item>
     <layout class="QGridLayout" name="gridLayout">
      <item row="0" column="0">
-      <widget class="QFrame" name="frameStats">
+      <widget class="QFrame" name="frameToday">
        <property name="frameShape">
         <enum>QFrame::StyledPanel</enum>
        </property>
@@ -42,38 +42,96 @@
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
-         <widget class="QLabel" name="labelTotalCalls">
+         <widget class="QLabel" name="labelTodayHeader">
           <property name="font">
            <font>
-            <pointsize>12</pointsize>
+            <pointsize>14</pointsize>
+            <bold>true</bold>
            </font>
           </property>
+          <property name="text">
+           <string>Today's Statistics</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="labelTodayTotal">
           <property name="text">
            <string>Total Calls: 0</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QLabel" name="labelConnectedCalls">
+         <widget class="QLabel" name="labelTodayConnected">
+          <property name="text">
+           <string>Connected: 0</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="labelTodayMissed">
+          <property name="text">
+           <string>Missed: 0</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="labelTodayIncoming">
+          <property name="text">
+           <string>Incoming: 0</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="labelTodayOutgoing">
+          <property name="text">
+           <string>Outgoing: 0</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QFrame" name="frameLive">
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Raised</enum>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_3">
+        <item>
+         <widget class="QLabel" name="labelLiveHeader">
           <property name="font">
            <font>
-            <pointsize>12</pointsize>
+            <pointsize>14</pointsize>
+            <bold>true</bold>
            </font>
           </property>
           <property name="text">
-           <string>Connected Calls: 0</string>
+           <string>Live Status</string>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QLabel" name="labelActiveCalls">
-          <property name="font">
-           <font>
-            <pointsize>12</pointsize>
-           </font>
-          </property>
           <property name="text">
            <string>Active Calls: 0</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="labelActiveIncoming">
+          <property name="text">
+           <string>Active Incoming: 0</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="labelActiveOutgoing">
+          <property name="text">
+           <string>Active Outgoing: 0</string>
           </property>
          </widget>
         </item>

@@ -27,6 +27,7 @@ private:
     Ui::Dashboard *ui;
     APIHandler *apiHandler;
     QString sessionToken;
+    void updateDashboard();
     void updateStatistics(const QJsonObject &callDetails, const QJsonObject &liveDetails);
 };
 

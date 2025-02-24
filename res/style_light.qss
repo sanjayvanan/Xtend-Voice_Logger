@@ -184,3 +184,65 @@ QScrollBar::sub-line:horizontal {
 .data-table::item:alternate {
     background-color: #f8f9fa;
 }
+/*------------------------------------------------------------------------------------------------------------------------*/
+/* Dashboard Styles */
+#Dashboard {
+    background-color: #ffffff; /* Background color for the dashboard */
+    border: 1px solid #c0c7ce; /* Border around the dashboard */
+    border-radius: 8px; /* Rounded corners */
+    padding: 10px; /* Padding inside the dashboard */
+}
+
+#Dashboard QLabel {
+    color: #2C3E50; /* Text color for labels in the dashboard */
+    font-weight: bold; /* Bold text for labels */
+}
+
+#Dashboard QLabel#labelTodayHeader {
+    font-size: 18px; /* Larger font size for the header */
+    margin-bottom: 10px; /* Space below the header */
+}
+
+#Dashboard QFrame {
+    background-color: #f1f1f1; /* Background color for frames */
+    border: 1px solid #d0d0d0; /* Border for frames */
+    border-radius: 4px; /* Rounded corners for frames */
+    padding: 10px; /* Padding inside frames */
+}
+
+#Dashboard QVBoxLayout {
+    spacing: 10px; /* Space between items in vertical layout */
+}
+
+#Dashboard QGridLayout {
+    spacing: 10px; /* Space between items in grid layout */
+}
+
+/* Specific styles for today's statistics */
+#Dashboard #frameToday QLabel {
+    color: #2980B9; /* Color for today's statistics labels */
+}
+
+/* Specific styles for live status */
+#Dashboard #frameLive QLabel {
+    color: #27ae60; /* Color for live status labels */
+}
+
+/* Button styles (if any buttons are added in the future) */
+#Dashboard QPushButton {
+    background-color: #3498DB; /* Button background color */
+    color: white; /* Button text color */
+    border: none; /* No border */
+    border-radius: 4px; /* Rounded corners */
+    padding: 8px; /* Padding inside buttons */
+}
+
+#Dashboard QPushButton:hover {
+    background-color: #2980B9; /* Darker blue on hover */
+}
+
+#Dashboard QPushButton:pressed {
+    background-color: #1F639B; /* Even darker blue when pressed */
+}
+
+/* Additional styles can be added as needed */

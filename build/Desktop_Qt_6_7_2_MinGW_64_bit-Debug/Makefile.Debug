@@ -2406,10 +2406,26 @@ debug/dashboard.o: ../../dashboard.cpp ../../dashboard.h \
 		C:/QT/6.7.2/mingw_64/include/QtCore/QJsonObject \
 		C:/QT/6.7.2/mingw_64/include/QtCore/qjsonobject.h \
 		ui_dashboard.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/QApplication \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qapplication.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/QFrame \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qframe.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/QGridLayout \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qgridlayout.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qlayout.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qlayoutitem.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qboxlayout.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/QLabel \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qlabel.h \
+		C:/QT/6.7.2/mingw_64/include/QtGui/qpicture.h \
+		C:/QT/6.7.2/mingw_64/include/QtGui/qtextdocument.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/QVBoxLayout \
 		C:/QT/6.7.2/mingw_64/include/QtWidgets/QMessageBox \
 		C:/QT/6.7.2/mingw_64/include/QtWidgets/qmessagebox.h \
 		C:/QT/6.7.2/mingw_64/include/QtWidgets/qdialog.h \
-		C:/QT/6.7.2/mingw_64/include/QtWidgets/qdialogbuttonbox.h
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qdialogbuttonbox.h \
+		C:/QT/6.7.2/mingw_64/include/QtCore/QJsonArray \
+		C:/QT/6.7.2/mingw_64/include/QtCore/qjsonarray.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\dashboard.o ..\..\dashboard.cpp
 
 debug/login.o: ../../login.cpp ../../login.h \
@@ -3191,15 +3207,16 @@ debug/mainwindow.o: ../../mainwindow.cpp ../../mainwindow.h \
 		C:/QT/6.7.2/mingw_64/include/QtCore/qbasictimer.h \
 		../../dashboard.h \
 		ui_mainwindow.h \
-		C:/QT/6.7.2/mingw_64/include/QtWidgets/QMessageBox \
-		C:/QT/6.7.2/mingw_64/include/QtWidgets/qmessagebox.h \
-		C:/QT/6.7.2/mingw_64/include/QtWidgets/qdialog.h \
-		C:/QT/6.7.2/mingw_64/include/QtWidgets/qdialogbuttonbox.h \
-		C:/QT/6.7.2/mingw_64/include/QtCore/QJsonArray \
-		C:/QT/6.7.2/mingw_64/include/QtCore/qjsonarray.h \
-		C:/QT/6.7.2/mingw_64/include/QtWidgets/QTableWidgetItem \
-		C:/QT/6.7.2/mingw_64/include/QtWidgets/qtablewidget.h \
-		C:/QT/6.7.2/mingw_64/include/QtWidgets/qtableview.h \
+		C:/QT/6.7.2/mingw_64/include/QtGui/QAction \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/QApplication \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qapplication.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/QHBoxLayout \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qboxlayout.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qlayout.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qlayoutitem.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qgridlayout.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/QHeaderView \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qheaderview.h \
 		C:/QT/6.7.2/mingw_64/include/QtWidgets/qabstractitemview.h \
 		C:/QT/6.7.2/mingw_64/include/QtWidgets/qabstractscrollarea.h \
 		C:/QT/6.7.2/mingw_64/include/QtWidgets/qframe.h \
@@ -3214,9 +3231,33 @@ debug/mainwindow.o: ../../mainwindow.cpp ../../mainwindow.h \
 		C:/QT/6.7.2/mingw_64/include/QtWidgets/qstyle.h \
 		C:/QT/6.7.2/mingw_64/include/QtWidgets/qtabbar.h \
 		C:/QT/6.7.2/mingw_64/include/QtWidgets/qrubberband.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/QLabel \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qlabel.h \
+		C:/QT/6.7.2/mingw_64/include/QtGui/qpicture.h \
+		C:/QT/6.7.2/mingw_64/include/QtGui/qtextdocument.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/QMenu \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qmenu.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/QMenuBar \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qmenubar.h \
 		C:/QT/6.7.2/mingw_64/include/QtWidgets/QPushButton \
 		C:/QT/6.7.2/mingw_64/include/QtWidgets/qpushbutton.h \
-		C:/QT/6.7.2/mingw_64/include/QtWidgets/qabstractbutton.h
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qabstractbutton.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/QSpacerItem \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/QStackedWidget \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qstackedwidget.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/QStatusBar \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qstatusbar.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/QTableWidget \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qtablewidget.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qtableview.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/QVBoxLayout \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/QMessageBox \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qmessagebox.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qdialog.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qdialogbuttonbox.h \
+		C:/QT/6.7.2/mingw_64/include/QtCore/QJsonArray \
+		C:/QT/6.7.2/mingw_64/include/QtCore/qjsonarray.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/QTableWidgetItem
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\mainwindow.o ..\..\mainwindow.cpp
 
 debug/timetimecalls.o: ../../timetimecalls.cpp ../../timetimecalls.h \
