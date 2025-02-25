@@ -37,7 +37,6 @@ public:
     QWidget *sideBar;
     QVBoxLayout *verticalLayout_2;
     QPushButton *btnDashboard;
-    QPushButton *btnCallLogs;
     QPushButton *btnLiveCalls;
     QPushButton *btnTimeTime;
     QSpacerItem *verticalSpacer;
@@ -94,24 +93,6 @@ public:
 "}"));
 
         verticalLayout_2->addWidget(btnDashboard);
-
-        btnCallLogs = new QPushButton(sideBar);
-        btnCallLogs->setObjectName("btnCallLogs");
-        btnCallLogs->setMinimumSize(QSize(0, 40));
-        btnCallLogs->setStyleSheet(QString::fromUtf8("QPushButton {\n"
-"    color: white;\n"
-"    border: none;\n"
-"    text-align: left;\n"
-"    padding-left: 15px;\n"
-"}\n"
-"QPushButton:hover {\n"
-"    background-color: #34495E;\n"
-"}\n"
-"QPushButton:pressed {\n"
-"    background-color: #2980B9;\n"
-"}"));
-
-        verticalLayout_2->addWidget(btnCallLogs);
 
         btnLiveCalls = new QPushButton(sideBar);
         btnLiveCalls->setObjectName("btnLiveCalls");
@@ -263,7 +244,6 @@ public:
         actionLogout->setShortcut(QCoreApplication::translate("MainWindow", "Ctrl+L", nullptr));
 #endif // QT_CONFIG(shortcut)
         btnDashboard->setText(QCoreApplication::translate("MainWindow", "Dashboard", nullptr));
-        btnCallLogs->setText(QCoreApplication::translate("MainWindow", "Call Logs", nullptr));
         btnLiveCalls->setText(QCoreApplication::translate("MainWindow", "Live Calls", nullptr));
         btnTimeTime->setText(QCoreApplication::translate("MainWindow", "Time to Time", nullptr));
         label->setText(QCoreApplication::translate("MainWindow", "Dashboard Page", nullptr));

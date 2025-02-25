@@ -48,10 +48,6 @@ MainWindow::MainWindow(QWidget *parent)
         dashboard->setSessionToken(sessionToken);  // Update dashboard when shown
     });
 
-    connect(ui->btnCallLogs, &QPushButton::clicked, [this]() {
-        ui->stackedWidget->setCurrentIndex(1);
-    });
-
     connect(ui->btnLiveCalls, &QPushButton::clicked, [this]() {
         ui->stackedWidget->setCurrentIndex(2);
         refreshLiveCalls(); // Fetch immediately
@@ -170,7 +166,7 @@ void MainWindow::on_btnDashboard_clicked()
 
 void MainWindow::on_btnCallLogs_clicked()
 {
-    // This function is now handled by the connection in the constructor
+    // This function is now removed
 }
 
 void MainWindow::on_btnLiveCalls_clicked()
