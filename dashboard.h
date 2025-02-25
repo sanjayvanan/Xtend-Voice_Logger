@@ -22,13 +22,20 @@ private slots:
     void handleCallDetailsFailed(const QString &message);
     void handleLiveCalls(const QJsonObject &details);
     void handleLiveCallsFailed(const QString &message);
+    void updateDashboard();
+    void updateStatistics(const QJsonObject &callDetails, const QJsonObject &liveDetails);
 
 private:
     Ui::Dashboard *ui;
     APIHandler *apiHandler;
     QString sessionToken;
-    void updateDashboard();
-    void updateStatistics(const QJsonObject &callDetails, const QJsonObject &liveDetails);
+
+    // Declare the variables to track call statistics
+    int totalCalls = 0;
+    int connectedCalls = 0;
+    int missedCalls = 0;
+    int incomingCalls = 0;
+    int outgoingCalls = 0;
 };
 
 #endif // DASHBOARD_H

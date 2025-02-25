@@ -22,6 +22,9 @@ public:
     ~TimeTimeCalls();
     void setSessionToken(const QString &token);
 
+protected:
+    void showEvent(QShowEvent *event) override;
+
 private slots:
     void on_searchButton_clicked();
     void handleCallDetails(const QJsonObject &details);
@@ -32,6 +35,7 @@ private slots:
     void handleWaveFileFailed(const QString &message);
 
 private:
+    void performSearch();
     Ui::TimeTimeCalls *ui;
     APIHandler *apiHandler;
     QString sessionToken;

@@ -60,7 +60,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(ui->btnTimeTime, &QPushButton::clicked, [this]() {
         ui->stackedWidget->setCurrentIndex(3);
-        timeTimeCalls->setSessionToken(sessionToken);  // Pass the session token
+        timeTimeCalls->setSessionToken(sessionToken);
     });
 
     // Connect API handler signals
@@ -96,8 +96,12 @@ MainWindow::~MainWindow()
 void MainWindow::setSessionToken(const QString &token)
 {
     sessionToken = token;
-    // Fetch call details when session token is set
-    fetchCallDetails();
+    
+    // Initialize dashboard
+    dashboard->setSessionToken(token);
+    
+    // Initialize time time calls
+    timeTimeCalls->setSessionToken(token);
 }
 
 void MainWindow::on_actionLogout_triggered()
@@ -118,13 +122,6 @@ void MainWindow::handleLogoutFailure(const QString &message)
     QMessageBox::warning(this, "Logout", "Logout failed: " + message);
 }
 
-void MainWindow::fetchCallDetails()
-{
-    if (!sessionToken.isEmpty()) {
-        // For testing, you can use a sample call reference ID
-        apiHandler->fetchCallDetails(sessionToken, "20200804135945-AN_20784_1_1-DD33C518-66D4-413E-B03B-246C0415D20A");
-    }
-}
 
 void MainWindow::handleCallDetails(const QJsonObject &details)
 {
@@ -283,4 +280,5 @@ void MainWindow::handleWaveFile(const QByteArray &waveData)
     mediaPlayer->setSource(QUrl::fromLocalFile(tempWaveFile->fileName()));
     mediaPlayer->play();
 }
+
 

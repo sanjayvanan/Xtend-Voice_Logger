@@ -9,7 +9,12 @@
 Dashboard::Dashboard(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Dashboard),
-    apiHandler(new APIHandler(this))
+    apiHandler(new APIHandler(this)),
+    totalCalls(0),          // Initialize totalCalls
+    connectedCalls(0),      // Initialize connectedCalls
+    missedCalls(0),         // Initialize missedCalls
+    incomingCalls(0),       // Initialize incomingCalls
+    outgoingCalls(0)        // Initialize outgoingCalls
 {
     ui->setupUi(this);
 
@@ -33,47 +38,41 @@ void Dashboard::setSessionToken(const QString &token)
 {
     sessionToken = token;
     if (!sessionToken.isEmpty()) {
-        // Start periodic updates
+        // Trigger immediate update
         updateDashboard();
-        // Set up timer for periodic updates
+        
+        // Set up timer for periodic updates (every 5 seconds)
         QTimer *updateTimer = new QTimer(this);
         connect(updateTimer, &QTimer::timeout, this, &Dashboard::updateDashboard);
-        updateTimer->start(5000); // Update every 5 seconds
+        updateTimer->start(5000);
     }
 }
 
 void Dashboard::updateDashboard()
 {
-    // Get today's date range
-    QDateTime startOfDay = QDateTime::currentDateTime();
-    startOfDay.setTime(QTime(0, 0, 0));
-    QDateTime endOfDay = startOfDay.addDays(1).addSecs(-1);
-
-    // Fetch today's call details
-    apiHandler->fetchCallList(
-        sessionToken,
-        startOfDay,
-        endOfDay,
-        "", // callerNo
-        "", // callType
-        0,  // pageNumber
-        1000 // pageSize
-    );
-
-    // Fetch live calls
-    apiHandler->fetchLiveCalls(sessionToken);
+    if (!sessionToken.isEmpty()) {
+        // Get current date/time
+        QDateTime now = QDateTime::currentDateTime();
+        QDateTime startOfDay = QDateTime(now.date(), QTime(0, 0, 0));
+        
+        // Fetch today's call details
+        apiHandler->fetchCallList(sessionToken, startOfDay, now);
+        
+        // Fetch live calls
+        apiHandler->fetchLiveCalls(sessionToken);
+    }
 }
 
 void Dashboard::handleCallDetails(const QJsonObject &details)
 {
     QJsonArray callList = details["List"].toArray();
     
-    // Initialize counters
-    int totalCalls = callList.size();
-    int connectedCalls = 0;
-    int missedCalls = 0;
-    int incomingCalls = 0;
-    int outgoingCalls = 0;
+    // Reset counters
+    totalCalls = callList.size(); // Use class member variable
+    connectedCalls = 0; // Use class member variable
+    missedCalls = 0; // Use class member variable
+    incomingCalls = 0; // Use class member variable
+    outgoingCalls = 0; // Use class member variable
 
     // Process each call
     for (const QJsonValue &callVal : callList) {
@@ -83,7 +82,7 @@ void Dashboard::handleCallDetails(const QJsonObject &details)
         QString status = call["Call-Status"].toString();
         if (status == "Connected") {
             connectedCalls++;
-        } else if (status == "Missed" || status == "No Answer") {
+        } else if (status == "Missed" || status == "No Answer" || status == "Missed Call") { // Include "Missed Call"
             missedCalls++;
         }
 
@@ -138,4 +137,38 @@ void Dashboard::handleLiveCalls(const QJsonObject &details)
 void Dashboard::handleLiveCallsFailed(const QString &message)
 {
     QMessageBox::warning(this, "Error", "Failed to fetch live calls: " + message);
+}
+
+void Dashboard::updateStatistics(const QJsonObject &callDetails, const QJsonObject &liveDetails)
+{
+    // Process call list
+    QJsonArray callList = callDetails["List"].toArray();
+    for (const QJsonValue &callVal : callList) {
+        QJsonObject call = callVal.toObject();
+        QString callType = call["Call-Type"].toString();
+        QString callStatus = call["Call-Status"].toString();
+
+        totalCalls++;
+
+        // Update connected and missed calls count
+        if (callStatus == "Connected") {
+            connectedCalls++;
+        } else if (callStatus == "Missed" || callStatus == "No Answer" || callStatus == "Failed") {
+            missedCalls++; // Ensure to include all relevant statuses for missed calls
+        }
+
+        // Update incoming/outgoing count
+        if (callType == "I") {
+            incomingCalls++;
+        } else if (callType == "O") {
+            outgoingCalls++;
+        }
+    }
+
+    // Update UI labels
+    ui->labelTodayTotal->setText(QString("Total Calls: %1").arg(totalCalls));
+    ui->labelTodayConnected->setText(QString("Connected: %1").arg(connectedCalls));
+    ui->labelTodayMissed->setText(QString("Missed: %1").arg(missedCalls));
+    ui->labelTodayIncoming->setText(QString("Incoming: %1").arg(incomingCalls));
+    ui->labelTodayOutgoing->setText(QString("Outgoing: %1").arg(outgoingCalls));
 }

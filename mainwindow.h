@@ -51,7 +51,6 @@ private:
     QAudioOutput *audioOutput = nullptr;
     QTemporaryFile *tempWaveFile = nullptr;
     Dashboard *dashboard;
-    void fetchCallDetails();
     void updateCallDetailsTable(const QJsonObject &details);
 };
 #endif // MAINWINDOW_H

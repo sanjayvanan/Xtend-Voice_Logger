@@ -2425,7 +2425,10 @@ debug/dashboard.o: ../../dashboard.cpp ../../dashboard.h \
 		C:/QT/6.7.2/mingw_64/include/QtWidgets/qdialog.h \
 		C:/QT/6.7.2/mingw_64/include/QtWidgets/qdialogbuttonbox.h \
 		C:/QT/6.7.2/mingw_64/include/QtCore/QJsonArray \
-		C:/QT/6.7.2/mingw_64/include/QtCore/qjsonarray.h
+		C:/QT/6.7.2/mingw_64/include/QtCore/qjsonarray.h \
+		C:/QT/6.7.2/mingw_64/include/QtCore/QTimer \
+		C:/QT/6.7.2/mingw_64/include/QtCore/qtimer.h \
+		C:/QT/6.7.2/mingw_64/include/QtCore/qbasictimer.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\dashboard.o ..\..\dashboard.cpp
 
 debug/login.o: ../../login.cpp ../../login.h \

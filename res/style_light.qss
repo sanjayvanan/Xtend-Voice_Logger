@@ -186,63 +186,90 @@ QScrollBar::sub-line:horizontal {
 }
 /*------------------------------------------------------------------------------------------------------------------------*/
 /* Dashboard Styles */
+/* --- General Dashboard Styling --- */
 #Dashboard {
-    background-color: #ffffff; /* Background color for the dashboard */
-    border: 1px solid #c0c7ce; /* Border around the dashboard */
-    border-radius: 8px; /* Rounded corners */
-    padding: 10px; /* Padding inside the dashboard */
+    background: #f4f6f9; /* Light, neutral background */
+    border-radius: 12px;
+    padding: 16px;
 }
 
+/* --- Optimized Title Styling: Compact & Modern --- */
+#labelTitle {
+    font-size: 12px; /* Smaller but still readable */
+    font-weight: 600; /* Professional emphasis */
+    color: #2C3E50;
+    text-transform: uppercase; /* Sharp & modern */
+    padding: 2px 0; /* Less padding to reduce height */
+    margin-bottom: 5px; /* Reduced space */
+    text-align: center; /* Keeps it aligned properly */
+}
+
+/* --- Labels: Modern & Readable --- */
 #Dashboard QLabel {
-    color: #2C3E50; /* Text color for labels in the dashboard */
-    font-weight: bold; /* Bold text for labels */
+    color: #34495E; /* Dark gray for contrast */
+    font-size: 13px;
+    font-weight: 500;
+    transition: color 0.2s ease-in-out;
 }
 
-#Dashboard QLabel#labelTodayHeader {
-    font-size: 18px; /* Larger font size for the header */
-    margin-bottom: 10px; /* Space below the header */
+/* --- Section Headers (Statistics & Live Status) --- */
+#Dashboard QLabel#labelTodayHeader,
+#Dashboard QLabel#labelLiveHeader {
+    font-size: 14px; /* Compact header size */
+    font-weight: 700;
+    color: #007ACC;
+    margin-bottom: 6px; /* Reduced for compactness */
 }
 
+/* --- Panels (Today & Live Status) --- */
 #Dashboard QFrame {
-    background-color: #f1f1f1; /* Background color for frames */
-    border: 1px solid #d0d0d0; /* Border for frames */
-    border-radius: 4px; /* Rounded corners for frames */
-    padding: 10px; /* Padding inside frames */
+    background: rgba(255, 255, 255, 0.8); /* Soft glass-like effect */
+    border: 1px solid #d6d9dc;
+    border-radius: 8px;
+    padding: 10px; /* Slightly reduced padding */
+    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1); /* Subtle floating effect */
 }
 
-#Dashboard QVBoxLayout {
-    spacing: 10px; /* Space between items in vertical layout */
-}
-
+/* --- Layout Spacing: Improved Compactness --- */
+#Dashboard QVBoxLayout,
 #Dashboard QGridLayout {
-    spacing: 10px; /* Space between items in grid layout */
+    spacing: 8px; /* More compact */
 }
 
-/* Specific styles for today's statistics */
+/* --- Section-Specific Label Colors --- */
 #Dashboard #frameToday QLabel {
-    color: #2980B9; /* Color for today's statistics labels */
+    color: #007ACC; /* Cool blue */
 }
 
-/* Specific styles for live status */
 #Dashboard #frameLive QLabel {
-    color: #27ae60; /* Color for live status labels */
+    color: #16a085; /* Deep green */
 }
 
-/* Button styles (if any buttons are added in the future) */
+/* --- Buttons: Stylish & Interactive --- */
 #Dashboard QPushButton {
-    background-color: #3498DB; /* Button background color */
-    color: white; /* Button text color */
-    border: none; /* No border */
-    border-radius: 4px; /* Rounded corners */
-    padding: 8px; /* Padding inside buttons */
+    background: linear-gradient(to right, #3498DB, #2980B9);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 6px 12px; /* More balanced size */
+    font-size: 12px; /* Slightly smaller for consistency */
+    font-weight: 600;
+    transition: all 0.3s ease-in-out;
 }
 
 #Dashboard QPushButton:hover {
-    background-color: #2980B9; /* Darker blue on hover */
+    background: linear-gradient(to right, #2980B9, #1F639B);
+    transform: scale(1.03); /* Smooth interaction */
 }
 
 #Dashboard QPushButton:pressed {
-    background-color: #1F639B; /* Even darker blue when pressed */
+    background: #1F639B;
+    transform: scale(0.98); /* Click feedback */
 }
 
-/* Additional styles can be added as needed */
+/* --- Smooth Animations for a Polished Feel --- */
+#Dashboard QLabel,
+#Dashboard QFrame,
+#Dashboard QPushButton {
+    transition: all 0.3s ease-in-out;
+}

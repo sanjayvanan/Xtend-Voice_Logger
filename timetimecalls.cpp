@@ -11,6 +11,7 @@
 #include <QAudioOutput>
 #include <QDir>
 #include "audioplayerdialog.h"
+#include <QDateTime>
 
 TimeTimeCalls::TimeTimeCalls(QWidget *parent)
     : QWidget(parent)
@@ -59,13 +60,16 @@ void TimeTimeCalls::setSessionToken(const QString &token)
     sessionToken = token;
 }
 
-void TimeTimeCalls::on_searchButton_clicked()
+void TimeTimeCalls::showEvent(QShowEvent *event)
 {
-    if (sessionToken.isEmpty()) {
-        QMessageBox::warning(this, "Error", "No active session");
-        return;
+    QWidget::showEvent(event);
+    if (!sessionToken.isEmpty()) {
+        performSearch();
     }
+}
 
+void TimeTimeCalls::performSearch()
+{
     QString callType;
     switch(ui->callTypeCombo->currentIndex()) {
         case 1: callType = "I"; break;
@@ -82,6 +86,16 @@ void TimeTimeCalls::on_searchButton_clicked()
         0,
         ui->pageSize->value()
     );
+}
+
+void TimeTimeCalls::on_searchButton_clicked()
+{
+    if (sessionToken.isEmpty()) {
+        QMessageBox::warning(this, "Error", "No active session");
+        return;
+    }
+
+    performSearch();
 }
 
 void TimeTimeCalls::handleCallDetails(const QJsonObject &details)

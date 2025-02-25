@@ -53,7 +53,7 @@ public:
         font.setPointSize(16);
         font.setBold(true);
         labelTitle->setFont(font);
-        labelTitle->setAlignment(Qt::AlignCenter);
+        labelTitle->setAlignment(Qt::AlignmentFlag::AlignCenter);
 
         verticalLayout->addWidget(labelTitle);
 
@@ -61,8 +61,8 @@ public:
         gridLayout->setObjectName("gridLayout");
         frameToday = new QFrame(Dashboard);
         frameToday->setObjectName("frameToday");
-        frameToday->setFrameShape(QFrame::StyledPanel);
-        frameToday->setFrameShadow(QFrame::Raised);
+        frameToday->setFrameShape(QFrame::Shape::StyledPanel);
+        frameToday->setFrameShadow(QFrame::Shadow::Raised);
         verticalLayout_2 = new QVBoxLayout(frameToday);
         verticalLayout_2->setObjectName("verticalLayout_2");
         labelTodayHeader = new QLabel(frameToday);
@@ -104,8 +104,8 @@ public:
 
         frameLive = new QFrame(Dashboard);
         frameLive->setObjectName("frameLive");
-        frameLive->setFrameShape(QFrame::StyledPanel);
-        frameLive->setFrameShadow(QFrame::Raised);
+        frameLive->setFrameShape(QFrame::Shape::StyledPanel);
+        frameLive->setFrameShadow(QFrame::Shadow::Raised);
         verticalLayout_3 = new QVBoxLayout(frameLive);
         verticalLayout_3->setObjectName("verticalLayout_3");
         labelLiveHeader = new QLabel(frameLive);
@@ -130,7 +130,7 @@ public:
         verticalLayout_3->addWidget(labelActiveOutgoing);
 
 
-        gridLayout->addWidget(frameLive, 0, 1, 1, 1);
+        gridLayout->addWidget(frameLive, 0, 2, 1, 1);
 
 
         verticalLayout->addLayout(gridLayout);
@@ -144,7 +144,7 @@ public:
     void retranslateUi(QWidget *Dashboard)
     {
         Dashboard->setWindowTitle(QCoreApplication::translate("Dashboard", "Dashboard", nullptr));
-        labelTitle->setText(QCoreApplication::translate("Dashboard", "Voice Logger Dashboard", nullptr));
+        labelTitle->setText(QCoreApplication::translate("Dashboard", " Dashboard", nullptr));
         labelTodayHeader->setText(QCoreApplication::translate("Dashboard", "Today's Statistics", nullptr));
         labelTodayTotal->setText(QCoreApplication::translate("Dashboard", "Total Calls: 0", nullptr));
         labelTodayConnected->setText(QCoreApplication::translate("Dashboard", "Connected: 0", nullptr));
