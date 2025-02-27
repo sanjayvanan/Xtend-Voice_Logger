@@ -10,18 +10,15 @@
 #define UI_MAINWINDOW_H
 
 #include <QtCore/QVariant>
-#include <QtGui/QAction>
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QFrame>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QMainWindow>
-#include <QtWidgets/QMenu>
-#include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QStackedWidget>
-#include <QtWidgets/QStatusBar>
 #include <QtWidgets/QTableWidget>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
@@ -31,8 +28,15 @@ QT_BEGIN_NAMESPACE
 class Ui_MainWindow
 {
 public:
-    QAction *actionLogout;
     QWidget *centralwidget;
+    QVBoxLayout *mainLayout;
+    QWidget *navBar;
+    QHBoxLayout *navBarLayout;
+    QVBoxLayout *titleLayout;
+    QLabel *labelTitle;
+    QFrame *titleLine;
+    QSpacerItem *horizontalSpacer;
+    QPushButton *btnLogout;
     QHBoxLayout *horizontalLayout;
     QWidget *sideBar;
     QVBoxLayout *verticalLayout_2;
@@ -52,33 +56,91 @@ public:
     QVBoxLayout *verticalLayout_4;
     QLabel *labelLiveCallsStatus;
     QTableWidget *tableLiveCalls;
-    QMenuBar *menubar;
-    QMenu *menuFile;
-    QStatusBar *statusbar;
 
     void setupUi(QMainWindow *MainWindow)
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName("MainWindow");
         MainWindow->resize(1217, 600);
-        actionLogout = new QAction(MainWindow);
-        actionLogout->setObjectName("actionLogout");
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName("centralwidget");
-        horizontalLayout = new QHBoxLayout(centralwidget);
+        mainLayout = new QVBoxLayout(centralwidget);
+        mainLayout->setSpacing(0);
+        mainLayout->setObjectName("mainLayout");
+        mainLayout->setContentsMargins(0, 0, 0, 0);
+        navBar = new QWidget(centralwidget);
+        navBar->setObjectName("navBar");
+        navBar->setMinimumSize(QSize(0, 50));
+        navBar->setMaximumSize(QSize(16777215, 50));
+        navBar->setStyleSheet(QString::fromUtf8("background-color: #2C3E50;"));
+        navBarLayout = new QHBoxLayout(navBar);
+        navBarLayout->setObjectName("navBarLayout");
+        navBarLayout->setContentsMargins(15, 0, 15, 0);
+        titleLayout = new QVBoxLayout();
+        titleLayout->setSpacing(2);
+        titleLayout->setObjectName("titleLayout");
+        labelTitle = new QLabel(navBar);
+        labelTitle->setObjectName("labelTitle");
+        labelTitle->setStyleSheet(QString::fromUtf8("color: white; font-size: 16px; font-weight: bold;"));
+
+        titleLayout->addWidget(labelTitle);
+
+        titleLine = new QFrame(navBar);
+        titleLine->setObjectName("titleLine");
+        titleLine->setMinimumSize(QSize(150, 2));
+        titleLine->setMaximumSize(QSize(150, 2));
+        titleLine->setStyleSheet(QString::fromUtf8("background-color: #3498db;"));
+        titleLine->setFrameShape(QFrame::Shape::HLine);
+        titleLine->setFrameShadow(QFrame::Shadow::Sunken);
+
+        titleLayout->addWidget(titleLine);
+
+
+        navBarLayout->addLayout(titleLayout);
+
+        horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Minimum);
+
+        navBarLayout->addItem(horizontalSpacer);
+
+        btnLogout = new QPushButton(navBar);
+        btnLogout->setObjectName("btnLogout");
+        btnLogout->setMinimumSize(QSize(100, 30));
+        btnLogout->setCursor(QCursor(Qt::CursorShape::PointingHandCursor));
+        btnLogout->setStyleSheet(QString::fromUtf8("QPushButton {\n"
+"    color: white;\n"
+"    background-color: #e74c3c;\n"
+"    border: none;\n"
+"    border-radius: 4px;\n"
+"    padding: 5px 15px;\n"
+"}\n"
+"QPushButton:hover {\n"
+"    background-color: #c0392b;\n"
+"}\n"
+"QPushButton:pressed {\n"
+"    background-color: #a93226;\n"
+"}"));
+
+        navBarLayout->addWidget(btnLogout);
+
+
+        mainLayout->addWidget(navBar);
+
+        horizontalLayout = new QHBoxLayout();
         horizontalLayout->setSpacing(0);
         horizontalLayout->setObjectName("horizontalLayout");
-        horizontalLayout->setContentsMargins(0, 0, 0, 0);
         sideBar = new QWidget(centralwidget);
         sideBar->setObjectName("sideBar");
-        sideBar->setMinimumSize(QSize(200, 0));
-        sideBar->setMaximumSize(QSize(200, 16777215));
+        sideBar->setMinimumSize(QSize(180, 0));
+        sideBar->setMaximumSize(QSize(16777215, 16777215));
         sideBar->setStyleSheet(QString::fromUtf8("background-color: #2C3E50;"));
         verticalLayout_2 = new QVBoxLayout(sideBar);
+        verticalLayout_2->setSpacing(5);
         verticalLayout_2->setObjectName("verticalLayout_2");
+        verticalLayout_2->setContentsMargins(0, 10, 0, 0);
         btnDashboard = new QPushButton(sideBar);
         btnDashboard->setObjectName("btnDashboard");
         btnDashboard->setMinimumSize(QSize(0, 40));
+        btnDashboard->setCursor(QCursor(Qt::CursorShape::PointingHandCursor));
         btnDashboard->setStyleSheet(QString::fromUtf8("QPushButton {\n"
 "    color: white;\n"
 "    border: none;\n"
@@ -97,6 +159,7 @@ public:
         btnLiveCalls = new QPushButton(sideBar);
         btnLiveCalls->setObjectName("btnLiveCalls");
         btnLiveCalls->setMinimumSize(QSize(0, 40));
+        btnLiveCalls->setCursor(QCursor(Qt::CursorShape::PointingHandCursor));
         btnLiveCalls->setStyleSheet(QString::fromUtf8("QPushButton {\n"
 "    color: white;\n"
 "    border: none;\n"
@@ -115,6 +178,7 @@ public:
         btnTimeTime = new QPushButton(sideBar);
         btnTimeTime->setObjectName("btnTimeTime");
         btnTimeTime->setMinimumSize(QSize(0, 40));
+        btnTimeTime->setCursor(QCursor(Qt::CursorShape::PointingHandCursor));
         btnTimeTime->setStyleSheet(QString::fromUtf8("QPushButton {\n"
 "    color: white;\n"
 "    border: none;\n"
@@ -214,23 +278,14 @@ public:
 
         horizontalLayout->addWidget(stackedWidget);
 
-        MainWindow->setCentralWidget(centralwidget);
-        menubar = new QMenuBar(MainWindow);
-        menubar->setObjectName("menubar");
-        menubar->setGeometry(QRect(0, 0, 1217, 25));
-        menuFile = new QMenu(menubar);
-        menuFile->setObjectName("menuFile");
-        MainWindow->setMenuBar(menubar);
-        statusbar = new QStatusBar(MainWindow);
-        statusbar->setObjectName("statusbar");
-        MainWindow->setStatusBar(statusbar);
 
-        menubar->addAction(menuFile->menuAction());
-        menuFile->addAction(actionLogout);
+        mainLayout->addLayout(horizontalLayout);
+
+        MainWindow->setCentralWidget(centralwidget);
 
         retranslateUi(MainWindow);
 
-        stackedWidget->setCurrentIndex(2);
+        stackedWidget->setCurrentIndex(0);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -239,10 +294,8 @@ public:
     void retranslateUi(QMainWindow *MainWindow)
     {
         MainWindow->setWindowTitle(QCoreApplication::translate("MainWindow", "MainWindow", nullptr));
-        actionLogout->setText(QCoreApplication::translate("MainWindow", "Logout", nullptr));
-#if QT_CONFIG(shortcut)
-        actionLogout->setShortcut(QCoreApplication::translate("MainWindow", "Ctrl+L", nullptr));
-#endif // QT_CONFIG(shortcut)
+        labelTitle->setText(QCoreApplication::translate("MainWindow", "Zosh Voice Logger", nullptr));
+        btnLogout->setText(QCoreApplication::translate("MainWindow", "Logout", nullptr));
         btnDashboard->setText(QCoreApplication::translate("MainWindow", "Dashboard", nullptr));
         btnLiveCalls->setText(QCoreApplication::translate("MainWindow", "Live Calls", nullptr));
         btnTimeTime->setText(QCoreApplication::translate("MainWindow", "Time to Time", nullptr));
@@ -277,7 +330,6 @@ public:
         ___qtablewidgetitem12->setText(QCoreApplication::translate("MainWindow", "Status", nullptr));
         QTableWidgetItem *___qtablewidgetitem13 = tableLiveCalls->horizontalHeaderItem(7);
         ___qtablewidgetitem13->setText(QCoreApplication::translate("MainWindow", "Listen", nullptr));
-        menuFile->setTitle(QCoreApplication::translate("MainWindow", "File", nullptr));
     } // retranslateUi
 
 };

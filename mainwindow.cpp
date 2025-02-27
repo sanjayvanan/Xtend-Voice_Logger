@@ -80,6 +80,9 @@ MainWindow::MainWindow(QWidget *parent)
     connect(liveCallsTimer, &QTimer::timeout,
             this, &MainWindow::refreshLiveCalls);
 
+    // Connect the new logout button
+    connect(ui->btnLogout, &QPushButton::clicked, this, &MainWindow::on_actionLogout_triggered);
+
     // Set default view
     ui->stackedWidget->setCurrentIndex(0);
 }

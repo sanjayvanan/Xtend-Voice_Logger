@@ -19,6 +19,7 @@ TimeTimeCalls::TimeTimeCalls(QWidget *parent)
     , apiHandler(new APIHandler(this))
     , mediaPlayer(nullptr)
     , tempWaveFile(nullptr)
+    , totalPages(1)
 {
     ui->setupUi(this);
 
@@ -46,6 +47,11 @@ TimeTimeCalls::TimeTimeCalls(QWidget *parent)
     ui->tableWidget->setSelectionMode(QAbstractItemView::SingleSelection);
     ui->tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
     ui->tableWidget->horizontalHeader()->setStretchLastSection(true);
+
+    // Initialize pagination controls
+    ui->currentPage->setValue(1);
+    ui->btnPrevPage->setEnabled(false);
+    ui->btnNextPage->setEnabled(false);
 }
 
 TimeTimeCalls::~TimeTimeCalls()
@@ -62,30 +68,10 @@ void TimeTimeCalls::setSessionToken(const QString &token)
 
 void TimeTimeCalls::showEvent(QShowEvent *event)
 {
-    QWidget::showEvent(event);
+    QWidget::showEvent(event); // Call the base class implementation
     if (!sessionToken.isEmpty()) {
-        performSearch();
+        performSearch(); // Perform search when the widget is shown
     }
-}
-
-void TimeTimeCalls::performSearch()
-{
-    QString callType;
-    switch(ui->callTypeCombo->currentIndex()) {
-        case 1: callType = "I"; break;
-        case 2: callType = "O"; break;
-        default: break;
-    }
-
-    apiHandler->fetchCallList(
-        sessionToken,
-        ui->fromDateTime->dateTime(),
-        ui->toDateTime->dateTime(),
-        ui->phoneNumber->text(),
-        callType,
-        0,
-        ui->pageSize->value()
-    );
 }
 
 void TimeTimeCalls::on_searchButton_clicked()
@@ -210,6 +196,9 @@ void TimeTimeCalls::updateCallDetailsTable(const QJsonObject &details)
     ui->tableWidget->resizeColumnsToContents();
     ui->tableWidget->horizontalHeader()->setStretchLastSection(true);
     ui->tableWidget->setSortingEnabled(true);
+
+    // Update pagination
+    updatePaginationControls(totalCount.toInt());
 }
 
 void TimeTimeCalls::handleTableCellClicked(int row, int column)
@@ -252,5 +241,64 @@ void TimeTimeCalls::handleWaveFile(const QByteArray &waveData)
 void TimeTimeCalls::handleWaveFileFailed(const QString &message)
 {
     QMessageBox::warning(this, "Error", "Failed to fetch wave file: " + message);
+}
+
+void TimeTimeCalls::performSearch()
+{
+    QString callType;
+    switch(ui->callTypeCombo->currentIndex()) {
+        case 1: callType = "I"; break;
+        case 2: callType = "O"; break;
+        default: break;
+    }
+
+    int currentPageValue = ui->currentPage->value() - 1; // API uses 0-based indexing
+    
+    apiHandler->fetchCallList(
+        sessionToken,
+        ui->fromDateTime->dateTime(),
+        ui->toDateTime->dateTime(),
+        ui->phoneNumber->text(),
+        callType,
+        currentPageValue,
+        ui->pageSize->value()
+    );
+}
+
+void TimeTimeCalls::updatePaginationControls(int totalCalls)
+{
+    int pageSize = ui->pageSize->value();
+    totalPages = (totalCalls + pageSize - 1) / pageSize;
+    
+    ui->currentPage->setMaximum(totalPages);
+    ui->btnPrevPage->setEnabled(ui->currentPage->value() > 1);
+    ui->btnNextPage->setEnabled(ui->currentPage->value() < totalPages);
+}
+
+void TimeTimeCalls::on_btnPrevPage_clicked()
+{
+    if (ui->currentPage->value() > 1) {
+        ui->currentPage->setValue(ui->currentPage->value() - 1);
+        performSearch();
+    }
+}
+
+void TimeTimeCalls::on_btnNextPage_clicked()
+{
+    if (ui->currentPage->value() < totalPages) {
+        ui->currentPage->setValue(ui->currentPage->value() + 1);
+        performSearch();
+    }
+}
+
+void TimeTimeCalls::on_currentPage_valueChanged(int value)
+{
+    ui->btnPrevPage->setEnabled(value > 1);
+    ui->btnNextPage->setEnabled(value < totalPages);
+    
+    // Only perform search if the widget is visible
+    if (isVisible()) {
+        performSearch();
+    }
 }
 

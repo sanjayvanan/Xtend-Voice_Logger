@@ -13,7 +13,63 @@
   <property name="windowTitle">
    <string>Dashboard</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">QWidget {
+    background-color: #f5f5f5;
+    color: #333333;
+}
+QFrame {
+    border-radius: 8px;
+    background-color: white;
+    border: 1px solid #e0e0e0;
+}
+QLabel {
+    color: #333333;
+}
+QLabel[objectName^=&quot;labelHeader&quot;] {
+    color: #2c3e50;
+    font-weight: bold;
+}
+QLabel[objectName^=&quot;labelTitle&quot;] {
+    color: #2c3e50;
+    font-weight: bold;
+}
+QLabel[objectName^=&quot;labelStat&quot;] {
+     font-size: 24px;
+    padding: 10px;
+    min-height: 40px;
+}
+QProgressBar {
+    border: none;
+    border-radius: 4px;
+    background-color: #ecf0f1;
+    text-align: center;
+}
+QProgressBar::chunk {
+    border-radius: 4px;
+}
+#progressIncoming::chunk { background-color: #3498db; }
+#progressOutgoing::chunk { background-color: #2ecc71; }
+#progressConnected::chunk { background-color: #27ae60; }
+#progressMissed::chunk { background-color: #e74c3c; }
+</string>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="spacing">
+    <number>16</number>
+   </property>
+   <property name="leftMargin">
+    <number>16</number>
+   </property>
+   <property name="topMargin">
+    <number>16</number>
+   </property>
+   <property name="rightMargin">
+    <number>16</number>
+   </property>
+   <property name="bottomMargin">
+    <number>16</number>
+   </property>
    <item>
     <widget class="QLabel" name="labelTitle">
      <property name="font">
@@ -23,17 +79,265 @@
       </font>
      </property>
      <property name="text">
-      <string> Dashboard</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignmentFlag::AlignCenter</set>
+      <string>Dashboard Overview</string>
      </property>
     </widget>
    </item>
    <item>
-    <layout class="QGridLayout" name="gridLayout">
-     <item row="0" column="0">
-      <widget class="QFrame" name="frameToday">
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <property name="spacing">
+      <number>16</number>
+     </property>
+     <item>
+      <widget class="QFrame" name="frameStats">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>180</height>
+        </size>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::Shape::StyledPanel</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Shadow::Raised</enum>
+       </property>
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <property name="spacing">
+         <number>24</number>
+        </property>
+        <item>
+         <widget class="QFrame" name="statTotal">
+          <property name="styleSheet">
+           <string notr="true">background-color: #3498db;
+color: white;
+border: none;</string>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::Shape::StyledPanel</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Shadow::Raised</enum>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_4">
+           <item>
+            <widget class="QLabel" name="labelStatTotal">
+             <property name="font">
+              <font>
+               <pointsize>-1</pointsize>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">color: white;</string>
+             </property>
+             <property name="text">
+              <string>0</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignmentFlag::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="labelStatTotalText">
+             <property name="styleSheet">
+              <string notr="true">color: white;</string>
+             </property>
+             <property name="text">
+              <string>Total Calls</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignmentFlag::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QFrame" name="statConnected">
+          <property name="styleSheet">
+           <string notr="true">background-color: #27ae60;
+color: white;
+border: none;</string>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::Shape::StyledPanel</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Shadow::Raised</enum>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_5">
+           <item>
+            <widget class="QLabel" name="labelStatConnected">
+             <property name="font">
+              <font>
+               <pointsize>-1</pointsize>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">color: white;</string>
+             </property>
+             <property name="text">
+              <string>0</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignmentFlag::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="labelStatConnectedText">
+             <property name="styleSheet">
+              <string notr="true">color: white;</string>
+             </property>
+             <property name="text">
+              <string>Connected</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignmentFlag::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QFrame" name="statMissed">
+          <property name="styleSheet">
+           <string notr="true">background-color: #e74c3c;
+color: white;
+border: none;</string>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::Shape::StyledPanel</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Shadow::Raised</enum>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_6">
+           <item>
+            <widget class="QLabel" name="labelStatMissed">
+             <property name="font">
+              <font>
+               <pointsize>-1</pointsize>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">color: white;</string>
+             </property>
+             <property name="text">
+              <string>0</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignmentFlag::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="labelStatMissedText">
+             <property name="styleSheet">
+              <string notr="true">color: white;</string>
+             </property>
+             <property name="text">
+              <string>Missed</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignmentFlag::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QFrame" name="statActive">
+          <property name="styleSheet">
+           <string notr="true">background-color: #f39c12;
+color: white;
+border: none;</string>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::Shape::StyledPanel</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Shadow::Raised</enum>
+          </property>
+          <property name="lineWidth">
+           <number>1</number>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_7">
+           <property name="spacing">
+            <number>3</number>
+           </property>
+           <property name="leftMargin">
+            <number>11</number>
+           </property>
+           <property name="topMargin">
+            <number>11</number>
+           </property>
+           <property name="rightMargin">
+            <number>11</number>
+           </property>
+           <property name="bottomMargin">
+            <number>11</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="labelStatActive">
+             <property name="font">
+              <font>
+               <pointsize>-1</pointsize>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">color: white;</string>
+             </property>
+             <property name="text">
+              <string>0</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignmentFlag::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="labelStatActiveText">
+             <property name="styleSheet">
+              <string notr="true">color: white;</string>
+             </property>
+             <property name="text">
+              <string>Active Calls</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignmentFlag::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <property name="spacing">
+      <number>16</number>
+     </property>
+     <item>
+      <widget class="QFrame" name="frameCallTypes">
+       <property name="minimumSize">
+        <size>
+         <width>100</width>
+         <height>50</height>
+        </size>
+       </property>
        <property name="frameShape">
         <enum>QFrame::Shape::StyledPanel</enum>
        </property>
@@ -42,58 +346,96 @@
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
-         <widget class="QLabel" name="labelTodayHeader">
+         <widget class="QLabel" name="labelHeaderCallTypes">
           <property name="font">
            <font>
-            <pointsize>14</pointsize>
+            <pointsize>12</pointsize>
             <bold>true</bold>
            </font>
           </property>
           <property name="text">
-           <string>Today's Statistics</string>
+           <string>Call Types</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QLabel" name="labelTodayTotal">
-          <property name="text">
-           <string>Total Calls: 0</string>
-          </property>
-         </widget>
+         <layout class="QHBoxLayout" name="horizontalLayout_4">
+          <item>
+           <widget class="QLabel" name="labelIncoming">
+            <property name="minimumSize">
+             <size>
+              <width>100</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Incoming:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QProgressBar" name="progressIncoming">
+            <property name="value">
+             <number>0</number>
+            </property>
+            <property name="format">
+             <string>%v</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
         <item>
-         <widget class="QLabel" name="labelTodayConnected">
-          <property name="text">
-           <string>Connected: 0</string>
-          </property>
-         </widget>
+         <layout class="QHBoxLayout" name="horizontalLayout_5">
+          <item>
+           <widget class="QLabel" name="labelOutgoing">
+            <property name="minimumSize">
+             <size>
+              <width>100</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Outgoing:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QProgressBar" name="progressOutgoing">
+            <property name="value">
+             <number>0</number>
+            </property>
+            <property name="format">
+             <string>%v</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
         <item>
-         <widget class="QLabel" name="labelTodayMissed">
-          <property name="text">
-           <string>Missed: 0</string>
+         <spacer name="verticalSpacer">
+          <property name="orientation">
+           <enum>Qt::Orientation::Vertical</enum>
           </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="labelTodayIncoming">
-          <property name="text">
-           <string>Incoming: 0</string>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
           </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="labelTodayOutgoing">
-          <property name="text">
-           <string>Outgoing: 0</string>
-          </property>
-         </widget>
+         </spacer>
         </item>
        </layout>
       </widget>
      </item>
-     <item row="0" column="2">
-      <widget class="QFrame" name="frameLive">
+     <item>
+      <widget class="QFrame" name="frameCallStatus">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>200</height>
+        </size>
+       </property>
        <property name="frameShape">
         <enum>QFrame::Shape::StyledPanel</enum>
        </property>
@@ -102,43 +444,222 @@
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_3">
         <item>
-         <widget class="QLabel" name="labelLiveHeader">
+         <widget class="QLabel" name="labelHeaderCallStatus">
           <property name="font">
            <font>
-            <pointsize>14</pointsize>
+            <pointsize>12</pointsize>
             <bold>true</bold>
            </font>
           </property>
           <property name="text">
-           <string>Live Status</string>
+           <string>Call Status</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QLabel" name="labelActiveCalls">
-          <property name="text">
-           <string>Active Calls: 0</string>
-          </property>
-         </widget>
+         <layout class="QHBoxLayout" name="horizontalLayout_6">
+          <item>
+           <widget class="QLabel" name="labelConnected">
+            <property name="minimumSize">
+             <size>
+              <width>100</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Connected:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QProgressBar" name="progressConnected">
+            <property name="value">
+             <number>0</number>
+            </property>
+            <property name="format">
+             <string>%v</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
         <item>
-         <widget class="QLabel" name="labelActiveIncoming">
-          <property name="text">
-           <string>Active Incoming: 0</string>
-          </property>
-         </widget>
+         <layout class="QHBoxLayout" name="horizontalLayout_7">
+          <item>
+           <widget class="QLabel" name="labelMissed">
+            <property name="minimumSize">
+             <size>
+              <width>100</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Missed:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QProgressBar" name="progressMissed">
+            <property name="value">
+             <number>0</number>
+            </property>
+            <property name="format">
+             <string>%v</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
         <item>
-         <widget class="QLabel" name="labelActiveOutgoing">
-          <property name="text">
-           <string>Active Outgoing: 0</string>
+         <spacer name="verticalSpacer_2">
+          <property name="orientation">
+           <enum>Qt::Orientation::Vertical</enum>
           </property>
-         </widget>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
         </item>
        </layout>
       </widget>
      </item>
     </layout>
+   </item>
+   <item>
+    <widget class="QFrame" name="frameLiveStatus">
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>150</height>
+      </size>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::Shape::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Shadow::Raised</enum>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_8">
+      <item>
+       <widget class="QLabel" name="labelHeaderLiveStatus">
+        <property name="font">
+         <font>
+          <pointsize>24</pointsize>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>Live Status</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_8">
+        <item>
+         <widget class="QFrame" name="frameLiveIncoming">
+          <property name="styleSheet">
+           <string notr="true">background-color: #3498db;
+color: white;
+border-radius: 8px;</string>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::Shape::StyledPanel</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Shadow::Raised</enum>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_9">
+           <item>
+            <widget class="QLabel" name="labelLiveIncoming">
+             <property name="font">
+              <font>
+               <pointsize>18</pointsize>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">color: white;</string>
+             </property>
+             <property name="text">
+              <string>0</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignmentFlag::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="labelLiveIncomingText">
+             <property name="styleSheet">
+              <string notr="true">color: white;</string>
+             </property>
+             <property name="text">
+              <string>Active Incoming</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignmentFlag::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QFrame" name="frameLiveOutgoing">
+          <property name="styleSheet">
+           <string notr="true">background-color: #2ecc71;
+color: white;
+border-radius: 8px;</string>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::Shape::StyledPanel</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Shadow::Raised</enum>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_10">
+           <item>
+            <widget class="QLabel" name="labelLiveOutgoing">
+             <property name="font">
+              <font>
+               <pointsize>18</pointsize>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">color: white;</string>
+             </property>
+             <property name="text">
+              <string>0</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignmentFlag::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="labelLiveOutgoingText">
+             <property name="styleSheet">
+              <string notr="true">color: white;</string>
+             </property>
+             <property name="text">
+              <string>Active Outgoing</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignmentFlag::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
    </item>
   </layout>
  </widget>

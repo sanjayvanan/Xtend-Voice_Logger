@@ -68,11 +68,11 @@ void Dashboard::handleCallDetails(const QJsonObject &details)
     QJsonArray callList = details["List"].toArray();
     
     // Reset counters
-    totalCalls = callList.size(); // Use class member variable
-    connectedCalls = 0; // Use class member variable
-    missedCalls = 0; // Use class member variable
-    incomingCalls = 0; // Use class member variable
-    outgoingCalls = 0; // Use class member variable
+    totalCalls = callList.size();
+    connectedCalls = 0;
+    missedCalls = 0;
+    incomingCalls = 0;
+    outgoingCalls = 0;
 
     // Process each call
     for (const QJsonValue &callVal : callList) {
@@ -82,7 +82,7 @@ void Dashboard::handleCallDetails(const QJsonObject &details)
         QString status = call["Call-Status"].toString();
         if (status == "Connected") {
             connectedCalls++;
-        } else if (status == "Missed" || status == "No Answer" || status == "Missed Call") { // Include "Missed Call"
+        } else if (status == "Missed" || status == "No Answer" || status == "Missed Call") {
             missedCalls++;
         }
 
@@ -95,17 +95,41 @@ void Dashboard::handleCallDetails(const QJsonObject &details)
         }
     }
 
-    // Update UI labels
-    ui->labelTodayTotal->setText(QString("Total Calls: %1").arg(totalCalls));
-    ui->labelTodayConnected->setText(QString("Connected: %1").arg(connectedCalls));
-    ui->labelTodayMissed->setText(QString("Missed: %1").arg(missedCalls));
-    ui->labelTodayIncoming->setText(QString("Incoming: %1").arg(incomingCalls));
-    ui->labelTodayOutgoing->setText(QString("Outgoing: %1").arg(outgoingCalls));
+    // Update UI with modern stats display
+    ui->labelStatTotal->setText(QString::number(totalCalls));
+    ui->labelStatConnected->setText(QString::number(connectedCalls));
+    ui->labelStatMissed->setText(QString::number(missedCalls));
+    
+    // Update progress bars for call types
+    int maxCalls = qMax(incomingCalls, outgoingCalls);
+    if (maxCalls > 0) {
+        ui->progressIncoming->setMaximum(maxCalls);
+        ui->progressOutgoing->setMaximum(maxCalls);
+    } else {
+        ui->progressIncoming->setMaximum(1);
+        ui->progressOutgoing->setMaximum(1);
+    }
+    
+    ui->progressIncoming->setValue(incomingCalls);
+    ui->progressOutgoing->setValue(outgoingCalls);
+    
+    // Update progress bars for call status
+    int maxStatus = qMax(connectedCalls, missedCalls);
+    if (maxStatus > 0) {
+        ui->progressConnected->setMaximum(maxStatus);
+        ui->progressMissed->setMaximum(maxStatus);
+    } else {
+        ui->progressConnected->setMaximum(1);
+        ui->progressMissed->setMaximum(1);
+    }
+    
+    ui->progressConnected->setValue(connectedCalls);
+    ui->progressMissed->setValue(missedCalls);
 }
 
 void Dashboard::handleCallDetailsFailed(const QString &message)
 {
-    QMessageBox::warning(this, "Error", "Failed to fetch call details: " + message);
+   qDebug() << "Error fetching call details:" << message;
 }
 
 void Dashboard::handleLiveCalls(const QJsonObject &details)
@@ -128,15 +152,16 @@ void Dashboard::handleLiveCalls(const QJsonObject &details)
         }
     }
 
-    // Update UI labels
-    ui->labelActiveCalls->setText(QString("Active Calls: %1").arg(activeCalls));
-    ui->labelActiveIncoming->setText(QString("Active Incoming: %1").arg(activeIncoming));
-    ui->labelActiveOutgoing->setText(QString("Active Outgoing: %1").arg(activeOutgoing));
+    // Update UI labels for live status
+    ui->labelStatActive->setText(QString::number(activeCalls));
+    ui->labelLiveIncoming->setText(QString::number(activeIncoming));
+    ui->labelLiveOutgoing->setText(QString::number(activeOutgoing));
 }
 
 void Dashboard::handleLiveCallsFailed(const QString &message)
 {
-    QMessageBox::warning(this, "Error", "Failed to fetch live calls: " + message);
+    // QMessageBox::warning(this, "Error", "Failed to fetch live calls: " + message);
+    qDebug() << "Error fetching call details:" << message;
 }
 
 void Dashboard::updateStatistics(const QJsonObject &callDetails, const QJsonObject &liveDetails)
@@ -165,10 +190,10 @@ void Dashboard::updateStatistics(const QJsonObject &callDetails, const QJsonObje
         }
     }
 
-    // Update UI labels
-    ui->labelTodayTotal->setText(QString("Total Calls: %1").arg(totalCalls));
-    ui->labelTodayConnected->setText(QString("Connected: %1").arg(connectedCalls));
-    ui->labelTodayMissed->setText(QString("Missed: %1").arg(missedCalls));
-    ui->labelTodayIncoming->setText(QString("Incoming: %1").arg(incomingCalls));
-    ui->labelTodayOutgoing->setText(QString("Outgoing: %1").arg(outgoingCalls));
+    // Update UI labels using existing labels
+    ui->labelStatTotal->setText(QString("Total Calls: %1").arg(totalCalls));
+    ui->labelStatConnected->setText(QString("Connected: %1").arg(connectedCalls));
+    ui->labelStatMissed->setText(QString("Missed: %1").arg(missedCalls));
+    ui->labelLiveIncoming->setText(QString("Incoming: %1").arg(incomingCalls));
+    ui->labelLiveOutgoing->setText(QString("Outgoing: %1").arg(outgoingCalls));
 }

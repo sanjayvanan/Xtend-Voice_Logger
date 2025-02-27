@@ -27,6 +27,9 @@ protected:
 
 private slots:
     void on_searchButton_clicked();
+    void on_btnPrevPage_clicked();
+    void on_btnNextPage_clicked();
+    void on_currentPage_valueChanged(int value);
     void handleCallDetails(const QJsonObject &details);
     void handleCallDetailsFailed(const QString &message);
     void updateCallDetailsTable(const QJsonObject &details);
@@ -36,11 +39,13 @@ private slots:
 
 private:
     void performSearch();
+    void updatePaginationControls(int totalCalls);
     Ui::TimeTimeCalls *ui;
     APIHandler *apiHandler;
     QString sessionToken;
     QMediaPlayer *mediaPlayer;
     QTemporaryFile *tempWaveFile;
+    int totalPages;
 };
 
 #endif // TIMETIMECALLS_H

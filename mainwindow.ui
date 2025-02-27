@@ -14,7 +14,7 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QHBoxLayout" name="horizontalLayout">
+   <layout class="QVBoxLayout" name="mainLayout">
     <property name="spacing">
      <number>0</number>
     </property>
@@ -31,266 +31,390 @@
      <number>0</number>
     </property>
     <item>
-     <widget class="QWidget" name="sideBar" native="true">
+     <widget class="QWidget" name="navBar" native="true">
       <property name="minimumSize">
        <size>
-        <width>200</width>
-        <height>0</height>
+        <width>0</width>
+        <height>50</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
-        <width>200</width>
-        <height>16777215</height>
+        <width>16777215</width>
+        <height>50</height>
        </size>
       </property>
       <property name="styleSheet">
        <string notr="true">background-color: #2C3E50;</string>
       </property>
-      <layout class="QVBoxLayout" name="verticalLayout_2">
+      <layout class="QHBoxLayout" name="navBarLayout">
+       <property name="leftMargin">
+        <number>15</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>15</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
        <item>
-        <widget class="QPushButton" name="btnDashboard">
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>40</height>
-          </size>
+        <layout class="QVBoxLayout" name="titleLayout">
+         <property name="spacing">
+          <number>2</number>
          </property>
-         <property name="styleSheet">
-          <string notr="true">QPushButton {
-    color: white;
-    border: none;
-    text-align: left;
-    padding-left: 15px;
-}
-QPushButton:hover {
-    background-color: #34495E;
-}
-QPushButton:pressed {
-    background-color: #2980B9;
-}</string>
-         </property>
-         <property name="text">
-          <string>Dashboard</string>
-         </property>
-        </widget>
+         <item>
+          <widget class="QLabel" name="labelTitle">
+           <property name="styleSheet">
+            <string notr="true">color: white; font-size: 16px; font-weight: bold;</string>
+           </property>
+           <property name="text">
+            <string>Zosh Voice Logger</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QFrame" name="titleLine">
+           <property name="minimumSize">
+            <size>
+             <width>150</width>
+             <height>2</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>150</width>
+             <height>2</height>
+            </size>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">background-color: #3498db;</string>
+           </property>
+           <property name="frameShape">
+            <enum>QFrame::Shape::HLine</enum>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Shadow::Sunken</enum>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
        <item>
-        <widget class="QPushButton" name="btnLiveCalls">
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>40</height>
-          </size>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">QPushButton {
-    color: white;
-    border: none;
-    text-align: left;
-    padding-left: 15px;
-}
-QPushButton:hover {
-    background-color: #34495E;
-}
-QPushButton:pressed {
-    background-color: #2980B9;
-}</string>
-         </property>
-         <property name="text">
-          <string>Live Calls</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="btnTimeTime">
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>40</height>
-          </size>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">QPushButton {
-    color: white;
-    border: none;
-    text-align: left;
-    padding-left: 15px;
-}
-QPushButton:hover {
-    background-color: #34495E;
-}
-QPushButton:pressed {
-    background-color: #2980B9;
-}</string>
-         </property>
-         <property name="text">
-          <string>Time to Time</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer name="verticalSpacer">
+        <spacer name="horizontalSpacer">
          <property name="orientation">
-          <enum>Qt::Orientation::Vertical</enum>
+          <enum>Qt::Orientation::Horizontal</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
-           <width>20</width>
-           <height>40</height>
+           <width>40</width>
+           <height>20</height>
           </size>
          </property>
         </spacer>
+       </item>
+       <item>
+        <widget class="QPushButton" name="btnLogout">
+         <property name="minimumSize">
+          <size>
+           <width>100</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton {
+    color: white;
+    background-color: #e74c3c;
+    border: none;
+    border-radius: 4px;
+    padding: 5px 15px;
+}
+QPushButton:hover {
+    background-color: #c0392b;
+}
+QPushButton:pressed {
+    background-color: #a93226;
+}</string>
+         </property>
+         <property name="text">
+          <string>Logout</string>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
     </item>
     <item>
-     <widget class="QStackedWidget" name="stackedWidget">
-      <property name="currentIndex">
-       <number>2</number>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <property name="spacing">
+       <number>0</number>
       </property>
-      <widget class="QWidget" name="pageDashboard">
-       <layout class="QVBoxLayout" name="verticalLayout">
-        <item>
-         <widget class="QLabel" name="label">
-          <property name="text">
-           <string>Dashboard Page</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="pageCallLogs">
-       <layout class="QVBoxLayout" name="verticalLayout_3">
-        <item>
-         <widget class="QLabel" name="labelTotalCalls">
-          <property name="text">
-           <string>Total Connected Calls: 0</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QTableWidget" name="tableWidget">
-          <column>
-           <property name="text">
-            <string>Call Ref ID</string>
+      <item>
+       <widget class="QWidget" name="sideBar" native="true">
+        <property name="minimumSize">
+         <size>
+          <width>180</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color: #2C3E50;</string>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_2">
+         <property name="spacing">
+          <number>5</number>
+         </property>
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>10</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QPushButton" name="btnDashboard">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>40</height>
+            </size>
            </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Channel</string>
+           <property name="cursor">
+            <cursorShape>PointingHandCursor</cursorShape>
            </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Call Type</string>
+           <property name="styleSheet">
+            <string notr="true">QPushButton {
+    color: white;
+    border: none;
+    text-align: left;
+    padding-left: 15px;
+}
+QPushButton:hover {
+    background-color: #34495E;
+}
+QPushButton:pressed {
+    background-color: #2980B9;
+}</string>
            </property>
-          </column>
-          <column>
            <property name="text">
-            <string>Call Time</string>
+            <string>Dashboard</string>
            </property>
-          </column>
-          <column>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="btnLiveCalls">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>40</height>
+            </size>
+           </property>
+           <property name="cursor">
+            <cursorShape>PointingHandCursor</cursorShape>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QPushButton {
+    color: white;
+    border: none;
+    text-align: left;
+    padding-left: 15px;
+}
+QPushButton:hover {
+    background-color: #34495E;
+}
+QPushButton:pressed {
+    background-color: #2980B9;
+}</string>
+           </property>
            <property name="text">
-            <string>Duration</string>
+            <string>Live Calls</string>
            </property>
-          </column>
-          <column>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="btnTimeTime">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>40</height>
+            </size>
+           </property>
+           <property name="cursor">
+            <cursorShape>PointingHandCursor</cursorShape>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QPushButton {
+    color: white;
+    border: none;
+    text-align: left;
+    padding-left: 15px;
+}
+QPushButton:hover {
+    background-color: #34495E;
+}
+QPushButton:pressed {
+    background-color: #2980B9;
+}</string>
+           </property>
            <property name="text">
-            <string>Status</string>
+            <string>Time to Time</string>
            </property>
-          </column>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="pageLiveCalls">
-       <layout class="QVBoxLayout" name="verticalLayout_4">
-        <item>
-         <widget class="QLabel" name="labelLiveCallsStatus">
-          <property name="text">
-           <string>Active Calls: 0</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QTableWidget" name="tableLiveCalls">
-          <column>
-           <property name="text">
-            <string>Channel</string>
+          </widget>
+         </item>
+         <item>
+          <spacer name="verticalSpacer">
+           <property name="orientation">
+            <enum>Qt::Orientation::Vertical</enum>
            </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Channel Name</string>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
            </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Call Type</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Call Time</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Caller ID</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Called ID</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Status</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Listen</string>
-           </property>
-          </column>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-     </widget>
+          </spacer>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QStackedWidget" name="stackedWidget">
+        <property name="currentIndex">
+         <number>0</number>
+        </property>
+        <widget class="QWidget" name="pageDashboard">
+         <layout class="QVBoxLayout" name="verticalLayout">
+          <item>
+           <widget class="QLabel" name="label">
+            <property name="text">
+             <string>Dashboard Page</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="pageCallLogs">
+         <layout class="QVBoxLayout" name="verticalLayout_3">
+          <item>
+           <widget class="QLabel" name="labelTotalCalls">
+            <property name="text">
+             <string>Total Connected Calls: 0</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QTableWidget" name="tableWidget">
+            <column>
+             <property name="text">
+              <string>Call Ref ID</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Channel</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Call Type</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Call Time</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Duration</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Status</string>
+             </property>
+            </column>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="pageLiveCalls">
+         <layout class="QVBoxLayout" name="verticalLayout_4">
+          <item>
+           <widget class="QLabel" name="labelLiveCallsStatus">
+            <property name="text">
+             <string>Active Calls: 0</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QTableWidget" name="tableLiveCalls">
+            <column>
+             <property name="text">
+              <string>Channel</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Channel Name</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Call Type</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Call Time</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Caller ID</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Called ID</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Status</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Listen</string>
+             </property>
+            </column>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+      </item>
+     </layout>
     </item>
    </layout>
   </widget>
-  <widget class="QMenuBar" name="menubar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>1217</width>
-     <height>25</height>
-    </rect>
-   </property>
-   <widget class="QMenu" name="menuFile">
-    <property name="title">
-     <string>File</string>
-    </property>
-    <addaction name="actionLogout"/>
-   </widget>
-   <addaction name="menuFile"/>
-  </widget>
-  <widget class="QStatusBar" name="statusbar"/>
-  <action name="actionLogout">
-   <property name="text">
-    <string>Logout</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+L</string>
-   </property>
-  </action>
  </widget>
  <resources/>
  <connections/>

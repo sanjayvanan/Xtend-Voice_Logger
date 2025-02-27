@@ -15,10 +15,12 @@
 #include <QtWidgets/QDateTimeEdit>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QGroupBox>
+#include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QPushButton>
+#include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QSpinBox>
 #include <QtWidgets/QTableWidget>
 #include <QtWidgets/QVBoxLayout>
@@ -44,7 +46,13 @@ public:
     QLabel *labelPageSize;
     QSpinBox *pageSize;
     QPushButton *searchButton;
+    QHBoxLayout *paginationLayout;
     QLabel *labelTotalCalls;
+    QSpacerItem *horizontalSpacer;
+    QLabel *labelPage;
+    QPushButton *btnPrevPage;
+    QSpinBox *currentPage;
+    QPushButton *btnNextPage;
     QTableWidget *tableWidget;
 
     void setupUi(QWidget *TimeTimeCalls)
@@ -156,13 +164,59 @@ public:
 
         verticalLayout->addWidget(searchGroup);
 
+        paginationLayout = new QHBoxLayout();
+        paginationLayout->setObjectName("paginationLayout");
         labelTotalCalls = new QLabel(TimeTimeCalls);
         labelTotalCalls->setObjectName("labelTotalCalls");
         QFont font1;
+        font1.setPointSize(10);
         font1.setBold(true);
         labelTotalCalls->setFont(font1);
 
-        verticalLayout->addWidget(labelTotalCalls);
+        paginationLayout->addWidget(labelTotalCalls);
+
+        horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Minimum);
+
+        paginationLayout->addItem(horizontalSpacer);
+
+        labelPage = new QLabel(TimeTimeCalls);
+        labelPage->setObjectName("labelPage");
+        labelPage->setFont(font1);
+
+        paginationLayout->addWidget(labelPage);
+
+        btnPrevPage = new QPushButton(TimeTimeCalls);
+        btnPrevPage->setObjectName("btnPrevPage");
+        btnPrevPage->setMinimumSize(QSize(40, 30));
+        btnPrevPage->setMaximumSize(QSize(40, 30));
+        btnPrevPage->setFont(font1);
+        btnPrevPage->setStyleSheet(QString::fromUtf8("background-color: #3498db; color: white; border-radius: 4px;"));
+
+        paginationLayout->addWidget(btnPrevPage);
+
+        currentPage = new QSpinBox(TimeTimeCalls);
+        currentPage->setObjectName("currentPage");
+        currentPage->setMinimumSize(QSize(70, 30));
+        QFont font2;
+        font2.setPointSize(10);
+        currentPage->setFont(font2);
+        currentPage->setStyleSheet(QString::fromUtf8("padding: 2px 5px;"));
+        currentPage->setMinimum(1);
+        currentPage->setMaximum(999999);
+
+        paginationLayout->addWidget(currentPage);
+
+        btnNextPage = new QPushButton(TimeTimeCalls);
+        btnNextPage->setObjectName("btnNextPage");
+        btnNextPage->setMinimumSize(QSize(40, 30));
+        btnNextPage->setMaximumSize(QSize(40, 30));
+        btnNextPage->setFont(font1);
+        btnNextPage->setStyleSheet(QString::fromUtf8("background-color: #3498db; color: white; border-radius: 4px;"));
+
+        paginationLayout->addWidget(btnNextPage);
+
+
+        verticalLayout->addLayout(paginationLayout);
 
         tableWidget = new QTableWidget(TimeTimeCalls);
         if (tableWidget->columnCount() < 12)
@@ -224,6 +278,9 @@ public:
         labelPageSize->setText(QCoreApplication::translate("TimeTimeCalls", "Page Size:", nullptr));
         searchButton->setText(QCoreApplication::translate("TimeTimeCalls", "Search", nullptr));
         labelTotalCalls->setText(QCoreApplication::translate("TimeTimeCalls", "Total Connected Calls: 0", nullptr));
+        labelPage->setText(QCoreApplication::translate("TimeTimeCalls", "Page:", nullptr));
+        btnPrevPage->setText(QCoreApplication::translate("TimeTimeCalls", "<", nullptr));
+        btnNextPage->setText(QCoreApplication::translate("TimeTimeCalls", ">", nullptr));
         QTableWidgetItem *___qtablewidgetitem = tableWidget->horizontalHeaderItem(0);
         ___qtablewidgetitem->setText(QCoreApplication::translate("TimeTimeCalls", "Call Ref ID", nullptr));
         QTableWidgetItem *___qtablewidgetitem1 = tableWidget->horizontalHeaderItem(1);

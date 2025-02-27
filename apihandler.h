@@ -7,6 +7,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 
+
 class APIHandler : public QObject
 {
     Q_OBJECT
