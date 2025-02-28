@@ -41,19 +41,7 @@ constexpr auto qt_meta_stringdata_CLASSMainWindowENDCLASS = QtMocHelpers::string
     "",
     "handleLogoutSuccess",
     "handleLogoutFailure",
-    "message",
-    "handleCallDetails",
-    "details",
-    "handleCallDetailsFailed",
-    "handleLiveCalls",
-    "handleLiveCallsFailed",
-    "updateLiveCallsTable",
-    "refreshLiveCalls",
-    "handleWaveFile",
-    "waveData",
-    "on_btnDashboard_clicked",
-    "on_btnCallLogs_clicked",
-    "on_btnLiveCalls_clicked"
+    "message"
 );
 #else  // !QT_MOC_HAS_STRINGDATA
 #error "qtmochelpers.h not found or too old."
@@ -66,7 +54,7 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSMainWindowENDCLASS[] = {
       12,       // revision
        0,       // classname
        0,    0, // classinfo
-      13,   14, // methods
+       3,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -74,34 +62,14 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSMainWindowENDCLASS[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags, initial metatype offsets
-       1,    0,   92,    2, 0x08,    1 /* Private */,
-       3,    0,   93,    2, 0x08,    2 /* Private */,
-       4,    1,   94,    2, 0x08,    3 /* Private */,
-       6,    1,   97,    2, 0x08,    5 /* Private */,
-       8,    1,  100,    2, 0x08,    7 /* Private */,
-       9,    1,  103,    2, 0x08,    9 /* Private */,
-      10,    1,  106,    2, 0x08,   11 /* Private */,
-      11,    1,  109,    2, 0x08,   13 /* Private */,
-      12,    0,  112,    2, 0x08,   15 /* Private */,
-      13,    1,  113,    2, 0x08,   16 /* Private */,
-      15,    0,  116,    2, 0x08,   18 /* Private */,
-      16,    0,  117,    2, 0x08,   19 /* Private */,
-      17,    0,  118,    2, 0x08,   20 /* Private */,
+       1,    0,   32,    2, 0x08,    1 /* Private */,
+       3,    0,   33,    2, 0x08,    2 /* Private */,
+       4,    1,   34,    2, 0x08,    3 /* Private */,
 
  // slots: parameters
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void, QMetaType::QString,    5,
-    QMetaType::Void, QMetaType::QJsonObject,    7,
-    QMetaType::Void, QMetaType::QString,    5,
-    QMetaType::Void, QMetaType::QJsonObject,    7,
-    QMetaType::Void, QMetaType::QString,    5,
-    QMetaType::Void, QMetaType::QJsonObject,    7,
-    QMetaType::Void,
-    QMetaType::Void, QMetaType::QByteArray,   14,
-    QMetaType::Void,
-    QMetaType::Void,
-    QMetaType::Void,
 
        0        // eod
 };
@@ -121,33 +89,7 @@ Q_CONSTINIT const QMetaObject MainWindow::staticMetaObject = { {
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         // method 'handleLogoutFailure'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
-        QtPrivate::TypeAndForceComplete<const QString &, std::false_type>,
-        // method 'handleCallDetails'
-        QtPrivate::TypeAndForceComplete<void, std::false_type>,
-        QtPrivate::TypeAndForceComplete<const QJsonObject &, std::false_type>,
-        // method 'handleCallDetailsFailed'
-        QtPrivate::TypeAndForceComplete<void, std::false_type>,
-        QtPrivate::TypeAndForceComplete<const QString &, std::false_type>,
-        // method 'handleLiveCalls'
-        QtPrivate::TypeAndForceComplete<void, std::false_type>,
-        QtPrivate::TypeAndForceComplete<const QJsonObject &, std::false_type>,
-        // method 'handleLiveCallsFailed'
-        QtPrivate::TypeAndForceComplete<void, std::false_type>,
-        QtPrivate::TypeAndForceComplete<const QString &, std::false_type>,
-        // method 'updateLiveCallsTable'
-        QtPrivate::TypeAndForceComplete<void, std::false_type>,
-        QtPrivate::TypeAndForceComplete<const QJsonObject &, std::false_type>,
-        // method 'refreshLiveCalls'
-        QtPrivate::TypeAndForceComplete<void, std::false_type>,
-        // method 'handleWaveFile'
-        QtPrivate::TypeAndForceComplete<void, std::false_type>,
-        QtPrivate::TypeAndForceComplete<const QByteArray &, std::false_type>,
-        // method 'on_btnDashboard_clicked'
-        QtPrivate::TypeAndForceComplete<void, std::false_type>,
-        // method 'on_btnCallLogs_clicked'
-        QtPrivate::TypeAndForceComplete<void, std::false_type>,
-        // method 'on_btnLiveCalls_clicked'
-        QtPrivate::TypeAndForceComplete<void, std::false_type>
+        QtPrivate::TypeAndForceComplete<const QString &, std::false_type>
     >,
     nullptr
 } };
@@ -161,16 +103,6 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 0: _t->on_actionLogout_triggered(); break;
         case 1: _t->handleLogoutSuccess(); break;
         case 2: _t->handleLogoutFailure((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
-        case 3: _t->handleCallDetails((*reinterpret_cast< std::add_pointer_t<QJsonObject>>(_a[1]))); break;
-        case 4: _t->handleCallDetailsFailed((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
-        case 5: _t->handleLiveCalls((*reinterpret_cast< std::add_pointer_t<QJsonObject>>(_a[1]))); break;
-        case 6: _t->handleLiveCallsFailed((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
-        case 7: _t->updateLiveCallsTable((*reinterpret_cast< std::add_pointer_t<QJsonObject>>(_a[1]))); break;
-        case 8: _t->refreshLiveCalls(); break;
-        case 9: _t->handleWaveFile((*reinterpret_cast< std::add_pointer_t<QByteArray>>(_a[1]))); break;
-        case 10: _t->on_btnDashboard_clicked(); break;
-        case 11: _t->on_btnCallLogs_clicked(); break;
-        case 12: _t->on_btnLiveCalls_clicked(); break;
         default: ;
         }
     }
@@ -195,13 +127,13 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 13)
+        if (_id < 3)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 13;
+        _id -= 3;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 13)
+        if (_id < 3)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 13;
+        _id -= 3;
     }
     return _id;
 }

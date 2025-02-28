@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>LiveCalls</class>
+ <widget class="QWidget" name="LiveCalls">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Live Calls</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QLabel" name="labelStatus">
+     <property name="text">
+      <string>Active Calls: 0</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QTableWidget" name="tableLiveCalls">
+     <property name="columnCount">
+      <number>8</number>
+     </property>
+     <column>
+      <property name="text">
+       <string>Channel</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Channel Name</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Call Type</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Call Time</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Caller ID</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Called ID</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Reason</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Actions</string>
+      </property>
+     </column>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

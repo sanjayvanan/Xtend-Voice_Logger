@@ -4,11 +4,8 @@
 #include <QMainWindow>
 #include "apihandler.h"
 #include "timetimecalls.h"
-#include <QTimer>
-#include <QMediaPlayer>
-#include <QAudioOutput>
-#include <QTemporaryFile>
 #include "dashboard.h"
+#include "livecalls.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -27,30 +24,13 @@ private slots:
     void on_actionLogout_triggered();
     void handleLogoutSuccess();
     void handleLogoutFailure(const QString &message);
-    void handleCallDetails(const QJsonObject &details);
-    void handleCallDetailsFailed(const QString &message);
-    void handleLiveCalls(const QJsonObject &details);
-    void handleLiveCallsFailed(const QString &message);
-    void updateLiveCallsTable(const QJsonObject &details);
-    void refreshLiveCalls();
-    void handleWaveFile(const QByteArray &waveData);
-
-    void on_btnDashboard_clicked();
-
-    void on_btnCallLogs_clicked();
-
-    void on_btnLiveCalls_clicked();
 
 private:
     Ui::MainWindow *ui;
     APIHandler *apiHandler;
     QString sessionToken;
     TimeTimeCalls *timeTimeCalls;
-    QTimer *liveCallsTimer;
-    QMediaPlayer *mediaPlayer = nullptr;
-    QAudioOutput *audioOutput = nullptr;
-    QTemporaryFile *tempWaveFile = nullptr;
     Dashboard *dashboard;
-    void updateCallDetailsTable(const QJsonObject &details);
+    LiveCalls *liveCalls;
 };
 #endif // MAINWINDOW_H

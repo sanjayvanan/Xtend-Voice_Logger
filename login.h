@@ -24,6 +24,7 @@ private slots:
     void handleLoginSuccess(const QString &token);
     void handleLoginFailure(const QString &message);
 
+
 private:
     Ui::login *ui;
     APIHandler *apiHandler;

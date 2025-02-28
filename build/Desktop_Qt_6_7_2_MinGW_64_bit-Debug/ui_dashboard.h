@@ -15,7 +15,6 @@
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QProgressBar>
-#include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 
@@ -55,7 +54,6 @@ public:
     QHBoxLayout *horizontalLayout_5;
     QLabel *labelOutgoing;
     QProgressBar *progressOutgoing;
-    QSpacerItem *verticalSpacer;
     QFrame *frameCallStatus;
     QVBoxLayout *verticalLayout_3;
     QLabel *labelHeaderCallStatus;
@@ -65,7 +63,6 @@ public:
     QHBoxLayout *horizontalLayout_7;
     QLabel *labelMissed;
     QProgressBar *progressMissed;
-    QSpacerItem *verticalSpacer_2;
     QFrame *frameLiveStatus;
     QVBoxLayout *verticalLayout_8;
     QLabel *labelHeaderLiveStatus;
@@ -83,7 +80,7 @@ public:
     {
         if (Dashboard->objectName().isEmpty())
             Dashboard->setObjectName("Dashboard");
-        Dashboard->resize(800, 600);
+        Dashboard->resize(800, 652);
         Dashboard->setStyleSheet(QString::fromUtf8("QWidget {\n"
 "    background-color: #f5f5f5;\n"
 "    color: #333333;\n"
@@ -319,10 +316,6 @@ public:
 
         verticalLayout_2->addLayout(horizontalLayout_5);
 
-        verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Policy::Minimum, QSizePolicy::Policy::Expanding);
-
-        verticalLayout_2->addItem(verticalSpacer);
-
 
         horizontalLayout_3->addWidget(frameCallTypes);
 
@@ -372,10 +365,6 @@ public:
 
 
         verticalLayout_3->addLayout(horizontalLayout_7);
-
-        verticalSpacer_2 = new QSpacerItem(20, 40, QSizePolicy::Policy::Minimum, QSizePolicy::Policy::Expanding);
-
-        verticalLayout_3->addItem(verticalSpacer_2);
 
 
         horizontalLayout_3->addWidget(frameCallStatus);

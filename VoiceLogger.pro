@@ -12,6 +12,7 @@ SOURCES += \
     apihandler.cpp \
     audioplayerdialog.cpp \
     dashboard.cpp \
+    livecalls.cpp \
     login.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -21,6 +22,7 @@ HEADERS += \
     apihandler.h \
     audioplayerdialog.h \
     dashboard.h \
+    livecalls.h \
     login.h \
     mainwindow.h \
     timetimecalls.h \
@@ -29,6 +31,7 @@ HEADERS += \
 FORMS += \
     audioplayerdialog.ui \
     dashboard.ui \
+    livecalls.ui \
     login.ui \
     mainwindow.ui \
     timetimecalls.ui

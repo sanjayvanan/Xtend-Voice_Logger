@@ -81,6 +81,8 @@ void TimeTimeCalls::on_searchButton_clicked()
         return;
     }
 
+    // Reset pagination to first page when searching
+    ui->currentPage->setValue(1);
     performSearch();
 }
 
