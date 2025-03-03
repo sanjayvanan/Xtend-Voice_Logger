@@ -28,7 +28,7 @@ private slots:
 private:
     bool validateCredentials(const QString &username, const QString &password);
     static void createTablesIfNotExist();
-    static void addDefaultUserIfNotExist();
+    // static void addDefaultUserIfNotExist();
     
     Ui::login *ui;
     APIHandler *apiHandler;

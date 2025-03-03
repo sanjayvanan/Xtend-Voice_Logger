@@ -17,7 +17,7 @@ LiveCalls::LiveCalls(QWidget *parent)
     , tempWaveFile(nullptr)
 {
     ui->setupUi(this);
-
+    
     // Connect API handler signals
     connect(apiHandler, &APIHandler::liveCallsReceived,
             this, &LiveCalls::handleLiveCalls);
@@ -32,28 +32,25 @@ LiveCalls::LiveCalls(QWidget *parent)
             this, &LiveCalls::refreshLiveCalls);
 }
 
-LiveCalls::~LiveCalls()
-{
-    delete ui;
-    if (tempWaveFile) {
-        delete tempWaveFile;
-    }
-}
-
-void LiveCalls::setSessionToken(const QString &token)
-{
-    sessionToken = token;
-}
-
 void LiveCalls::startMonitoring()
 {
-    refreshLiveCalls(); // Fetch immediately
-    liveCallsTimer->start(); // Start periodic updates
+    if (!sessionToken.isEmpty()) {
+        refreshLiveCalls(); // Fetch immediately
+        liveCallsTimer->start(); // Start periodic updates
+    }
 }
 
 void LiveCalls::stopMonitoring()
 {
     liveCallsTimer->stop();
+}
+
+void LiveCalls::setSessionToken(const QString &token)
+{
+    sessionToken = token;
+    if (!token.isEmpty()) {
+        startMonitoring(); // Start monitoring when token is set
+    }
 }
 
 void LiveCalls::refreshLiveCalls()
@@ -90,11 +87,12 @@ void LiveCalls::updateLiveCallsTable(const QJsonObject &details)
 
     QJsonArray callList = details["List"].toArray();
     ui->tableLiveCalls->setRowCount(callList.size());
-    ui->labelStatus->setText(QString("Active Calls: %1").arg(details["TotalCount"].toString()));
+    ui->labelStatus->setText(QString("Active Calls: %1").arg(callList.size()));
 
     for (int i = 0; i < callList.size(); ++i) {
         QJsonObject call = callList[i].toObject();
 
+        // Create table items
         QTableWidgetItem *channel = new QTableWidgetItem(call["Channel"].toString());
         QTableWidgetItem *channelName = new QTableWidgetItem(call["Channel-Name"].toString());
         QTableWidgetItem *callType = new QTableWidgetItem(call["Call-Type"].toString() == "O" ? "Outgoing" : "Incoming");
@@ -103,6 +101,7 @@ void LiveCalls::updateLiveCallsTable(const QJsonObject &details)
         QTableWidgetItem *calledID = new QTableWidgetItem(call["Called-ID"].toString());
         QTableWidgetItem *reason = new QTableWidgetItem(call["Reason"].toString());
 
+        // Set items in table
         ui->tableLiveCalls->setItem(i, 0, channel);
         ui->tableLiveCalls->setItem(i, 1, channelName);
         ui->tableLiveCalls->setItem(i, 2, callType);
@@ -115,7 +114,7 @@ void LiveCalls::updateLiveCallsTable(const QJsonObject &details)
         if (call["Reason"].toString() == "Connected") {
             QPushButton *listenButton = new QPushButton("Listen Live");
             listenButton->setProperty("callRefId", call["CallRef-ID"].toString());
-
+            
             connect(listenButton, &QPushButton::clicked, this, [this, call]() {
                 QString callRefId = call["CallRef-ID"].toString();
                 apiHandler->streamWaveFile(sessionToken, callRefId);
@@ -155,4 +154,13 @@ void LiveCalls::handleWaveFile(const QByteArray &waveData)
 
     mediaPlayer->setSource(QUrl::fromLocalFile(tempWaveFile->fileName()));
     mediaPlayer->play();
+}
+
+LiveCalls::~LiveCalls()
+{
+    stopMonitoring();
+    delete ui;
+    if (tempWaveFile) {
+        delete tempWaveFile;
+    }
 }
