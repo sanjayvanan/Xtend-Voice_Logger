@@ -116,6 +116,34 @@
         </spacer>
        </item>
        <item>
+        <widget class="QLabel" name="labelUserName">
+         <property name="styleSheet">
+          <string notr="true">color: white;</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="btnUserManagement">
+         <property name="text">
+          <string>User Management</string>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">
+           QPushButton {
+               color: white;
+               background-color: #2980b9;
+               border: none;
+               border-radius: 4px;
+               padding: 5px 15px;
+           }
+           QPushButton:hover {
+               background-color: #3498db;
+           }
+          </string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QPushButton" name="btnLogout">
          <property name="minimumSize">
           <size>
@@ -403,6 +431,32 @@ QPushButton:pressed {
             <column>
              <property name="text">
               <string>Listen</string>
+             </property>
+            </column>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="pageUsers">
+         <layout class="QVBoxLayout" name="verticalLayout_5">
+          <item>
+           <widget class="QTableWidget" name="tableUsers">
+            <property name="columnCount">
+             <number>3</number>
+            </property>
+            <column>
+             <property name="text">
+              <string>Username</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Display Name</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Role</string>
              </property>
             </column>
            </widget>

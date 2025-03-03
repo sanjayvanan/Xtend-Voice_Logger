@@ -40,6 +40,7 @@ private slots:
 private:
     void performSearch();
     void updatePaginationControls(int totalCalls);
+    void initializeDateTimeFields();
     Ui::TimeTimeCalls *ui;
     APIHandler *apiHandler;
     QString sessionToken;

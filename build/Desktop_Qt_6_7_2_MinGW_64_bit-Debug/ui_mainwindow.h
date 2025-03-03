@@ -36,6 +36,8 @@ public:
     QLabel *labelTitle;
     QFrame *titleLine;
     QSpacerItem *horizontalSpacer;
+    QLabel *labelUserName;
+    QPushButton *btnUserManagement;
     QPushButton *btnLogout;
     QHBoxLayout *horizontalLayout;
     QWidget *sideBar;
@@ -56,6 +58,9 @@ public:
     QVBoxLayout *verticalLayout_4;
     QLabel *labelLiveCallsStatus;
     QTableWidget *tableLiveCalls;
+    QWidget *pageUsers;
+    QVBoxLayout *verticalLayout_5;
+    QTableWidget *tableUsers;
 
     void setupUi(QMainWindow *MainWindow)
     {
@@ -101,6 +106,29 @@ public:
         horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Minimum);
 
         navBarLayout->addItem(horizontalSpacer);
+
+        labelUserName = new QLabel(navBar);
+        labelUserName->setObjectName("labelUserName");
+        labelUserName->setStyleSheet(QString::fromUtf8("color: white;"));
+
+        navBarLayout->addWidget(labelUserName);
+
+        btnUserManagement = new QPushButton(navBar);
+        btnUserManagement->setObjectName("btnUserManagement");
+        btnUserManagement->setStyleSheet(QString::fromUtf8("\n"
+"           QPushButton {\n"
+"               color: white;\n"
+"               background-color: #2980b9;\n"
+"               border: none;\n"
+"               border-radius: 4px;\n"
+"               padding: 5px 15px;\n"
+"           }\n"
+"           QPushButton:hover {\n"
+"               background-color: #3498db;\n"
+"           }\n"
+"          "));
+
+        navBarLayout->addWidget(btnUserManagement);
 
         btnLogout = new QPushButton(navBar);
         btnLogout->setObjectName("btnLogout");
@@ -275,6 +303,25 @@ public:
         verticalLayout_4->addWidget(tableLiveCalls);
 
         stackedWidget->addWidget(pageLiveCalls);
+        pageUsers = new QWidget();
+        pageUsers->setObjectName("pageUsers");
+        verticalLayout_5 = new QVBoxLayout(pageUsers);
+        verticalLayout_5->setObjectName("verticalLayout_5");
+        tableUsers = new QTableWidget(pageUsers);
+        if (tableUsers->columnCount() < 3)
+            tableUsers->setColumnCount(3);
+        QTableWidgetItem *__qtablewidgetitem14 = new QTableWidgetItem();
+        tableUsers->setHorizontalHeaderItem(0, __qtablewidgetitem14);
+        QTableWidgetItem *__qtablewidgetitem15 = new QTableWidgetItem();
+        tableUsers->setHorizontalHeaderItem(1, __qtablewidgetitem15);
+        QTableWidgetItem *__qtablewidgetitem16 = new QTableWidgetItem();
+        tableUsers->setHorizontalHeaderItem(2, __qtablewidgetitem16);
+        tableUsers->setObjectName("tableUsers");
+        tableUsers->setColumnCount(3);
+
+        verticalLayout_5->addWidget(tableUsers);
+
+        stackedWidget->addWidget(pageUsers);
 
         horizontalLayout->addWidget(stackedWidget);
 
@@ -295,6 +342,7 @@ public:
     {
         MainWindow->setWindowTitle(QCoreApplication::translate("MainWindow", "MainWindow", nullptr));
         labelTitle->setText(QCoreApplication::translate("MainWindow", "Zosh Voice Logger", nullptr));
+        btnUserManagement->setText(QCoreApplication::translate("MainWindow", "User Management", nullptr));
         btnLogout->setText(QCoreApplication::translate("MainWindow", "Logout", nullptr));
         btnDashboard->setText(QCoreApplication::translate("MainWindow", "Dashboard", nullptr));
         btnLiveCalls->setText(QCoreApplication::translate("MainWindow", "Live Calls", nullptr));
@@ -330,6 +378,12 @@ public:
         ___qtablewidgetitem12->setText(QCoreApplication::translate("MainWindow", "Status", nullptr));
         QTableWidgetItem *___qtablewidgetitem13 = tableLiveCalls->horizontalHeaderItem(7);
         ___qtablewidgetitem13->setText(QCoreApplication::translate("MainWindow", "Listen", nullptr));
+        QTableWidgetItem *___qtablewidgetitem14 = tableUsers->horizontalHeaderItem(0);
+        ___qtablewidgetitem14->setText(QCoreApplication::translate("MainWindow", "Username", nullptr));
+        QTableWidgetItem *___qtablewidgetitem15 = tableUsers->horizontalHeaderItem(1);
+        ___qtablewidgetitem15->setText(QCoreApplication::translate("MainWindow", "Display Name", nullptr));
+        QTableWidgetItem *___qtablewidgetitem16 = tableUsers->horizontalHeaderItem(2);
+        ___qtablewidgetitem16->setText(QCoreApplication::translate("MainWindow", "Role", nullptr));
     } // retranslateUi
 
 };

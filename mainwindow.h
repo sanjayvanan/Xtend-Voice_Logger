@@ -6,6 +6,14 @@
 #include "timetimecalls.h"
 #include "dashboard.h"
 #include "livecalls.h"
+#include <QTableWidget>
+#include <QHeaderView>
+#include <QVBoxLayout>
+#include <QFormLayout>
+#include <QLineEdit>
+#include <QComboBox>
+#include <QGroupBox>
+#include <QPushButton>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -18,12 +26,14 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-    void setSessionToken(const QString &token);
+    void setSessionToken(const QString &token, const QString &username, const QString &role);
 
 private slots:
     void on_actionLogout_triggered();
     void handleLogoutSuccess();
     void handleLogoutFailure(const QString &message);
+    void onAddUserClicked();
+    void onDeleteUserClicked();
 
 private:
     Ui::MainWindow *ui;
@@ -32,5 +42,12 @@ private:
     TimeTimeCalls *timeTimeCalls;
     Dashboard *dashboard;
     LiveCalls *liveCalls;
+    QWidget *userManagementWidget = nullptr;
+    QString currentUserRole;
+    QString currentDisplayName;
+    QTableWidget *tableUsers = nullptr;
+
+    void setupUserManagement();
+    void refreshUserList();
 };
 #endif // MAINWINDOW_H

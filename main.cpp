@@ -7,6 +7,9 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     
+    // Initialize the database before creating the login window
+    login::initializeDatabase();
+    
     // Apply stylesheet
     QFile file(":/myres/res/style_light.qss");
     if(file.open(QFile::ReadOnly | QFile::Text)){
@@ -21,8 +24,8 @@ int main(int argc, char *argv[])
 
     // Connect login success to main window
     QObject::connect(loginWindow, &login::loginSuccessful,
-                    [mainWindow](const QString &token) {
-        mainWindow->setSessionToken(token);
+                    [mainWindow](const QString &token, const QString &username, const QString &role) {
+        mainWindow->setSessionToken(token, username, role);
         mainWindow->show();
     });
 

@@ -10,6 +10,7 @@ Dashboard::Dashboard(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Dashboard),
     apiHandler(new APIHandler(this)),
+    updateTimer(new QTimer(this)),
     totalCalls(0),          // Initialize totalCalls
     connectedCalls(0),      // Initialize connectedCalls
     missedCalls(0),         // Initialize missedCalls
@@ -27,10 +28,15 @@ Dashboard::Dashboard(QWidget *parent) :
             this, &Dashboard::handleLiveCalls);
     connect(apiHandler, &APIHandler::liveCallsFailed,
             this, &Dashboard::handleLiveCallsFailed);
+
+    // Set up timer for periodic updates
+    connect(updateTimer, &QTimer::timeout, this, &Dashboard::updateDashboard);
+    updateTimer->setInterval(5000); // 5 seconds
 }
 
 Dashboard::~Dashboard()
 {
+    stopMonitoring();
     delete ui;
 }
 
@@ -38,14 +44,21 @@ void Dashboard::setSessionToken(const QString &token)
 {
     sessionToken = token;
     if (!sessionToken.isEmpty()) {
-        // Trigger immediate update
-        updateDashboard();
-        
-        // Set up timer for periodic updates (every 5 seconds)
-        QTimer *updateTimer = new QTimer(this);
-        connect(updateTimer, &QTimer::timeout, this, &Dashboard::updateDashboard);
-        updateTimer->start(5000);
+        startMonitoring();
     }
+}
+
+void Dashboard::startMonitoring()
+{
+    // Trigger immediate update
+    updateDashboard();
+    // Start periodic updates
+    updateTimer->start();
+}
+
+void Dashboard::stopMonitoring()
+{
+    updateTimer->stop();
 }
 
 void Dashboard::updateDashboard()

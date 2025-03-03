@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include "apihandler.h"
+#include <QTimer>
 
 namespace Ui {
 class Dashboard;
@@ -16,6 +17,8 @@ public:
     explicit Dashboard(QWidget *parent = nullptr);
     ~Dashboard();
     void setSessionToken(const QString &token);
+    void startMonitoring();
+    void stopMonitoring();
 
 private slots:
     void handleCallDetails(const QJsonObject &details);
@@ -29,6 +32,7 @@ private:
     Ui::Dashboard *ui;
     APIHandler *apiHandler;
     QString sessionToken;
+    QTimer *updateTimer;
 
     // Declare the variables to track call statistics
     int totalCalls = 0;

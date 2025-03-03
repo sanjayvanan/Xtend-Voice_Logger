@@ -22,12 +22,10 @@ TimeTimeCalls::TimeTimeCalls(QWidget *parent)
     , totalPages(1)
 {
     ui->setupUi(this);
-
-    // Initialize date/time editors with default values
-    QDateTime now = QDateTime::currentDateTime();
-    ui->fromDateTime->setDateTime(now.addDays(-1));
-    ui->toDateTime->setDateTime(now);
-
+    
+    // Initialize date/time fields
+    initializeDateTimeFields();
+    
     // Connect API handler signals
     connect(apiHandler, &APIHandler::callDetailsReceived,
             this, &TimeTimeCalls::handleCallDetails);
@@ -61,16 +59,34 @@ TimeTimeCalls::~TimeTimeCalls()
     delete tempWaveFile;
 }
 
+void TimeTimeCalls::initializeDateTimeFields()
+{
+    // Set the from date to start of current day
+    QDateTime startOfDay = QDateTime::currentDateTime();
+    startOfDay.setTime(QTime(0, 0));
+    ui->fromDateTime->setDateTime(startOfDay);
+    
+    // Set the to date to current date/time
+    ui->toDateTime->setDateTime(QDateTime::currentDateTime());
+    
+    // Set default values
+    ui->pageSize->setValue(50);
+    ui->currentPage->setValue(1);
+}
+
 void TimeTimeCalls::setSessionToken(const QString &token)
 {
     sessionToken = token;
+    if (!sessionToken.isEmpty() && isVisible()) {
+        performSearch();  // Perform initial search if widget is visible
+    }
 }
 
 void TimeTimeCalls::showEvent(QShowEvent *event)
 {
-    QWidget::showEvent(event); // Call the base class implementation
+    QWidget::showEvent(event);
     if (!sessionToken.isEmpty()) {
-        performSearch(); // Perform search when the widget is shown
+        performSearch();  // Perform search when widget becomes visible
     }
 }
 
