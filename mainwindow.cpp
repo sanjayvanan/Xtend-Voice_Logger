@@ -28,6 +28,10 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
     , apiHandler(new APIHandler(this))
+    , dashboard(new Dashboard(this))
+    , liveCalls(new LiveCalls(this))
+    , timeTimeCalls(new TimeTimeCalls(this))
+    , userManagement(nullptr)  // Initialize to nullptr
 {
     ui->setupUi(this);
     setWindowTitle("Zosh Voice Logger");
@@ -48,23 +52,9 @@ MainWindow::MainWindow(QWidget *parent)
     ui->stackedWidget->addWidget(timeTimeCalls); // Index 2: Time to Time Calls
 
     // Connect button clicks to switch pages
-    connect(ui->btnDashboard, &QPushButton::clicked, [this]() {
-        ui->stackedWidget->setCurrentIndex(0);
-        dashboard->setSessionToken(sessionToken);
-        liveCalls->stopMonitoring();
-    });
-
-    connect(ui->btnLiveCalls, &QPushButton::clicked, [this]() {
-        ui->stackedWidget->setCurrentIndex(1);
-        liveCalls->setSessionToken(sessionToken);
-        liveCalls->startMonitoring();
-    });
-
-    connect(ui->btnTimeTime, &QPushButton::clicked, [this]() {
-        ui->stackedWidget->setCurrentIndex(2);
-        timeTimeCalls->setSessionToken(sessionToken);
-        liveCalls->stopMonitoring();
-    });
+    connect(ui->btnDashboard, &QPushButton::clicked, this, &MainWindow::on_btnDashboard_clicked);
+    connect(ui->btnLiveCalls, &QPushButton::clicked, this, &MainWindow::on_btnLiveCalls_clicked);
+    connect(ui->btnTimeTime, &QPushButton::clicked, this, &MainWindow::on_btnTimeTimeCalls_clicked);
 
     // Connect logout button
     connect(ui->btnLogout, &QPushButton::clicked, this, &MainWindow::on_actionLogout_triggered);
@@ -315,6 +305,40 @@ void MainWindow::onDeleteUserClicked()
         } else {
             QMessageBox::warning(this, "Error", "Failed to delete user: " + query.lastError().text());
         }
+    }
+}
+
+void MainWindow::on_btnDashboard_clicked()
+{
+    ui->stackedWidget->setCurrentWidget(dashboard);
+}
+
+void MainWindow::on_btnLiveCalls_clicked()
+{
+    ui->stackedWidget->setCurrentWidget(liveCalls);
+}
+
+void MainWindow::on_btnTimeTimeCalls_clicked()
+{
+    ui->stackedWidget->setCurrentWidget(timeTimeCalls);
+}
+
+void MainWindow::on_btnUserManagement_clicked()
+{
+    if (!userManagement) {
+        userManagement = new UserManagement(this);
+        userManagement->setAttribute(Qt::WA_DeleteOnClose);
+        connect(userManagement, &QWidget::destroyed, [this]() {
+            userManagement = nullptr;
+        });
+    }
+    
+    if (userManagement) {
+        userManagement->setSessionToken(sessionToken);
+        userManagement->show();
+        userManagement->raise();
+        userManagement->activateWindow();
+        userManagement->refreshUserList(); // Refresh the user list when shown
     }
 }
 

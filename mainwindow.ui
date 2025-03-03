@@ -123,24 +123,24 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="btnUserManagement">
-         <property name="text">
-          <string>User Management</string>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">
-           QPushButton {
-               color: white;
-               background-color: #2980b9;
-               border: none;
-               border-radius: 4px;
-               padding: 5px 15px;
-           }
-           QPushButton:hover {
-               background-color: #3498db;
-           }
-          </string>
-         </property>
+       <widget class="QPushButton" name="btnUserManagement">
+        <property name="text">
+        <string>User Management</string>
+        </property>
+        <property name="styleSheet">
+        <string notr="true">
+        QPushButton {
+            color: white;
+            background-color: #2980b9;
+            border: none;
+            border-radius: 4px;
+            padding: 5px 15px;
+        }
+        QPushButton:hover {
+            background-color: #3498db;
+        }
+        </string>
+        </property>
         </widget>
        </item>
        <item>

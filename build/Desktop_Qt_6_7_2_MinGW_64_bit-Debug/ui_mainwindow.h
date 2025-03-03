@@ -116,17 +116,17 @@ public:
         btnUserManagement = new QPushButton(navBar);
         btnUserManagement->setObjectName("btnUserManagement");
         btnUserManagement->setStyleSheet(QString::fromUtf8("\n"
-"           QPushButton {\n"
-"               color: white;\n"
-"               background-color: #2980b9;\n"
-"               border: none;\n"
-"               border-radius: 4px;\n"
-"               padding: 5px 15px;\n"
-"           }\n"
-"           QPushButton:hover {\n"
-"               background-color: #3498db;\n"
-"           }\n"
-"          "));
+"        QPushButton {\n"
+"            color: white;\n"
+"            background-color: #2980b9;\n"
+"            border: none;\n"
+"            border-radius: 4px;\n"
+"            padding: 5px 15px;\n"
+"        }\n"
+"        QPushButton:hover {\n"
+"            background-color: #3498db;\n"
+"        }\n"
+"        "));
 
         navBarLayout->addWidget(btnUserManagement);
 

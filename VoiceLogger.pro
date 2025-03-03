@@ -17,6 +17,7 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     timetimecalls.cpp \
+    usermanagement.cpp
 
 HEADERS += \
     apihandler.h \
@@ -26,7 +27,8 @@ HEADERS += \
     login.h \
     mainwindow.h \
     timetimecalls.h \
-    mainwindow.h
+    mainwindow.h \
+    usermanagement.h
 
 FORMS += \
     audioplayerdialog.ui \
@@ -34,7 +36,8 @@ FORMS += \
     livecalls.ui \
     login.ui \
     mainwindow.ui \
-    timetimecalls.ui
+    timetimecalls.ui \
+    usermanagement.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

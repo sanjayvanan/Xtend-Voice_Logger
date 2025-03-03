@@ -6,6 +6,7 @@ release/login.o
 release/main.o
 release/mainwindow.o
 release/timetimecalls.o
+release/usermanagement.o
 release/qrc_Resource.o
 release/moc_apihandler.o
 release/moc_audioplayerdialog.o
@@ -14,3 +15,4 @@ release/moc_livecalls.o
 release/moc_login.o
 release/moc_mainwindow.o
 release/moc_timetimecalls.o
+release/moc_usermanagement.o

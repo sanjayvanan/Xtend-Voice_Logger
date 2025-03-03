@@ -6,6 +6,7 @@ debug/login.o
 debug/main.o
 debug/mainwindow.o
 debug/timetimecalls.o
+debug/usermanagement.o
 debug/qrc_Resource.o
 debug/moc_apihandler.o
 debug/moc_audioplayerdialog.o
@@ -14,3 +15,4 @@ debug/moc_livecalls.o
 debug/moc_login.o
 debug/moc_mainwindow.o
 debug/moc_timetimecalls.o
+debug/moc_usermanagement.o

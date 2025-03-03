@@ -6,6 +6,7 @@
 #include "timetimecalls.h"
 #include "dashboard.h"
 #include "livecalls.h"
+#include "usermanagement.h"
 #include <QTableWidget>
 #include <QHeaderView>
 #include <QVBoxLayout>
@@ -14,6 +15,7 @@
 #include <QComboBox>
 #include <QGroupBox>
 #include <QPushButton>
+#include <QStackedWidget>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -34,6 +36,10 @@ private slots:
     void handleLogoutFailure(const QString &message);
     void onAddUserClicked();
     void onDeleteUserClicked();
+    void on_btnDashboard_clicked();
+    void on_btnLiveCalls_clicked();
+    void on_btnTimeTimeCalls_clicked();
+    void on_btnUserManagement_clicked();
 
 private:
     Ui::MainWindow *ui;
@@ -42,6 +48,7 @@ private:
     TimeTimeCalls *timeTimeCalls;
     Dashboard *dashboard;
     LiveCalls *liveCalls;
+    UserManagement *userManagement;
     QWidget *userManagementWidget = nullptr;
     QString currentUserRole;
     QString currentDisplayName;
