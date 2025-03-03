@@ -123,27 +123,6 @@
         </widget>
        </item>
        <item>
-       <widget class="QPushButton" name="btnUserManagement">
-        <property name="text">
-        <string>User Management</string>
-        </property>
-        <property name="styleSheet">
-        <string notr="true">
-        QPushButton {
-            color: white;
-            background-color: #2980b9;
-            border: none;
-            border-radius: 4px;
-            padding: 5px 15px;
-        }
-        QPushButton:hover {
-            background-color: #3498db;
-        }
-        </string>
-        </property>
-        </widget>
-       </item>
-       <item>
         <widget class="QPushButton" name="btnLogout">
          <property name="minimumSize">
           <size>
@@ -199,7 +178,7 @@ QPushButton:pressed {
         <property name="styleSheet">
          <string notr="true">background-color: #2C3E50;</string>
         </property>
-        <layout class="QVBoxLayout" name="verticalLayout_2">
+        <layout class="QVBoxLayout" name="sideBarLayout">
          <property name="spacing">
           <number>5</number>
          </property>
@@ -276,7 +255,7 @@ QPushButton:pressed {
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="btnTimeTime">
+          <widget class="QPushButton" name="btnTimeTimeCalls">
            <property name="minimumSize">
             <size>
              <width>0</width>
@@ -302,6 +281,16 @@ QPushButton:pressed {
            </property>
            <property name="text">
             <string>Time to Time</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="btnUserManagement">
+           <property name="text">
+            <string>User Management</string>
+           </property>
+           <property name="visible">
+            <bool>false</bool>
            </property>
           </widget>
          </item>

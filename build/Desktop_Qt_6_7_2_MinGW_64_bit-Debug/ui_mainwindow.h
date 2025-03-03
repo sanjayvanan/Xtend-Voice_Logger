@@ -37,14 +37,14 @@ public:
     QFrame *titleLine;
     QSpacerItem *horizontalSpacer;
     QLabel *labelUserName;
-    QPushButton *btnUserManagement;
     QPushButton *btnLogout;
     QHBoxLayout *horizontalLayout;
     QWidget *sideBar;
-    QVBoxLayout *verticalLayout_2;
+    QVBoxLayout *sideBarLayout;
     QPushButton *btnDashboard;
     QPushButton *btnLiveCalls;
-    QPushButton *btnTimeTime;
+    QPushButton *btnTimeTimeCalls;
+    QPushButton *btnUserManagement;
     QSpacerItem *verticalSpacer;
     QStackedWidget *stackedWidget;
     QWidget *pageDashboard;
@@ -113,23 +113,6 @@ public:
 
         navBarLayout->addWidget(labelUserName);
 
-        btnUserManagement = new QPushButton(navBar);
-        btnUserManagement->setObjectName("btnUserManagement");
-        btnUserManagement->setStyleSheet(QString::fromUtf8("\n"
-"        QPushButton {\n"
-"            color: white;\n"
-"            background-color: #2980b9;\n"
-"            border: none;\n"
-"            border-radius: 4px;\n"
-"            padding: 5px 15px;\n"
-"        }\n"
-"        QPushButton:hover {\n"
-"            background-color: #3498db;\n"
-"        }\n"
-"        "));
-
-        navBarLayout->addWidget(btnUserManagement);
-
         btnLogout = new QPushButton(navBar);
         btnLogout->setObjectName("btnLogout");
         btnLogout->setMinimumSize(QSize(100, 30));
@@ -161,10 +144,10 @@ public:
         sideBar->setMinimumSize(QSize(180, 0));
         sideBar->setMaximumSize(QSize(16777215, 16777215));
         sideBar->setStyleSheet(QString::fromUtf8("background-color: #2C3E50;"));
-        verticalLayout_2 = new QVBoxLayout(sideBar);
-        verticalLayout_2->setSpacing(5);
-        verticalLayout_2->setObjectName("verticalLayout_2");
-        verticalLayout_2->setContentsMargins(0, 10, 0, 0);
+        sideBarLayout = new QVBoxLayout(sideBar);
+        sideBarLayout->setSpacing(5);
+        sideBarLayout->setObjectName("sideBarLayout");
+        sideBarLayout->setContentsMargins(0, 10, 0, 0);
         btnDashboard = new QPushButton(sideBar);
         btnDashboard->setObjectName("btnDashboard");
         btnDashboard->setMinimumSize(QSize(0, 40));
@@ -182,7 +165,7 @@ public:
 "    background-color: #2980B9;\n"
 "}"));
 
-        verticalLayout_2->addWidget(btnDashboard);
+        sideBarLayout->addWidget(btnDashboard);
 
         btnLiveCalls = new QPushButton(sideBar);
         btnLiveCalls->setObjectName("btnLiveCalls");
@@ -201,13 +184,13 @@ public:
 "    background-color: #2980B9;\n"
 "}"));
 
-        verticalLayout_2->addWidget(btnLiveCalls);
+        sideBarLayout->addWidget(btnLiveCalls);
 
-        btnTimeTime = new QPushButton(sideBar);
-        btnTimeTime->setObjectName("btnTimeTime");
-        btnTimeTime->setMinimumSize(QSize(0, 40));
-        btnTimeTime->setCursor(QCursor(Qt::CursorShape::PointingHandCursor));
-        btnTimeTime->setStyleSheet(QString::fromUtf8("QPushButton {\n"
+        btnTimeTimeCalls = new QPushButton(sideBar);
+        btnTimeTimeCalls->setObjectName("btnTimeTimeCalls");
+        btnTimeTimeCalls->setMinimumSize(QSize(0, 40));
+        btnTimeTimeCalls->setCursor(QCursor(Qt::CursorShape::PointingHandCursor));
+        btnTimeTimeCalls->setStyleSheet(QString::fromUtf8("QPushButton {\n"
 "    color: white;\n"
 "    border: none;\n"
 "    text-align: left;\n"
@@ -220,11 +203,17 @@ public:
 "    background-color: #2980B9;\n"
 "}"));
 
-        verticalLayout_2->addWidget(btnTimeTime);
+        sideBarLayout->addWidget(btnTimeTimeCalls);
+
+        btnUserManagement = new QPushButton(sideBar);
+        btnUserManagement->setObjectName("btnUserManagement");
+        btnUserManagement->setVisible(false);
+
+        sideBarLayout->addWidget(btnUserManagement);
 
         verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Policy::Minimum, QSizePolicy::Policy::Expanding);
 
-        verticalLayout_2->addItem(verticalSpacer);
+        sideBarLayout->addItem(verticalSpacer);
 
 
         horizontalLayout->addWidget(sideBar);
@@ -342,11 +331,11 @@ public:
     {
         MainWindow->setWindowTitle(QCoreApplication::translate("MainWindow", "MainWindow", nullptr));
         labelTitle->setText(QCoreApplication::translate("MainWindow", "Zosh Voice Logger", nullptr));
-        btnUserManagement->setText(QCoreApplication::translate("MainWindow", "User Management", nullptr));
         btnLogout->setText(QCoreApplication::translate("MainWindow", "Logout", nullptr));
         btnDashboard->setText(QCoreApplication::translate("MainWindow", "Dashboard", nullptr));
         btnLiveCalls->setText(QCoreApplication::translate("MainWindow", "Live Calls", nullptr));
-        btnTimeTime->setText(QCoreApplication::translate("MainWindow", "Time to Time", nullptr));
+        btnTimeTimeCalls->setText(QCoreApplication::translate("MainWindow", "Time to Time", nullptr));
+        btnUserManagement->setText(QCoreApplication::translate("MainWindow", "User Management", nullptr));
         label->setText(QCoreApplication::translate("MainWindow", "Dashboard Page", nullptr));
         labelTotalCalls->setText(QCoreApplication::translate("MainWindow", "Total Connected Calls: 0", nullptr));
         QTableWidgetItem *___qtablewidgetitem = tableWidget->horizontalHeaderItem(0);

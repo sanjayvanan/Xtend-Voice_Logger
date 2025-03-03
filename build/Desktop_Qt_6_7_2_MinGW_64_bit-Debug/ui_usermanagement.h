@@ -58,7 +58,8 @@ public:
         font.setPointSize(16);
         font.setBold(true);
         titleLabel->setFont(font);
-        titleLabel->setAlignment(Qt::AlignCenter);
+        titleLabel->setAlignment(Qt::AlignLeft);
+        titleLabel->setMargin(0);
 
         verticalLayout->addWidget(titleLabel);
 
@@ -176,14 +177,12 @@ public:
         verticalLayout->addLayout(buttonLayout);
 
         userTable = new QTableWidget(UserManagement);
-        if (userTable->columnCount() < 3)
-            userTable->setColumnCount(3);
+        if (userTable->columnCount() < 2)
+            userTable->setColumnCount(2);
         QTableWidgetItem *__qtablewidgetitem = new QTableWidgetItem();
         userTable->setHorizontalHeaderItem(0, __qtablewidgetitem);
         QTableWidgetItem *__qtablewidgetitem1 = new QTableWidgetItem();
         userTable->setHorizontalHeaderItem(1, __qtablewidgetitem1);
-        QTableWidgetItem *__qtablewidgetitem2 = new QTableWidgetItem();
-        userTable->setHorizontalHeaderItem(2, __qtablewidgetitem2);
         userTable->setObjectName("userTable");
         userTable->setSelectionBehavior(QAbstractItemView::SelectRows);
         userTable->setSelectionMode(QAbstractItemView::SingleSelection);
@@ -200,6 +199,7 @@ public:
     {
         UserManagement->setWindowTitle(QCoreApplication::translate("UserManagement", "User Management", nullptr));
         titleLabel->setText(QCoreApplication::translate("UserManagement", "User Management", nullptr));
+        titleLabel->setProperty("class", QVariant(QCoreApplication::translate("UserManagement", "page-title", nullptr)));
         formGroupBox->setTitle(QCoreApplication::translate("UserManagement", "User Details", nullptr));
         usernameLabel->setText(QCoreApplication::translate("UserManagement", "Username:", nullptr));
         passwordLabel->setText(QCoreApplication::translate("UserManagement", "Password:", nullptr));
@@ -215,8 +215,6 @@ public:
         ___qtablewidgetitem->setText(QCoreApplication::translate("UserManagement", "Username", nullptr));
         QTableWidgetItem *___qtablewidgetitem1 = userTable->horizontalHeaderItem(1);
         ___qtablewidgetitem1->setText(QCoreApplication::translate("UserManagement", "Role", nullptr));
-        QTableWidgetItem *___qtablewidgetitem2 = userTable->horizontalHeaderItem(2);
-        ___qtablewidgetitem2->setText(QCoreApplication::translate("UserManagement", "Actions", nullptr));
     } // retranslateUi
 
 };

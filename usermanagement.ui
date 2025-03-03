@@ -26,7 +26,13 @@
       <string>User Management</string>
      </property>
      <property name="alignment">
-      <set>Qt::AlignCenter</set>
+      <set>Qt::AlignLeft</set>
+     </property>
+     <property name="margin">
+      <number>0</number>
+     </property>
+     <property name="class" stdset="0">
+      <string>page-title</string>
      </property>
     </widget>
    </item>
@@ -188,11 +194,6 @@
      <column>
       <property name="text">
        <string>Role</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Actions</string>
       </property>
      </column>
     </widget>

@@ -31,7 +31,7 @@ MainWindow::MainWindow(QWidget *parent)
     , dashboard(new Dashboard(this))
     , liveCalls(new LiveCalls(this))
     , timeTimeCalls(new TimeTimeCalls(this))
-    , userManagement(nullptr)  // Initialize to nullptr
+    , userManagement(new UserManagement(this))
 {
     ui->setupUi(this);
     setWindowTitle("Zosh Voice Logger");
@@ -50,17 +50,22 @@ MainWindow::MainWindow(QWidget *parent)
     ui->stackedWidget->addWidget(dashboard);     // Index 0: Dashboard
     ui->stackedWidget->addWidget(liveCalls);     // Index 1: Live Calls
     ui->stackedWidget->addWidget(timeTimeCalls); // Index 2: Time to Time Calls
+    ui->stackedWidget->addWidget(userManagement);// Index 3: User Management
 
     // Connect button clicks to switch pages
     connect(ui->btnDashboard, &QPushButton::clicked, this, &MainWindow::on_btnDashboard_clicked);
     connect(ui->btnLiveCalls, &QPushButton::clicked, this, &MainWindow::on_btnLiveCalls_clicked);
-    connect(ui->btnTimeTime, &QPushButton::clicked, this, &MainWindow::on_btnTimeTimeCalls_clicked);
+    connect(ui->btnTimeTimeCalls, &QPushButton::clicked, this, &MainWindow::on_btnTimeTimeCalls_clicked);
+    connect(ui->btnUserManagement, &QPushButton::clicked, this, &MainWindow::on_btnUserManagement_clicked);
 
     // Connect logout button
     connect(ui->btnLogout, &QPushButton::clicked, this, &MainWindow::on_actionLogout_triggered);
 
+    // Hide user management button initially
+    ui->btnUserManagement->setVisible(false);
+
     // Set default view
-    ui->stackedWidget->setCurrentIndex(0);
+    ui->stackedWidget->setCurrentWidget(dashboard);
 }
 
 MainWindow::~MainWindow()
@@ -76,55 +81,25 @@ void MainWindow::setSessionToken(const QString &token, const QString &username, 
     // Update UI with username
     ui->labelUserName->setText(username);
     
-    // Initialize dashboard first
+    // Show/hide admin features based on role
+    ui->btnUserManagement->setVisible(role == "admin");
+    
+    // Initialize components
     if (dashboard) {
         dashboard->setSessionToken(token);
-        dashboard->stopMonitoring(); // Stop any existing monitoring
-        dashboard->startMonitoring(); // Start fresh monitoring
+        dashboard->startMonitoring();
     }
     
-    // Initialize time to time calls
     if (timeTimeCalls) {
         timeTimeCalls->setSessionToken(token);
     }
     
-    // Initialize live calls
     if (liveCalls) {
         liveCalls->setSessionToken(token);
-        liveCalls->stopMonitoring(); // Ensure monitoring is stopped initially
     }
     
-    // Show/hide admin features based on role
-    if (role == "admin") {
-        // Hide the user management button initially
-        if (ui->btnUserManagement) {
-            ui->btnUserManagement->hide();
-        }
-        
-        // Delay user management setup and button display
-        QTimer::singleShot(1000, this, [this]() {
-            try {
-                setupUserManagement();
-                if (ui->btnUserManagement) {
-                    ui->btnUserManagement->show();
-                }
-            } catch (const std::exception& e) {
-                qDebug() << "Error setting up user management:" << e.what();
-                QMessageBox::warning(this, "Warning", 
-                    "Error initializing admin features. Some functions may be limited.");
-            }
-        });
-    } else {
-        if (ui->btnUserManagement) {
-            ui->btnUserManagement->hide();
-        }
-        if (userManagementWidget && userManagementWidget->isVisible()) {
-            userManagementWidget->hide();
-        }
-    }
-    
-    // Ensure we're showing the dashboard
-    ui->stackedWidget->setCurrentIndex(0);
+    // Show dashboard initially
+    ui->stackedWidget->setCurrentWidget(dashboard);
 }
 
 void MainWindow::on_actionLogout_triggered()
@@ -325,20 +300,6 @@ void MainWindow::on_btnTimeTimeCalls_clicked()
 
 void MainWindow::on_btnUserManagement_clicked()
 {
-    if (!userManagement) {
-        userManagement = new UserManagement(this);
-        userManagement->setAttribute(Qt::WA_DeleteOnClose);
-        connect(userManagement, &QWidget::destroyed, [this]() {
-            userManagement = nullptr;
-        });
-    }
-    
-    if (userManagement) {
-        userManagement->setSessionToken(sessionToken);
-        userManagement->show();
-        userManagement->raise();
-        userManagement->activateWindow();
-        userManagement->refreshUserList(); // Refresh the user list when shown
-    }
+    ui->stackedWidget->setCurrentWidget(userManagement);
 }
 
