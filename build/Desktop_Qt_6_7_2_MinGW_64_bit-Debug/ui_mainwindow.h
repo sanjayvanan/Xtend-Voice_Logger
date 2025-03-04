@@ -49,7 +49,6 @@ public:
     QStackedWidget *stackedWidget;
     QWidget *pageDashboard;
     QVBoxLayout *verticalLayout;
-    QLabel *label;
     QWidget *pageCallLogs;
     QVBoxLayout *verticalLayout_3;
     QLabel *labelTotalCalls;
@@ -224,11 +223,6 @@ public:
         pageDashboard->setObjectName("pageDashboard");
         verticalLayout = new QVBoxLayout(pageDashboard);
         verticalLayout->setObjectName("verticalLayout");
-        label = new QLabel(pageDashboard);
-        label->setObjectName("label");
-
-        verticalLayout->addWidget(label);
-
         stackedWidget->addWidget(pageDashboard);
         pageCallLogs = new QWidget();
         pageCallLogs->setObjectName("pageCallLogs");
@@ -336,7 +330,6 @@ public:
         btnLiveCalls->setText(QCoreApplication::translate("MainWindow", "Live Calls", nullptr));
         btnTimeTimeCalls->setText(QCoreApplication::translate("MainWindow", "Time to Time", nullptr));
         btnUserManagement->setText(QCoreApplication::translate("MainWindow", "User Management", nullptr));
-        label->setText(QCoreApplication::translate("MainWindow", "Dashboard Page", nullptr));
         labelTotalCalls->setText(QCoreApplication::translate("MainWindow", "Total Connected Calls: 0", nullptr));
         QTableWidgetItem *___qtablewidgetitem = tableWidget->horizontalHeaderItem(0);
         ___qtablewidgetitem->setText(QCoreApplication::translate("MainWindow", "Call Ref ID", nullptr));

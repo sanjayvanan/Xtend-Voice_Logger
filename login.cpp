@@ -25,6 +25,9 @@ login::login(QWidget *parent)
             [this](const QString &token) {
                 backendToken = token;
             });
+            
+    // Initialize the database
+    initializeDatabase();
 }
 
 login::~login()
@@ -78,7 +81,7 @@ void login::createTablesIfNotExist()
         
 //         // Hash the password 'admin' using SHA256
 //         QString hashedPassword = QString(QCryptographicHash::hash("admin",
-//                                QCryptographicHash::Sha256).toHex());
+//                                 QCryptographicHash::Sha256).toHex());
         
 //         query.bindValue(":password_hash", hashedPassword);
 //         query.bindValue(":role", "admin");
@@ -152,6 +155,7 @@ void login::on_login_2_clicked()
     if (validateCredentials(username, password)) {
         // Use the already obtained backend token
         handleLoginSuccess(backendToken);
+        this->hide(); // Hide the login window after successful login
     } else {
         handleLoginFailure("Invalid username or password");
     }

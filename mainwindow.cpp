@@ -61,6 +61,31 @@ MainWindow::MainWindow(QWidget *parent)
     // Connect logout button
     connect(ui->btnLogout, &QPushButton::clicked, this, &MainWindow::on_actionLogout_triggered);
 
+    // Ensure User Management button has the same styling as other sidebar buttons
+    ui->btnUserManagement->setStyleSheet(ui->btnDashboard->styleSheet());
+    ui->btnUserManagement->setMinimumHeight(ui->btnDashboard->minimumHeight());
+    ui->btnUserManagement->setMaximumHeight(ui->btnDashboard->maximumHeight());
+    ui->btnUserManagement->setSizePolicy(ui->btnDashboard->sizePolicy());
+    ui->btnUserManagement->setFont(ui->btnDashboard->font());
+    ui->btnUserManagement->setIconSize(ui->btnDashboard->iconSize());
+    ui->btnUserManagement->setFlat(ui->btnDashboard->isFlat());
+    
+    // Ensure button is properly aligned in the sidebar
+    QLayout* sidebarLayout = ui->btnDashboard->parentWidget()->layout();
+    if (sidebarLayout) {
+        // Make sure there's proper spacing between the buttons
+        int index = sidebarLayout->indexOf(ui->btnTimeTimeCalls);
+        if (index != -1) {
+            // Add the User Management button right after Time to Time Calls with the same layout parameters
+            QLayoutItem* item = sidebarLayout->itemAt(index);
+            if (item) {
+                ui->btnUserManagement->setContentsMargins(ui->btnTimeTimeCalls->contentsMargins());
+                // The User Management button should already be in the layout from the UI file,
+                // but we need to ensure it has consistent margins and alignment
+            }
+        }
+    }
+
     // Hide user management button initially
     ui->btnUserManagement->setVisible(false);
 
@@ -302,4 +327,3 @@ void MainWindow::on_btnUserManagement_clicked()
 {
     ui->stackedWidget->setCurrentWidget(userManagement);
 }
-

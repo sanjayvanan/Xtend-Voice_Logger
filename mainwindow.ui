@@ -286,11 +286,11 @@ QPushButton:pressed {
          </item>
          <item>
           <widget class="QPushButton" name="btnUserManagement">
-           <property name="text">
-            <string>User Management</string>
-           </property>
            <property name="visible">
             <bool>false</bool>
+           </property>
+           <property name="text">
+            <string>User Management</string>
            </property>
           </widget>
          </item>
@@ -316,15 +316,7 @@ QPushButton:pressed {
          <number>0</number>
         </property>
         <widget class="QWidget" name="pageDashboard">
-         <layout class="QVBoxLayout" name="verticalLayout">
-          <item>
-           <widget class="QLabel" name="label">
-            <property name="text">
-             <string>Dashboard Page</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
+         <layout class="QVBoxLayout" name="verticalLayout"/>
         </widget>
         <widget class="QWidget" name="pageCallLogs">
          <layout class="QVBoxLayout" name="verticalLayout_3">
