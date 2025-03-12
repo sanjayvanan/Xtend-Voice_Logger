@@ -330,7 +330,7 @@
      </property>
      <column>
       <property name="text">
-       <string>Call Ref ID</string>
+       <string>Play</string>
       </property>
      </column>
      <column>
@@ -340,17 +340,17 @@
      </column>
      <column>
       <property name="text">
-       <string>Channel Name</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Channel Hardware</string>
+       <string>Call Ref ID</string>
       </property>
      </column>
      <column>
       <property name="text">
        <string>Call Type</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Call Status</string>
       </property>
      </column>
      <column>
@@ -375,17 +375,12 @@
      </column>
      <column>
       <property name="text">
-       <string>Status</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
        <string>Compression</string>
       </property>
      </column>
      <column>
       <property name="text">
-       <string>Play</string>
+       <string>Channel Hardware</string>
       </property>
      </column>
     </widget>

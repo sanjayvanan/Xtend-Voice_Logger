@@ -219,8 +219,8 @@ public:
         verticalLayout->addLayout(paginationLayout);
 
         tableWidget = new QTableWidget(TimeTimeCalls);
-        if (tableWidget->columnCount() < 12)
-            tableWidget->setColumnCount(12);
+        if (tableWidget->columnCount() < 11)
+            tableWidget->setColumnCount(11);
         QTableWidgetItem *__qtablewidgetitem = new QTableWidgetItem();
         tableWidget->setHorizontalHeaderItem(0, __qtablewidgetitem);
         QTableWidgetItem *__qtablewidgetitem1 = new QTableWidgetItem();
@@ -243,8 +243,6 @@ public:
         tableWidget->setHorizontalHeaderItem(9, __qtablewidgetitem9);
         QTableWidgetItem *__qtablewidgetitem10 = new QTableWidgetItem();
         tableWidget->setHorizontalHeaderItem(10, __qtablewidgetitem10);
-        QTableWidgetItem *__qtablewidgetitem11 = new QTableWidgetItem();
-        tableWidget->setHorizontalHeaderItem(11, __qtablewidgetitem11);
         tableWidget->setObjectName("tableWidget");
         QSizePolicy sizePolicy2(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Expanding);
         sizePolicy2.setHorizontalStretch(0);
@@ -282,15 +280,15 @@ public:
         btnPrevPage->setText(QCoreApplication::translate("TimeTimeCalls", "<", nullptr));
         btnNextPage->setText(QCoreApplication::translate("TimeTimeCalls", ">", nullptr));
         QTableWidgetItem *___qtablewidgetitem = tableWidget->horizontalHeaderItem(0);
-        ___qtablewidgetitem->setText(QCoreApplication::translate("TimeTimeCalls", "Call Ref ID", nullptr));
+        ___qtablewidgetitem->setText(QCoreApplication::translate("TimeTimeCalls", "Play", nullptr));
         QTableWidgetItem *___qtablewidgetitem1 = tableWidget->horizontalHeaderItem(1);
         ___qtablewidgetitem1->setText(QCoreApplication::translate("TimeTimeCalls", "Channel", nullptr));
         QTableWidgetItem *___qtablewidgetitem2 = tableWidget->horizontalHeaderItem(2);
-        ___qtablewidgetitem2->setText(QCoreApplication::translate("TimeTimeCalls", "Channel Name", nullptr));
+        ___qtablewidgetitem2->setText(QCoreApplication::translate("TimeTimeCalls", "Call Ref ID", nullptr));
         QTableWidgetItem *___qtablewidgetitem3 = tableWidget->horizontalHeaderItem(3);
-        ___qtablewidgetitem3->setText(QCoreApplication::translate("TimeTimeCalls", "Channel Hardware", nullptr));
+        ___qtablewidgetitem3->setText(QCoreApplication::translate("TimeTimeCalls", "Call Type", nullptr));
         QTableWidgetItem *___qtablewidgetitem4 = tableWidget->horizontalHeaderItem(4);
-        ___qtablewidgetitem4->setText(QCoreApplication::translate("TimeTimeCalls", "Call Type", nullptr));
+        ___qtablewidgetitem4->setText(QCoreApplication::translate("TimeTimeCalls", "Call Status", nullptr));
         QTableWidgetItem *___qtablewidgetitem5 = tableWidget->horizontalHeaderItem(5);
         ___qtablewidgetitem5->setText(QCoreApplication::translate("TimeTimeCalls", "Call Time", nullptr));
         QTableWidgetItem *___qtablewidgetitem6 = tableWidget->horizontalHeaderItem(6);
@@ -300,11 +298,9 @@ public:
         QTableWidgetItem *___qtablewidgetitem8 = tableWidget->horizontalHeaderItem(8);
         ___qtablewidgetitem8->setText(QCoreApplication::translate("TimeTimeCalls", "Connect Duration", nullptr));
         QTableWidgetItem *___qtablewidgetitem9 = tableWidget->horizontalHeaderItem(9);
-        ___qtablewidgetitem9->setText(QCoreApplication::translate("TimeTimeCalls", "Status", nullptr));
+        ___qtablewidgetitem9->setText(QCoreApplication::translate("TimeTimeCalls", "Compression", nullptr));
         QTableWidgetItem *___qtablewidgetitem10 = tableWidget->horizontalHeaderItem(10);
-        ___qtablewidgetitem10->setText(QCoreApplication::translate("TimeTimeCalls", "Compression", nullptr));
-        QTableWidgetItem *___qtablewidgetitem11 = tableWidget->horizontalHeaderItem(11);
-        ___qtablewidgetitem11->setText(QCoreApplication::translate("TimeTimeCalls", "Play", nullptr));
+        ___qtablewidgetitem10->setText(QCoreApplication::translate("TimeTimeCalls", "Channel Hardware", nullptr));
         (void)TimeTimeCalls;
     } // retranslateUi
 

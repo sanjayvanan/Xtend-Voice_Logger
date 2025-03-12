@@ -138,41 +138,56 @@ void TimeTimeCalls::updateCallDetailsTable(const QJsonObject &details)
         QString callerId = call["Caller-ID"].toString();
         QString calledId = call["Called-ID"].toString();
         QString channel = call["Channel"].toString();
-        QString channelName = call["Channel-Name"].toString();
-        QString channelHardware = call["Channel-Hardware"].toString();
         QString callType = call["Call-Type"].toString();
+        QString callStatus = call["Call-Status"].toString();
         QString callTime = call["Call-Time"].toString();
         QString totalDuration = call["Total-Duration"].toString();
         QString ringDuration = call["Ring-Duration"].toString();
         QString connectDuration = call["Connect-Duration"].toString();
-        QString callStatus = call["Call-Status"].toString();
         QString compression = call["Compression"].toString();
+        QString channelHardware = call["Channel-Hardware"].toString();
+
+        // Format Call Time from YYYYMMDDHHMMSS to yyyy-MM-dd HH:mm:ss
+        if (callTime.length() == 14) { // Ensure the length is correct
+            QString year = callTime.mid(0, 4);
+            QString month = callTime.mid(4, 2);
+            QString day = callTime.mid(6, 2);
+            QString hour = callTime.mid(8, 2);
+            QString minute = callTime.mid(10, 2);
+            QString second = callTime.mid(12, 2);
+            callTime = QString("%1-%2-%3 %4:%5:%6").arg(year, month, day, hour, minute, second);
+        } else {
+            callTime = "Invalid Date"; // Handle invalid date format
+        }
 
         // Determine which ID to display
         QString displayId = !callerId.isEmpty() ? callerId : (!calledId.isEmpty() ? calledId : refId);
-        QTableWidgetItem *refIdItem = new QTableWidgetItem(displayId);
+
+        // Create table items
+        QTableWidgetItem *playButtonItem = new QTableWidgetItem("Play");
         QTableWidgetItem *channelItem = new QTableWidgetItem(channel);
-        QTableWidgetItem *channelNameItem = new QTableWidgetItem(channelName);
-        QTableWidgetItem *channelHardwareItem = new QTableWidgetItem(channelHardware);
+        QTableWidgetItem *refIdItem = new QTableWidgetItem(displayId);
         QTableWidgetItem *callTypeItem = new QTableWidgetItem(callType);
+        QTableWidgetItem *callStatusItem = new QTableWidgetItem(callStatus);
         QTableWidgetItem *callTimeItem = new QTableWidgetItem(callTime);
         QTableWidgetItem *totalDurationItem = new QTableWidgetItem(totalDuration);
         QTableWidgetItem *ringDurationItem = new QTableWidgetItem(ringDuration);
         QTableWidgetItem *connectDurationItem = new QTableWidgetItem(connectDuration);
-        QTableWidgetItem *callStatusItem = new QTableWidgetItem(callStatus);
         QTableWidgetItem *compressionItem = new QTableWidgetItem(compression);
+        QTableWidgetItem *channelHardwareItem = new QTableWidgetItem(channelHardware);
 
-        ui->tableWidget->setItem(row, 0, refIdItem);
-        ui->tableWidget->setItem(row, 1, channelItem);
-        ui->tableWidget->setItem(row, 2, channelNameItem);
-        ui->tableWidget->setItem(row, 3, channelHardwareItem);
-        ui->tableWidget->setItem(row, 4, callTypeItem);
-        ui->tableWidget->setItem(row, 5, callTimeItem);
-        ui->tableWidget->setItem(row, 6, totalDurationItem);
-        ui->tableWidget->setItem(row, 7, ringDurationItem);
-        ui->tableWidget->setItem(row, 8, connectDurationItem);
-        ui->tableWidget->setItem(row, 9, callStatusItem);
-        ui->tableWidget->setItem(row, 10, compressionItem);
+        // Set items in the new order
+        ui->tableWidget->setItem(row, 0, playButtonItem); // Play
+        ui->tableWidget->setItem(row, 1, channelItem); // Channel
+        ui->tableWidget->setItem(row, 2, refIdItem); // Call Ref ID
+        ui->tableWidget->setItem(row, 3, callTypeItem); // Call Type
+        ui->tableWidget->setItem(row, 4, callStatusItem); // Call Status
+        ui->tableWidget->setItem(row, 5, callTimeItem); // Call Time
+        ui->tableWidget->setItem(row, 6, totalDurationItem); // Duration
+        ui->tableWidget->setItem(row, 7, ringDurationItem); // Ring Duration
+        ui->tableWidget->setItem(row, 8, connectDurationItem); // Connect Duration
+        ui->tableWidget->setItem(row, 9, compressionItem); // Compression
+        ui->tableWidget->setItem(row, 10, channelHardwareItem); // Channel Hardware
 
         // Create Play button
         QPushButton *playButton = new QPushButton("Play");
@@ -181,9 +196,6 @@ void TimeTimeCalls::updateCallDetailsTable(const QJsonObject &details)
         // Fix the file path by replacing single backslashes with double backslashes or forward slashes
         audioFile.replace("\\", "/");
         
-        qDebug() << "Original audio file path:" << call["Audio-File"].toString();
-        qDebug() << "Processed audio file path:" << audioFile;
-
         playButton->setProperty("audioFile", audioFile);
         playButton->setProperty("callRefId", call["CallRef-ID"].toString());
         
@@ -194,10 +206,8 @@ void TimeTimeCalls::updateCallDetailsTable(const QJsonObject &details)
             
             QFile file(audioFile);
             if (!audioFile.isEmpty() && file.exists()) {
-                qDebug() << "Local file found, attempting to play...";
                 if (!mediaPlayer) {
                     mediaPlayer = new QMediaPlayer(this);
-                    // Add an audio output device
                     QAudioOutput *audioOutput = new QAudioOutput(this);
                     mediaPlayer->setAudioOutput(audioOutput);
                 }
@@ -208,7 +218,7 @@ void TimeTimeCalls::updateCallDetailsTable(const QJsonObject &details)
             }
         });
 
-        ui->tableWidget->setCellWidget(row, 11, playButton);
+        ui->tableWidget->setCellWidget(row, 0, playButton); // Set Play button in the first column
     }
 
     ui->tableWidget->resizeColumnsToContents();
@@ -265,9 +275,9 @@ void TimeTimeCalls::performSearch()
 {
     QString callType;
     switch(ui->callTypeCombo->currentIndex()) {
-        case 1: callType = "I"; break;
-        case 2: callType = "O"; break;
-        default: break;
+        case 1: callType = "I"; break; // Incoming
+        case 2: callType = "O"; break; // Outgoing
+        default: callType = ""; break; // All
     }
 
     int currentPageValue = ui->currentPage->value() - 1; // API uses 0-based indexing
@@ -277,7 +287,7 @@ void TimeTimeCalls::performSearch()
         ui->fromDateTime->dateTime(),
         ui->toDateTime->dateTime(),
         ui->phoneNumber->text(),
-        callType,
+        callType, 
         currentPageValue,
         ui->pageSize->value()
     );

@@ -280,7 +280,7 @@ QPushButton:pressed {
 }</string>
            </property>
            <property name="text">
-            <string>Time to Time</string>
+            <string>Call History</string>
            </property>
           </widget>
          </item>

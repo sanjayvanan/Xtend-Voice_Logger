@@ -328,7 +328,7 @@ public:
         btnLogout->setText(QCoreApplication::translate("MainWindow", "Logout", nullptr));
         btnDashboard->setText(QCoreApplication::translate("MainWindow", "Dashboard", nullptr));
         btnLiveCalls->setText(QCoreApplication::translate("MainWindow", "Live Calls", nullptr));
-        btnTimeTimeCalls->setText(QCoreApplication::translate("MainWindow", "Time to Time", nullptr));
+        btnTimeTimeCalls->setText(QCoreApplication::translate("MainWindow", "Call History", nullptr));
         btnUserManagement->setText(QCoreApplication::translate("MainWindow", "User Management", nullptr));
         labelTotalCalls->setText(QCoreApplication::translate("MainWindow", "Total Connected Calls: 0", nullptr));
         QTableWidgetItem *___qtablewidgetitem = tableWidget->horizontalHeaderItem(0);
