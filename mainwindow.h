@@ -29,6 +29,7 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
     void setSessionToken(const QString &token, const QString &username, const QString &role);
+    QString getCurrentUsername() const { return currentDisplayName; }
 
 private slots:
     void on_actionLogout_triggered();

@@ -37,6 +37,7 @@ private slots:
     void handleTableCellClicked(int row, int column);
     void handleWaveFile(const QByteArray &waveData);
     void handleWaveFileFailed(const QString &message);
+    void onChannelGroupChanged(int index);
 
 private:
     void performSearch();

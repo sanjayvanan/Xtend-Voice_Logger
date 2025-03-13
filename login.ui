@@ -82,7 +82,7 @@
                </font>
               </property>
               <property name="text">
-               <string>Communication &amp; Interface Module</string>
+               <string>Zosh Voice Logger</string>
               </property>
               <property name="scaledContents">
                <bool>false</bool>

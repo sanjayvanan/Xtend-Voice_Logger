@@ -1007,6 +1007,7 @@ debug/moc_livecalls.cpp: ../../livecalls.h \
 		C:/QT/6.7.2/mingw_64/include/QtCore/qtemporaryfile.h \
 		C:/QT/6.7.2/mingw_64/include/QtCore/qfile.h \
 		C:/QT/6.7.2/mingw_64/include/QtCore/qfiledevice.h \
+		C:/QT/6.7.2/mingw_64/include/QtCore/QMap \
 		debug/moc_predefs.h \
 		C:/QT/6.7.2/mingw_64/bin/moc.exe
 	C:\QT\6.7.2\mingw_64\bin\moc.exe $(DEFINES) --include C:/XtendALogger/Codes/24-2-25/1/VoiceLogger/build/Desktop_Qt_6_7_2_MinGW_64_bit-Debug/debug/moc_predefs.h -IC:/QT/6.7.2/mingw_64/mkspecs/win32-g++ -IC:/XtendALogger/Codes/24-2-25/1/VoiceLogger -IC:/QT/6.7.2/mingw_64/include -IC:/QT/6.7.2/mingw_64/include/QtMultimedia -IC:/QT/6.7.2/mingw_64/include/QtWidgets -IC:/QT/6.7.2/mingw_64/include/QtGui -IC:/QT/6.7.2/mingw_64/include/QtNetwork -IC:/QT/6.7.2/mingw_64/include/QtSql -IC:/QT/6.7.2/mingw_64/include/QtCore -I. -IC:/QT/Tools/mingw1120_64/lib/gcc/x86_64-w64-mingw32/11.2.0/include/c++ -IC:/QT/Tools/mingw1120_64/lib/gcc/x86_64-w64-mingw32/11.2.0/include/c++/x86_64-w64-mingw32 -IC:/QT/Tools/mingw1120_64/lib/gcc/x86_64-w64-mingw32/11.2.0/include/c++/backward -IC:/QT/Tools/mingw1120_64/lib/gcc/x86_64-w64-mingw32/11.2.0/include -IC:/QT/Tools/mingw1120_64/lib/gcc/x86_64-w64-mingw32/11.2.0/include-fixed -IC:/QT/Tools/mingw1120_64/x86_64-w64-mingw32/include ..\..\livecalls.h -o debug\moc_livecalls.cpp
@@ -1498,6 +1499,7 @@ debug/moc_mainwindow.cpp: ../../mainwindow.h \
 		C:/QT/6.7.2/mingw_64/include/QtCore/qtimer.h \
 		C:/QT/6.7.2/mingw_64/include/QtCore/qbasictimer.h \
 		../../livecalls.h \
+		C:/QT/6.7.2/mingw_64/include/QtCore/QMap \
 		../../usermanagement.h \
 		C:/QT/6.7.2/mingw_64/include/QtWidgets/QTableWidget \
 		C:/QT/6.7.2/mingw_64/include/QtWidgets/qtablewidget.h \
@@ -2071,6 +2073,7 @@ debug/moc_mainwindow.cpp: ../../mainwindow.h \
 		C:/QT/6.7.2/mingw_64/include/QtCore/qtimer.h \
 		C:/QT/6.7.2/mingw_64/include/QtCore/qbasictimer.h \
 		../../livecalls.h \
+		C:/QT/6.7.2/mingw_64/include/QtCore/QMap \
 		../../usermanagement.h \
 		C:/QT/6.7.2/mingw_64/include/QtWidgets/QTableWidget \
 		C:/QT/6.7.2/mingw_64/include/QtWidgets/qtablewidget.h \
@@ -3044,7 +3047,64 @@ debug/dashboard.o: ../../dashboard.cpp ../../dashboard.h \
 		C:/QT/6.7.2/mingw_64/include/QtWidgets/qdialog.h \
 		C:/QT/6.7.2/mingw_64/include/QtWidgets/qdialogbuttonbox.h \
 		C:/QT/6.7.2/mingw_64/include/QtCore/QJsonArray \
-		C:/QT/6.7.2/mingw_64/include/QtCore/qjsonarray.h
+		C:/QT/6.7.2/mingw_64/include/QtCore/qjsonarray.h \
+		../../usermanagement.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/QTableWidget \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qtablewidget.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qtableview.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qabstractitemview.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qabstractscrollarea.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qframe.h \
+		C:/QT/6.7.2/mingw_64/include/QtCore/qabstractitemmodel.h \
+		C:/QT/6.7.2/mingw_64/include/QtCore/qitemselectionmodel.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qabstractitemdelegate.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qstyleoption.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qabstractspinbox.h \
+		C:/QT/6.7.2/mingw_64/include/QtGui/qvalidator.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qslider.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qabstractslider.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qstyle.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qtabbar.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qtabwidget.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qrubberband.h \
+		C:/QT/6.7.2/mingw_64/include/QtSql/QSqlDatabase \
+		C:/QT/6.7.2/mingw_64/include/QtSql/qsqldatabase.h \
+		C:/QT/6.7.2/mingw_64/include/QtSql/qtsqlglobal.h \
+		C:/QT/6.7.2/mingw_64/include/QtSql/qtsql-config.h \
+		C:/QT/6.7.2/mingw_64/include/QtSql/qtsqlexports.h \
+		C:/QT/6.7.2/mingw_64/include/QtSql/QSqlQuery \
+		C:/QT/6.7.2/mingw_64/include/QtSql/qsqlquery.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/QVBoxLayout \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qboxlayout.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qlayout.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qlayoutitem.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qgridlayout.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/QHBoxLayout \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/QFormLayout \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qformlayout.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/QLayout \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/QLineEdit \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qlineedit.h \
+		C:/QT/6.7.2/mingw_64/include/QtGui/qtextcursor.h \
+		C:/QT/6.7.2/mingw_64/include/QtGui/qtextdocument.h \
+		C:/QT/6.7.2/mingw_64/include/QtGui/qtextformat.h \
+		C:/QT/6.7.2/mingw_64/include/QtGui/qpen.h \
+		C:/QT/6.7.2/mingw_64/include/QtGui/qtextoption.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/QComboBox \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qcombobox.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/QPushButton \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qpushbutton.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qabstractbutton.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/QLabel \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qlabel.h \
+		C:/QT/6.7.2/mingw_64/include/QtGui/qpicture.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/QGroupBox \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qgroupbox.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/QHeaderView \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qheaderview.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/QCheckBox \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qcheckbox.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/QTabWidget
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\dashboard.o ..\..\dashboard.cpp
 
 debug/livecalls.o: ../../livecalls.cpp ../../livecalls.h \
@@ -3292,6 +3352,7 @@ debug/livecalls.o: ../../livecalls.cpp ../../livecalls.h \
 		C:/QT/6.7.2/mingw_64/include/QtCore/qtemporaryfile.h \
 		C:/QT/6.7.2/mingw_64/include/QtCore/qfile.h \
 		C:/QT/6.7.2/mingw_64/include/QtCore/qfiledevice.h \
+		C:/QT/6.7.2/mingw_64/include/QtCore/QMap \
 		ui_livecalls.h \
 		C:/QT/6.7.2/mingw_64/include/QtCore/QJsonArray \
 		C:/QT/6.7.2/mingw_64/include/QtCore/qjsonarray.h \
@@ -3323,7 +3384,52 @@ debug/livecalls.o: ../../livecalls.cpp ../../livecalls.h \
 		C:/QT/6.7.2/mingw_64/include/QtCore/QDir \
 		C:/QT/6.7.2/mingw_64/include/QtCore/qdir.h \
 		C:/QT/6.7.2/mingw_64/include/QtCore/qfileinfo.h \
-		C:/QT/6.7.2/mingw_64/include/QtCore/qtimezone.h
+		C:/QT/6.7.2/mingw_64/include/QtCore/qtimezone.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/QComboBox \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qcombobox.h \
+		C:/QT/6.7.2/mingw_64/include/QtSql/QSqlQuery \
+		C:/QT/6.7.2/mingw_64/include/QtSql/qsqlquery.h \
+		C:/QT/6.7.2/mingw_64/include/QtSql/qtsqlglobal.h \
+		C:/QT/6.7.2/mingw_64/include/QtSql/qtsql-config.h \
+		C:/QT/6.7.2/mingw_64/include/QtSql/qtsqlexports.h \
+		C:/QT/6.7.2/mingw_64/include/QtSql/qsqldatabase.h \
+		C:/QT/6.7.2/mingw_64/include/QtCore/QDateTime \
+		../../mainwindow.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/QMainWindow \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qmainwindow.h \
+		../../timetimecalls.h \
+		../../dashboard.h \
+		../../usermanagement.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/QTableWidget \
+		C:/QT/6.7.2/mingw_64/include/QtSql/QSqlDatabase \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/QVBoxLayout \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qboxlayout.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qlayout.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qlayoutitem.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qgridlayout.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/QHBoxLayout \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/QFormLayout \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qformlayout.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/QLayout \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/QLineEdit \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qlineedit.h \
+		C:/QT/6.7.2/mingw_64/include/QtGui/qtextcursor.h \
+		C:/QT/6.7.2/mingw_64/include/QtGui/qtextdocument.h \
+		C:/QT/6.7.2/mingw_64/include/QtGui/qtextformat.h \
+		C:/QT/6.7.2/mingw_64/include/QtGui/qpen.h \
+		C:/QT/6.7.2/mingw_64/include/QtGui/qtextoption.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/QLabel \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qlabel.h \
+		C:/QT/6.7.2/mingw_64/include/QtGui/qpicture.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/QGroupBox \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qgroupbox.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/QHeaderView \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qheaderview.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/QCheckBox \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qcheckbox.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/QTabWidget \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/QStackedWidget \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qstackedwidget.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\livecalls.o ..\..\livecalls.cpp
 
 debug/login.o: ../../login.cpp ../../login.h \
@@ -3567,7 +3673,89 @@ debug/login.o: ../../login.cpp ../../login.h \
 		C:/QT/6.7.2/mingw_64/include/QtSql/qsqlquery.h \
 		C:/QT/6.7.2/mingw_64/include/QtSql/QSqlError \
 		C:/QT/6.7.2/mingw_64/include/QtSql/qsqlerror.h \
-		C:/QT/6.7.2/mingw_64/include/QtCore/QCryptographicHash
+		C:/QT/6.7.2/mingw_64/include/QtCore/QCryptographicHash \
+		../../mainwindow.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/QMainWindow \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qmainwindow.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qtabwidget.h \
+		../../timetimecalls.h \
+		C:/QT/6.7.2/mingw_64/include/QtCore/QDateTime \
+		C:/QT/6.7.2/mingw_64/include/QtMultimedia/QMediaPlayer \
+		C:/QT/6.7.2/mingw_64/include/QtMultimedia/qmediaplayer.h \
+		C:/QT/6.7.2/mingw_64/include/QtMultimedia/qtmultimediaglobal.h \
+		C:/QT/6.7.2/mingw_64/include/QtMultimedia/qtmultimedia-config.h \
+		C:/QT/6.7.2/mingw_64/include/QtMultimedia/qtmultimediaexports.h \
+		C:/QT/6.7.2/mingw_64/include/QtMultimedia/qmediaenumdebug.h \
+		C:/QT/6.7.2/mingw_64/include/QtCore/qmetaobject.h \
+		C:/QT/6.7.2/mingw_64/include/QtMultimedia/qtaudio.h \
+		C:/QT/6.7.2/mingw_64/include/QtMultimedia/qaudio.h \
+		C:/QT/6.7.2/mingw_64/include/QtCore/QTemporaryFile \
+		C:/QT/6.7.2/mingw_64/include/QtCore/qtemporaryfile.h \
+		C:/QT/6.7.2/mingw_64/include/QtCore/qfile.h \
+		C:/QT/6.7.2/mingw_64/include/QtCore/qfiledevice.h \
+		C:/QT/6.7.2/mingw_64/include/QtMultimedia/QAudioOutput \
+		C:/QT/6.7.2/mingw_64/include/QtMultimedia/qaudiooutput.h \
+		C:/QT/6.7.2/mingw_64/include/QtCore/QDir \
+		C:/QT/6.7.2/mingw_64/include/QtCore/qdir.h \
+		C:/QT/6.7.2/mingw_64/include/QtCore/qfileinfo.h \
+		C:/QT/6.7.2/mingw_64/include/QtCore/qtimezone.h \
+		../../dashboard.h \
+		C:/QT/6.7.2/mingw_64/include/QtCore/QTimer \
+		C:/QT/6.7.2/mingw_64/include/QtCore/qtimer.h \
+		C:/QT/6.7.2/mingw_64/include/QtCore/qbasictimer.h \
+		../../livecalls.h \
+		C:/QT/6.7.2/mingw_64/include/QtCore/QMap \
+		../../usermanagement.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/QTableWidget \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qtablewidget.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qtableview.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qabstractitemview.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qabstractscrollarea.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qframe.h \
+		C:/QT/6.7.2/mingw_64/include/QtCore/qabstractitemmodel.h \
+		C:/QT/6.7.2/mingw_64/include/QtCore/qitemselectionmodel.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qabstractitemdelegate.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qstyleoption.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qabstractspinbox.h \
+		C:/QT/6.7.2/mingw_64/include/QtGui/qvalidator.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qslider.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qabstractslider.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qstyle.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qtabbar.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qrubberband.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/QVBoxLayout \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qboxlayout.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qlayout.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qlayoutitem.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qgridlayout.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/QHBoxLayout \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/QFormLayout \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qformlayout.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/QLayout \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/QLineEdit \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qlineedit.h \
+		C:/QT/6.7.2/mingw_64/include/QtGui/qtextcursor.h \
+		C:/QT/6.7.2/mingw_64/include/QtGui/qtextdocument.h \
+		C:/QT/6.7.2/mingw_64/include/QtGui/qtextformat.h \
+		C:/QT/6.7.2/mingw_64/include/QtGui/qpen.h \
+		C:/QT/6.7.2/mingw_64/include/QtGui/qtextoption.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/QComboBox \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qcombobox.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/QPushButton \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qpushbutton.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qabstractbutton.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/QLabel \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qlabel.h \
+		C:/QT/6.7.2/mingw_64/include/QtGui/qpicture.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/QGroupBox \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qgroupbox.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/QHeaderView \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qheaderview.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/QCheckBox \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qcheckbox.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/QTabWidget \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/QStackedWidget \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qstackedwidget.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\login.o ..\..\login.cpp
 
 debug/main.o: ../../main.cpp ../../mainwindow.h \
@@ -3826,6 +4014,7 @@ debug/main.o: ../../main.cpp ../../mainwindow.h \
 		C:/QT/6.7.2/mingw_64/include/QtCore/qtimer.h \
 		C:/QT/6.7.2/mingw_64/include/QtCore/qbasictimer.h \
 		../../livecalls.h \
+		C:/QT/6.7.2/mingw_64/include/QtCore/QMap \
 		../../usermanagement.h \
 		C:/QT/6.7.2/mingw_64/include/QtWidgets/QTableWidget \
 		C:/QT/6.7.2/mingw_64/include/QtWidgets/qtablewidget.h \
@@ -4150,6 +4339,7 @@ debug/mainwindow.o: ../../mainwindow.cpp ../../mainwindow.h \
 		C:/QT/6.7.2/mingw_64/include/QtCore/qtimer.h \
 		C:/QT/6.7.2/mingw_64/include/QtCore/qbasictimer.h \
 		../../livecalls.h \
+		C:/QT/6.7.2/mingw_64/include/QtCore/QMap \
 		../../usermanagement.h \
 		C:/QT/6.7.2/mingw_64/include/QtWidgets/QTableWidget \
 		C:/QT/6.7.2/mingw_64/include/QtWidgets/qtablewidget.h \
@@ -4541,7 +4731,15 @@ debug/timetimecalls.o: ../../timetimecalls.cpp ../../timetimecalls.h \
 		C:/QT/6.7.2/mingw_64/include/QtWidgets/qheaderview.h \
 		C:/QT/6.7.2/mingw_64/include/QtWidgets/QCheckBox \
 		C:/QT/6.7.2/mingw_64/include/QtWidgets/qcheckbox.h \
-		C:/QT/6.7.2/mingw_64/include/QtWidgets/QTabWidget
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/QTabWidget \
+		../../mainwindow.h \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/QMainWindow \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qmainwindow.h \
+		../../dashboard.h \
+		../../livecalls.h \
+		C:/QT/6.7.2/mingw_64/include/QtCore/QMap \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/QStackedWidget \
+		C:/QT/6.7.2/mingw_64/include/QtWidgets/qstackedwidget.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\timetimecalls.o ..\..\timetimecalls.cpp
 
 debug/usermanagement.o: ../../usermanagement.cpp ../../usermanagement.h \

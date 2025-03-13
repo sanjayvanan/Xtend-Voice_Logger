@@ -123,10 +123,13 @@ void MainWindow::setSessionToken(const QString &token, const QString &username, 
     
     if (timeTimeCalls) {
         timeTimeCalls->setSessionToken(token);
+        // Refresh channel groups to apply user permissions
+        timeTimeCalls->refreshChannelGroups();
     }
     
     if (liveCalls) {
         liveCalls->setSessionToken(token);
+        liveCalls->setCurrentUser(username);
     }
     
     // Show dashboard initially

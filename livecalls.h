@@ -7,6 +7,7 @@
 #include <QMediaPlayer>
 #include <QAudioOutput>
 #include <QTemporaryFile>
+#include <QMap>
 
 namespace Ui {
 class LiveCalls;
@@ -20,19 +21,28 @@ public:
     explicit LiveCalls(QWidget *parent = nullptr);
     ~LiveCalls();
     void setSessionToken(const QString &token);
+    void setCurrentUser(const QString &username);
     void startMonitoring();
     void stopMonitoring();
 
 private slots:
+    void updateLiveCalls();
     void handleLiveCalls(const QJsonObject &details);
     void handleLiveCallsFailed(const QString &message);
-    void refreshLiveCalls();
+    void onChannelGroupChanged(int index);
     void handleWaveFile(const QByteArray &waveData);
 
 private:
     Ui::LiveCalls *ui;
     APIHandler *apiHandler;
     QString sessionToken;
+    QString currentUsername;
+    QTimer *updateTimer;
+    
+    // Channel group filtering
+    QMap<QString, QStringList> channelGroups;
+    void loadChannelGroups();
+    void filterCallsByChannelGroup(QJsonArray &callList);
     QTimer *liveCallsTimer;
     QMediaPlayer *mediaPlayer;
     QAudioOutput *audioOutput;

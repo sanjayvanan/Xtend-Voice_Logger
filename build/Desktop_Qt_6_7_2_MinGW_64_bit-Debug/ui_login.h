@@ -206,7 +206,7 @@ public:
     {
         login->setWindowTitle(QCoreApplication::translate("login", "Form", nullptr));
         groupBox_login->setTitle(QString());
-        label_cimtitle1->setText(QCoreApplication::translate("login", "Communication & Interface Module", nullptr));
+        label_cimtitle1->setText(QCoreApplication::translate("login", "Zosh Voice Logger", nullptr));
         label_loginname1->setText(QCoreApplication::translate("login", "Login", nullptr));
         label__username->setText(QCoreApplication::translate("login", "Username  ", nullptr));
         label_password->setText(QCoreApplication::translate("login", "Password  ", nullptr));

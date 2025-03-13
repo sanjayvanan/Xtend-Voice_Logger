@@ -37,12 +37,14 @@ namespace {
 struct qt_meta_stringdata_CLASSLiveCallsENDCLASS_t {};
 constexpr auto qt_meta_stringdata_CLASSLiveCallsENDCLASS = QtMocHelpers::stringData(
     "LiveCalls",
-    "handleLiveCalls",
+    "updateLiveCalls",
     "",
+    "handleLiveCalls",
     "details",
     "handleLiveCallsFailed",
     "message",
-    "refreshLiveCalls",
+    "onChannelGroupChanged",
+    "index",
     "handleWaveFile",
     "waveData"
 );
@@ -57,7 +59,7 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSLiveCallsENDCLASS[] = {
       12,       // revision
        0,       // classname
        0,    0, // classinfo
-       4,   14, // methods
+       5,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -65,16 +67,18 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSLiveCallsENDCLASS[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags, initial metatype offsets
-       1,    1,   38,    2, 0x08,    1 /* Private */,
-       4,    1,   41,    2, 0x08,    3 /* Private */,
-       6,    0,   44,    2, 0x08,    5 /* Private */,
-       7,    1,   45,    2, 0x08,    6 /* Private */,
+       1,    0,   44,    2, 0x08,    1 /* Private */,
+       3,    1,   45,    2, 0x08,    2 /* Private */,
+       5,    1,   48,    2, 0x08,    4 /* Private */,
+       7,    1,   51,    2, 0x08,    6 /* Private */,
+       9,    1,   54,    2, 0x08,    8 /* Private */,
 
  // slots: parameters
-    QMetaType::Void, QMetaType::QJsonObject,    3,
-    QMetaType::Void, QMetaType::QString,    5,
     QMetaType::Void,
-    QMetaType::Void, QMetaType::QByteArray,    8,
+    QMetaType::Void, QMetaType::QJsonObject,    4,
+    QMetaType::Void, QMetaType::QString,    6,
+    QMetaType::Void, QMetaType::Int,    8,
+    QMetaType::Void, QMetaType::QByteArray,   10,
 
        0        // eod
 };
@@ -88,14 +92,17 @@ Q_CONSTINIT const QMetaObject LiveCalls::staticMetaObject = { {
     qt_incomplete_metaTypeArray<qt_meta_stringdata_CLASSLiveCallsENDCLASS_t,
         // Q_OBJECT / Q_GADGET
         QtPrivate::TypeAndForceComplete<LiveCalls, std::true_type>,
+        // method 'updateLiveCalls'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
         // method 'handleLiveCalls'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         QtPrivate::TypeAndForceComplete<const QJsonObject &, std::false_type>,
         // method 'handleLiveCallsFailed'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         QtPrivate::TypeAndForceComplete<const QString &, std::false_type>,
-        // method 'refreshLiveCalls'
+        // method 'onChannelGroupChanged'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        QtPrivate::TypeAndForceComplete<int, std::false_type>,
         // method 'handleWaveFile'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         QtPrivate::TypeAndForceComplete<const QByteArray &, std::false_type>
@@ -109,10 +116,11 @@ void LiveCalls::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, v
         auto *_t = static_cast<LiveCalls *>(_o);
         (void)_t;
         switch (_id) {
-        case 0: _t->handleLiveCalls((*reinterpret_cast< std::add_pointer_t<QJsonObject>>(_a[1]))); break;
-        case 1: _t->handleLiveCallsFailed((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
-        case 2: _t->refreshLiveCalls(); break;
-        case 3: _t->handleWaveFile((*reinterpret_cast< std::add_pointer_t<QByteArray>>(_a[1]))); break;
+        case 0: _t->updateLiveCalls(); break;
+        case 1: _t->handleLiveCalls((*reinterpret_cast< std::add_pointer_t<QJsonObject>>(_a[1]))); break;
+        case 2: _t->handleLiveCallsFailed((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
+        case 3: _t->onChannelGroupChanged((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
+        case 4: _t->handleWaveFile((*reinterpret_cast< std::add_pointer_t<QByteArray>>(_a[1]))); break;
         default: ;
         }
     }
@@ -137,13 +145,13 @@ int LiveCalls::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 4)
+        if (_id < 5)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 4;
+        _id -= 5;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 4)
+        if (_id < 5)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 4;
+        _id -= 5;
     }
     return _id;
 }

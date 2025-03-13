@@ -14,47 +14,40 @@
 #include <QDateTime>
 #include "usermanagement.h"
 #include <QSqlQuery>
+#include "mainwindow.h"
 
 TimeTimeCalls::TimeTimeCalls(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::TimeTimeCalls)
     , apiHandler(new APIHandler(this))
-    , mediaPlayer(nullptr)
+    , mediaPlayer(new QMediaPlayer(this))
     , tempWaveFile(nullptr)
-    , totalPages(1)
+    , totalPages(0)
 {
     ui->setupUi(this);
     
     // Initialize date/time fields
     initializeDateTimeFields();
     
+    // Connect API handler signals
+    connect(apiHandler, &APIHandler::callDetailsReceived, this, &TimeTimeCalls::handleCallDetails);
+    connect(apiHandler, &APIHandler::callDetailsFailed, this, &TimeTimeCalls::handleCallDetailsFailed);
+    connect(apiHandler, &APIHandler::waveFileReceived, this, &TimeTimeCalls::handleWaveFile);
+    connect(apiHandler, &APIHandler::waveFileFailed, this, &TimeTimeCalls::handleWaveFileFailed);
+    
+    // Connect table cell clicked signal
+    connect(ui->tableWidget, &QTableWidget::cellClicked, this, &TimeTimeCalls::handleTableCellClicked);
+    
+    // Connect channel group combo box change signal
+    connect(ui->channelGroupCombo, QOverload<int>::of(&QComboBox::currentIndexChanged),
+            this, &TimeTimeCalls::onChannelGroupChanged, Qt::UniqueConnection);
+    
+    // Set up audio output for media player
+    QAudioOutput *audioOutput = new QAudioOutput(this);
+    mediaPlayer->setAudioOutput(audioOutput);
+    
     // Load channel groups
     loadChannelGroups();
-    
-    // Connect API handler signals
-    connect(apiHandler, &APIHandler::callDetailsReceived,
-            this, &TimeTimeCalls::handleCallDetails);
-    connect(apiHandler, &APIHandler::callDetailsFailed,
-            this, &TimeTimeCalls::handleCallDetailsFailed);
-    connect(apiHandler, &APIHandler::waveFileReceived,
-            this, &TimeTimeCalls::handleWaveFile);
-    connect(apiHandler, &APIHandler::waveFileFailed,
-            this, &TimeTimeCalls::handleWaveFileFailed);
-
-    // Connect table cell clicked signal
-    connect(ui->tableWidget, &QTableWidget::cellClicked,
-            this, &TimeTimeCalls::handleTableCellClicked);
-
-    // Set up the table widget
-    ui->tableWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
-    ui->tableWidget->setSelectionMode(QAbstractItemView::SingleSelection);
-    ui->tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    ui->tableWidget->horizontalHeader()->setStretchLastSection(true);
-
-    // Initialize pagination controls
-    ui->currentPage->setValue(1);
-    ui->btnPrevPage->setEnabled(false);
-    ui->btnNextPage->setEnabled(false);
 }
 
 TimeTimeCalls::~TimeTimeCalls()
@@ -81,30 +74,69 @@ void TimeTimeCalls::initializeDateTimeFields()
 
 void TimeTimeCalls::loadChannelGroups()
 {
-    // Clear the combo box except for the "All" item
-    while (ui->channelGroupCombo->count() > 1) {
-        ui->channelGroupCombo->removeItem(1);
+    // Clear the combo box first
+    ui->channelGroupCombo->clear();
+    
+    // Get the current username from the main window
+    QString currentUsername;
+    QWidget* parent = this->parentWidget();
+    while (parent) {
+        MainWindow* mainWindow = qobject_cast<MainWindow*>(parent);
+        if (mainWindow) {
+            currentUsername = mainWindow->getCurrentUsername();
+            break;
+        }
+        parent = parent->parentWidget();
     }
     
-    // Clear the channel groups map
-    channelGroups.clear();
+    // If we couldn't get the username, return
+    if (currentUsername.isEmpty()) {
+        return;
+    }
     
-    // Add "All" as the first item (already done in UI)
+    // Check if user is admin
+    bool isAdmin = UserManagement::isUserAdmin(currentUsername);
     
-    // Load channel groups from database
-    QSqlQuery query("SELECT group_name, channels FROM channel_groups");
-    if (query.exec()) {
-        while (query.next()) {
-            QString groupName = query.value(0).toString();
-            QString channelsStr = query.value(1).toString();
-            QStringList channels = channelsStr.split(",");
-            
-            // Add to combo box
-            ui->channelGroupCombo->addItem(groupName);
-            
-            // Add to map
-            channelGroups[groupName] = channels;
+    // Get all channel groups
+    QList<QPair<QString, QStringList>> allGroups = UserManagement::getChannelGroups();
+    
+    if (isAdmin) {
+        // Admin can see all channel groups and has the "All" option
+        ui->channelGroupCombo->addItem("All");
+        
+        for (const auto &group : allGroups) {
+            ui->channelGroupCombo->addItem(group.first);
+            channelGroups[group.first] = group.second;
         }
+    } else {
+        // Regular user can only see assigned channel groups
+        QSqlQuery query;
+        query.prepare("SELECT cg.group_name, cg.channels FROM user_channel_groups ucg "
+                     "JOIN channel_groups cg ON ucg.group_name = cg.group_name "
+                     "WHERE ucg.username = :username");
+        query.bindValue(":username", currentUsername);
+        
+        if (query.exec()) {
+            while (query.next()) {
+                QString groupName = query.value(0).toString();
+                QString channelsStr = query.value(1).toString();
+                QStringList channels = channelsStr.split(",", Qt::SkipEmptyParts);
+                
+                ui->channelGroupCombo->addItem(groupName);
+                channelGroups[groupName] = channels;
+            }
+        }
+        
+        // If no channel groups are assigned, add a placeholder
+        if (ui->channelGroupCombo->count() == 0) {
+            ui->channelGroupCombo->addItem("No assigned channels");
+            ui->channelGroupCombo->setEnabled(false);
+        }
+    }
+    
+    // Select the first item
+    if (ui->channelGroupCombo->count() > 0) {
+        ui->channelGroupCombo->setCurrentIndex(0);
     }
 }
 
@@ -147,42 +179,28 @@ void TimeTimeCalls::on_searchButton_clicked()
 
 void TimeTimeCalls::handleCallDetails(const QJsonObject &details)
 {
-    // Store the last call details for filtering
+    // Store the call details for filtering
     lastCallDetails = details;
     
-    // Check if we need to filter by channel group
-    QString selectedGroup = ui->channelGroupCombo->currentText();
-    if (selectedGroup != "All" && channelGroups.contains(selectedGroup)) {
-        // Create a copy of the details object for filtering
-        QJsonObject filteredDetails = details;
-        QJsonArray callList = filteredDetails["List"].toArray();
-        
-        // Filter the call list
-        filterCallsByChannelGroup(callList);
-        
-        // Update the filtered details
-        filteredDetails["List"] = callList;
-        filteredDetails["TotalCount"] = QString::number(callList.size());
-        
-        // Update the table with filtered data
-        updateCallDetailsTable(filteredDetails);
-    } else {
-        // No filtering needed
-        updateCallDetailsTable(details);
-    }
+    // Update the table with the call details
+    updateCallDetailsTable(details);
 }
 
 void TimeTimeCalls::filterCallsByChannelGroup(QJsonArray &callList)
 {
+    // Get the selected channel group
     QString selectedGroup = ui->channelGroupCombo->currentText();
+    
+    // If "All" is selected or no channel groups are available, return all calls
     if (selectedGroup == "All" || !channelGroups.contains(selectedGroup)) {
-        return; // No filtering needed
+        return;
     }
     
+    // Get the channels for the selected group
     QStringList channels = channelGroups[selectedGroup];
-    QJsonArray filteredList;
     
-    // Filter calls by channel
+    // Filter the call list
+    QJsonArray filteredList;
     for (int i = 0; i < callList.size(); i++) {
         QJsonObject call = callList[i].toObject();
         QString channel = call["Channel"].toString();
@@ -203,119 +221,91 @@ void TimeTimeCalls::handleCallDetailsFailed(const QString &message)
 
 void TimeTimeCalls::updateCallDetailsTable(const QJsonObject &details)
 {
-    ui->tableWidget->clearContents();
-    ui->tableWidget->setRowCount(0);
-
-    if (!details.contains("List")) {
-        qDebug() << "No 'List' field in response";
-        return;
-    }
-
+    // Get the call list
     QJsonArray callList = details["List"].toArray();
-    QString totalCount = details["TotalCount"].toString("0");
-    ui->labelTotalCalls->setText(QString("Total Connected Calls: %1").arg(totalCount));
-
-    ui->tableWidget->setSortingEnabled(false);
     
-    for (const QJsonValue &callValue : callList) {
-        QJsonObject call = callValue.toObject();
+    // Filter calls by channel group
+    filterCallsByChannelGroup(callList);
+    
+    // Clear the table
+    ui->tableWidget->setRowCount(0);
+    
+    // Update total calls count
+    int totalCalls = callList.size();
+    ui->labelTotalCalls->setText("Total Connected Calls: " + QString::number(totalCalls));
+    
+    // Update pagination controls
+    updatePaginationControls(totalCalls);
+    
+    // Populate the table with call details
+    for (int i = 0; i < callList.size(); i++) {
+        QJsonObject call = callList[i].toObject();
+        
         int row = ui->tableWidget->rowCount();
         ui->tableWidget->insertRow(row);
-
-        // Create and set table items
-        QString refId = call["CallRef-ID"].toString();
-        QString callerId = call["Caller-ID"].toString();
-        QString calledId = call["Called-ID"].toString();
-        QString channel = call["Channel"].toString();
-        QString callType = call["Call-Type"].toString();
-        QString callStatus = call["Call-Status"].toString();
-        QString callTime = call["Call-Time"].toString();
-        QString totalDuration = call["Total-Duration"].toString();
-        QString ringDuration = call["Ring-Duration"].toString();
-        QString connectDuration = call["Connect-Duration"].toString();
-        QString compression = call["Compression"].toString();
-        QString channelHardware = call["Channel-Hardware"].toString();
-
-        // Format Call Time from YYYYMMDDHHMMSS to yyyy-MM-dd HH:mm:ss
-        if (callTime.length() == 14) { // Ensure the length is correct
-            QString year = callTime.mid(0, 4);
-            QString month = callTime.mid(4, 2);
-            QString day = callTime.mid(6, 2);
-            QString hour = callTime.mid(8, 2);
-            QString minute = callTime.mid(10, 2);
-            QString second = callTime.mid(12, 2);
-            callTime = QString("%1-%2-%3 %4:%5:%6").arg(year, month, day, hour, minute, second);
-        } else {
-            callTime = "Invalid Date"; // Handle invalid date format
-        }
-
-        // Determine which ID to display
-        QString displayId = !callerId.isEmpty() ? callerId : (!calledId.isEmpty() ? calledId : refId);
-
-        // Create table items
-        QTableWidgetItem *playButtonItem = new QTableWidgetItem("Play");
-        QTableWidgetItem *channelItem = new QTableWidgetItem(channel);
-        QTableWidgetItem *refIdItem = new QTableWidgetItem(displayId);
-        QTableWidgetItem *callTypeItem = new QTableWidgetItem(callType);
-        QTableWidgetItem *callStatusItem = new QTableWidgetItem(callStatus);
-        QTableWidgetItem *callTimeItem = new QTableWidgetItem(callTime);
-        QTableWidgetItem *totalDurationItem = new QTableWidgetItem(totalDuration);
-        QTableWidgetItem *ringDurationItem = new QTableWidgetItem(ringDuration);
-        QTableWidgetItem *connectDurationItem = new QTableWidgetItem(connectDuration);
-        QTableWidgetItem *compressionItem = new QTableWidgetItem(compression);
-        QTableWidgetItem *channelHardwareItem = new QTableWidgetItem(channelHardware);
-
-        // Set items in the new order
-        ui->tableWidget->setItem(row, 0, playButtonItem); // Play
-        ui->tableWidget->setItem(row, 1, channelItem); // Channel
-        ui->tableWidget->setItem(row, 2, refIdItem); // Call Ref ID
-        ui->tableWidget->setItem(row, 3, callTypeItem); // Call Type
-        ui->tableWidget->setItem(row, 4, callStatusItem); // Call Status
-        ui->tableWidget->setItem(row, 5, callTimeItem); // Call Time
-        ui->tableWidget->setItem(row, 6, totalDurationItem); // Duration
-        ui->tableWidget->setItem(row, 7, ringDurationItem); // Ring Duration
-        ui->tableWidget->setItem(row, 8, connectDurationItem); // Connect Duration
-        ui->tableWidget->setItem(row, 9, compressionItem); // Compression
-        ui->tableWidget->setItem(row, 10, channelHardwareItem); // Channel Hardware
-
-        // Create Play button
-        QPushButton *playButton = new QPushButton("Play");
-        QString audioFile = call["Audio-File"].toString();
         
-        // Fix the file path by replacing single backslashes with double backslashes or forward slashes
-        audioFile.replace("\\", "/");
-        
-        playButton->setProperty("audioFile", audioFile);
+        // Play button - Use the correct key "CallRef-ID"
+        QPushButton *playButton = new QPushButton("Play", ui->tableWidget);
         playButton->setProperty("callRefId", call["CallRef-ID"].toString());
-        
-        // Connect button click to play function
+        playButton->setProperty("wavPass", call["Wav-Pass"].toString());
         connect(playButton, &QPushButton::clicked, this, [this, playButton]() {
-            QString audioFile = playButton->property("audioFile").toString();
             QString callRefId = playButton->property("callRefId").toString();
-            
-            QFile file(audioFile);
-            if (!audioFile.isEmpty() && file.exists()) {
-                if (!mediaPlayer) {
-                    mediaPlayer = new QMediaPlayer(this);
-                    QAudioOutput *audioOutput = new QAudioOutput(this);
-                    mediaPlayer->setAudioOutput(audioOutput);
-                }
-                mediaPlayer->setSource(QUrl::fromLocalFile(audioFile));
-                mediaPlayer->play();
-            } else {
-                apiHandler->streamWaveFile(sessionToken, callRefId);
-            }
+            QString wavPass = playButton->property("wavPass").toString();
+            apiHandler->streamWaveFile(sessionToken, callRefId, wavPass);
         });
-
-        ui->tableWidget->setCellWidget(row, 0, playButton); // Set Play button in the first column
+        ui->tableWidget->setCellWidget(row, 0, playButton);
+        
+        // Set other columns
+        ui->tableWidget->setItem(row, 1, new QTableWidgetItem(call["Channel"].toString()));
+        
+        // Determine which ID to display
+        QString displayId;
+        if (call.contains("Called-ID") && !call["Called-ID"].toString().isEmpty()) {
+            displayId = call["Called-ID"].toString();
+        } else if (call.contains("Caller-ID") && !call["Caller-ID"].toString().isEmpty()) {
+            displayId = call["Caller-ID"].toString();
+        } else {
+            displayId = call["CallRef-ID"].toString();
+        }
+        ui->tableWidget->setItem(row, 2, new QTableWidgetItem(displayId)); // Display ID
+        
+        // Call Type (I/O to Incoming/Outgoing)
+        QString callType = call["Call-Type"].toString();
+        if (callType == "I") {
+            callType = "Incoming";
+        } else if (callType == "O") {
+            callType = "Outgoing";
+        }
+        ui->tableWidget->setItem(row, 3, new QTableWidgetItem(callType));
+        
+        // Call Status
+        QString callStatus = call["Call-Status"].toString();
+        ui->tableWidget->setItem(row, 4, new QTableWidgetItem(callStatus));
+        
+        // Format call time
+        QString callTimeStr = call["Call-Time"].toString();
+        QDateTime callTime = QDateTime::fromString(callTimeStr, "yyyyMMddhhmmss");
+        ui->tableWidget->setItem(row, 5, new QTableWidgetItem(callTime.toString("yyyy-MM-dd hh:mm:ss")));
+        
+        // Duration - Use Connect-Duration for the duration column
+        QString duration = call["Connect-Duration"].toString();
+        ui->tableWidget->setItem(row, 6, new QTableWidgetItem(duration));
+        
+        // Ring Duration
+        ui->tableWidget->setItem(row, 7, new QTableWidgetItem(call["Ring-Duration"].toString()));
+        
+        // Connect Duration
+        ui->tableWidget->setItem(row, 8, new QTableWidgetItem(call["Connect-Duration"].toString()));
+        
+        // Compression
+        ui->tableWidget->setItem(row, 9, new QTableWidgetItem(call["Compression"].toString()));
+        
+        // Channel Hardware
+        ui->tableWidget->setItem(row, 10, new QTableWidgetItem(call["Channel-Hardware"].toString()));
     }
-
-    ui->tableWidget->resizeColumnsToContents();
-    ui->tableWidget->horizontalHeader()->setStretchLastSection(true);
-    ui->tableWidget->setSortingEnabled(true);
-
-    // Update pagination
-    updatePaginationControls(totalCount.toInt());
+    
+    // Add debug output to check the JSON structure
+    qDebug() << "First call in list:" << (callList.size() > 0 ? callList[0].toObject() : QJsonObject());
 }
 
 void TimeTimeCalls::handleTableCellClicked(int row, int column)
@@ -419,6 +409,14 @@ void TimeTimeCalls::on_currentPage_valueChanged(int value)
     // Only perform search if the widget is visible
     if (isVisible()) {
         performSearch();
+    }
+}
+
+void TimeTimeCalls::onChannelGroupChanged(int index)
+{
+    // If we have stored call details, update the table with the new filter
+    if (!lastCallDetails.isEmpty()) {
+        updateCallDetailsTable(lastCallDetails);
     }
 }
 

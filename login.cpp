@@ -10,6 +10,8 @@
 #include <QSqlQuery>
 #include <QSqlError>
 #include <QCryptographicHash>
+#include "mainwindow.h"
+#include "usermanagement.h"
 
 login::login(QWidget *parent)
     : QWidget(parent)
