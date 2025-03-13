@@ -80,7 +80,7 @@ public:
     {
         if (Dashboard->objectName().isEmpty())
             Dashboard->setObjectName("Dashboard");
-        Dashboard->resize(800, 652);
+        Dashboard->resize(1124, 719);
         Dashboard->setStyleSheet(QString::fromUtf8("QWidget {\n"
 "    background-color: #f5f5f5;\n"
 "    color: #333333;\n"

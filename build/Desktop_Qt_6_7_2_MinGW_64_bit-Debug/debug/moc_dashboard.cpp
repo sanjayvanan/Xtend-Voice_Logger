@@ -47,7 +47,8 @@ constexpr auto qt_meta_stringdata_CLASSDashboardENDCLASS = QtMocHelpers::stringD
     "updateDashboard",
     "updateStatistics",
     "callDetails",
-    "liveDetails"
+    "liveDetails",
+    "refreshUserAssignedChannels"
 );
 #else  // !QT_MOC_HAS_STRINGDATA
 #error "qtmochelpers.h not found or too old."
@@ -60,7 +61,7 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSDashboardENDCLASS[] = {
       12,       // revision
        0,       // classname
        0,    0, // classinfo
-       6,   14, // methods
+       7,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -68,12 +69,13 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSDashboardENDCLASS[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags, initial metatype offsets
-       1,    1,   50,    2, 0x08,    1 /* Private */,
-       4,    1,   53,    2, 0x08,    3 /* Private */,
-       6,    1,   56,    2, 0x08,    5 /* Private */,
-       7,    1,   59,    2, 0x08,    7 /* Private */,
-       8,    0,   62,    2, 0x08,    9 /* Private */,
-       9,    2,   63,    2, 0x08,   10 /* Private */,
+       1,    1,   56,    2, 0x08,    1 /* Private */,
+       4,    1,   59,    2, 0x08,    3 /* Private */,
+       6,    1,   62,    2, 0x08,    5 /* Private */,
+       7,    1,   65,    2, 0x08,    7 /* Private */,
+       8,    0,   68,    2, 0x08,    9 /* Private */,
+       9,    2,   69,    2, 0x08,   10 /* Private */,
+      12,    0,   74,    2, 0x08,   13 /* Private */,
 
  // slots: parameters
     QMetaType::Void, QMetaType::QJsonObject,    3,
@@ -82,6 +84,7 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSDashboardENDCLASS[] = {
     QMetaType::Void, QMetaType::QString,    5,
     QMetaType::Void,
     QMetaType::Void, QMetaType::QJsonObject, QMetaType::QJsonObject,   10,   11,
+    QMetaType::Void,
 
        0        // eod
 };
@@ -112,7 +115,9 @@ Q_CONSTINIT const QMetaObject Dashboard::staticMetaObject = { {
         // method 'updateStatistics'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         QtPrivate::TypeAndForceComplete<const QJsonObject &, std::false_type>,
-        QtPrivate::TypeAndForceComplete<const QJsonObject &, std::false_type>
+        QtPrivate::TypeAndForceComplete<const QJsonObject &, std::false_type>,
+        // method 'refreshUserAssignedChannels'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>
     >,
     nullptr
 } };
@@ -129,6 +134,7 @@ void Dashboard::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, v
         case 3: _t->handleLiveCallsFailed((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
         case 4: _t->updateDashboard(); break;
         case 5: _t->updateStatistics((*reinterpret_cast< std::add_pointer_t<QJsonObject>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<QJsonObject>>(_a[2]))); break;
+        case 6: _t->refreshUserAssignedChannels(); break;
         default: ;
         }
     }
@@ -153,13 +159,13 @@ int Dashboard::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 6)
+        if (_id < 7)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 6;
+        _id -= 7;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 6)
+        if (_id < 7)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 6;
+        _id -= 7;
     }
     return _id;
 }

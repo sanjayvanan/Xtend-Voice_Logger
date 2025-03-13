@@ -5,6 +5,7 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 #include <QTimer>
+#include "usermanagement.h"
 
 Dashboard::Dashboard(QWidget *parent) :
     QWidget(parent),
@@ -48,6 +49,27 @@ void Dashboard::setSessionToken(const QString &token)
     }
 }
 
+void Dashboard::setCurrentUser(const QString &username)
+{
+    currentUsername = username;
+    refreshUserAssignedChannels();
+}
+
+void Dashboard::refreshUserAssignedChannels()
+{
+    // Get the channels assigned to the current user
+    assignedChannels = UserManagement::getUserAssignedChannels(currentUsername);
+    
+    // If the user is an admin or has no assigned channels, they can see all channels
+    if (UserManagement::isUserAdmin(currentUsername) || assignedChannels.isEmpty()) {
+        assignedChannels.clear();
+        assignedChannels << "1" << "2" << "3" << "4";
+    }
+    
+    // Update the dashboard with the new channel assignments
+    updateDashboard();
+}
+
 void Dashboard::startMonitoring()
 {
     // Trigger immediate update
@@ -78,7 +100,15 @@ void Dashboard::updateDashboard()
 
 void Dashboard::handleCallDetails(const QJsonObject &details)
 {
-    QJsonArray callList = details["List"].toArray();
+    QJsonObject filteredDetails = details;
+    QJsonArray callList = filteredDetails["List"].toArray();
+    
+    // Filter calls by assigned channels
+    filterCallsByAssignedChannels(callList);
+    
+    // Update the filtered details
+    filteredDetails["List"] = callList;
+    filteredDetails["TotalCount"] = QString::number(callList.size());
     
     // Reset counters
     totalCalls = callList.size();
@@ -140,6 +170,29 @@ void Dashboard::handleCallDetails(const QJsonObject &details)
     ui->progressMissed->setValue(missedCalls);
 }
 
+void Dashboard::filterCallsByAssignedChannels(QJsonArray &callList)
+{
+    // If no assigned channels or user is admin, show all calls
+    if (assignedChannels.isEmpty() || UserManagement::isUserAdmin(currentUsername)) {
+        return;
+    }
+    
+    QJsonArray filteredList;
+    
+    // Filter calls by channel
+    for (int i = 0; i < callList.size(); i++) {
+        QJsonObject call = callList[i].toObject();
+        QString channel = call["Channel"].toString();
+        
+        if (assignedChannels.contains(channel)) {
+            filteredList.append(call);
+        }
+    }
+    
+    // Replace the original list with the filtered one
+    callList = filteredList;
+}
+
 void Dashboard::handleCallDetailsFailed(const QString &message)
 {
    qDebug() << "Error fetching call details:" << message;
@@ -147,7 +200,14 @@ void Dashboard::handleCallDetailsFailed(const QString &message)
 
 void Dashboard::handleLiveCalls(const QJsonObject &details)
 {
-    QJsonArray callList = details["List"].toArray();
+    QJsonObject filteredDetails = details;
+    QJsonArray callList = filteredDetails["List"].toArray();
+    
+    // Filter calls by assigned channels
+    filterCallsByAssignedChannels(callList);
+    
+    // Update the filtered details
+    filteredDetails["List"] = callList;
     
     int activeCalls = callList.size();
     int activeIncoming = 0;

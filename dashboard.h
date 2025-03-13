@@ -17,6 +17,7 @@ public:
     explicit Dashboard(QWidget *parent = nullptr);
     ~Dashboard();
     void setSessionToken(const QString &token);
+    void setCurrentUser(const QString &username);
     void startMonitoring();
     void stopMonitoring();
 
@@ -27,12 +28,15 @@ private slots:
     void handleLiveCallsFailed(const QString &message);
     void updateDashboard();
     void updateStatistics(const QJsonObject &callDetails, const QJsonObject &liveDetails);
+    void refreshUserAssignedChannels();
 
 private:
     Ui::Dashboard *ui;
     APIHandler *apiHandler;
     QString sessionToken;
+    QString currentUsername;
     QTimer *updateTimer;
+    QStringList assignedChannels;
 
     // Declare the variables to track call statistics
     int totalCalls = 0;
@@ -40,6 +44,9 @@ private:
     int missedCalls = 0;
     int incomingCalls = 0;
     int outgoingCalls = 0;
+    
+    // Helper method to filter calls by assigned channels
+    void filterCallsByAssignedChannels(QJsonArray &callList);
 };
 
 #endif // DASHBOARD_H

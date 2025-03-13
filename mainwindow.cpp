@@ -106,6 +106,7 @@ void MainWindow::setSessionToken(const QString &token, const QString &username, 
 {
     sessionToken = token;
     currentUserRole = role;
+    currentDisplayName = username;
     
     // Update UI with username
     ui->labelUserName->setText(username);
@@ -116,6 +117,7 @@ void MainWindow::setSessionToken(const QString &token, const QString &username, 
     // Initialize components
     if (dashboard) {
         dashboard->setSessionToken(token);
+        dashboard->setCurrentUser(username);
         dashboard->startMonitoring();
     }
     

@@ -31,13 +31,17 @@ public:
     ~UserManagement();
     void refreshUserList();
     void refreshChannelGroupList();
+    void refreshAssignmentList();
     void setSessionToken(const QString &token);
     
-    // Static method to get channel groups for other widgets
+    // Static methods to get data for other widgets
     static QList<QPair<QString, QStringList>> getChannelGroups();
+    static QStringList getUserAssignedChannels(const QString &username);
+    static bool isUserAdmin(const QString &username);
 
 signals:
     void channelGroupsChanged();
+    void userAssignmentsChanged();
 
 private slots:
     // User management slots
@@ -53,6 +57,13 @@ private slots:
     void onDeleteChannelGroupClicked();
     void onChannelGroupTableItemClicked(int row, int column);
     void clearChannelGroupForm();
+    
+    // User assignment slots
+    void onAssignButtonClicked();
+    void onUnassignButtonClicked();
+    void onAssignmentTableItemClicked(int row, int column);
+    void loadUsersInCombo();
+    void loadGroupsInCombo();
 
 private:
     Ui::UserManagement *ui;
@@ -81,6 +92,14 @@ private:
     QPushButton *deleteChannelGroupButton;
     QPushButton *clearChannelGroupButton;
     int currentChannelGroupRow = -1;
+    
+    // User assignment variables
+    QTableWidget *assignmentTable;
+    QComboBox *assignUserCombo;
+    QComboBox *assignGroupCombo;
+    QPushButton *assignButton;
+    QPushButton *unassignButton;
+    int currentAssignmentRow = -1;
     
     void setupUI();
     void setupConnections();

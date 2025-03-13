@@ -383,6 +383,108 @@
        </item>
       </layout>
      </widget>
+     <widget class="QWidget" name="assignmentTab">
+      <attribute name="title">
+       <string>User Assignments</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_4">
+       <item>
+        <widget class="QGroupBox" name="assignmentGroupBox">
+         <property name="title">
+          <string>Assign Channel Groups to Users</string>
+         </property>
+         <layout class="QFormLayout" name="formLayout_3">
+          <item row="0" column="0">
+           <widget class="QLabel" name="assignUserLabel">
+            <property name="text">
+             <string>User:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QComboBox" name="assignUserCombo"/>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="assignGroupLabel">
+            <property name="text">
+             <string>Channel Group:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QComboBox" name="assignGroupCombo"/>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="assignmentButtonLayout">
+         <item>
+          <widget class="QPushButton" name="assignButton">
+           <property name="text">
+            <string>Assign Group to User</string>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">
+             QPushButton {
+                 background-color: #2ecc71;
+                 color: white;
+                 border: none;
+                 padding: 5px 15px;
+                 border-radius: 4px;
+             }
+             QPushButton:hover {
+                 background-color: #27ae60;
+             }
+            </string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="unassignButton">
+           <property name="text">
+            <string>Remove Assignment</string>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">
+             QPushButton {
+                 background-color: #e74c3c;
+                 color: white;
+                 border: none;
+                 padding: 5px 15px;
+                 border-radius: 4px;
+             }
+             QPushButton:hover {
+                 background-color: #c0392b;
+             }
+            </string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QTableWidget" name="assignmentTable">
+         <property name="selectionBehavior">
+          <enum>QAbstractItemView::SelectRows</enum>
+         </property>
+         <property name="selectionMode">
+          <enum>QAbstractItemView::SingleSelection</enum>
+         </property>
+         <column>
+          <property name="text">
+           <string>Username</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Channel Group</string>
+          </property>
+         </column>
+        </widget>
+       </item>
+      </layout>
+     </widget>
     </widget>
    </item>
   </layout>

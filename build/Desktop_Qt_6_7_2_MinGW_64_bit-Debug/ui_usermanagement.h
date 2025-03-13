@@ -67,6 +67,18 @@ public:
     QPushButton *deleteChannelGroupButton;
     QPushButton *clearChannelGroupButton;
     QTableWidget *channelGroupTable;
+    QWidget *assignmentTab;
+    QVBoxLayout *verticalLayout_4;
+    QGroupBox *assignmentGroupBox;
+    QFormLayout *formLayout_3;
+    QLabel *assignUserLabel;
+    QComboBox *assignUserCombo;
+    QLabel *assignGroupLabel;
+    QComboBox *assignGroupCombo;
+    QHBoxLayout *assignmentButtonLayout;
+    QPushButton *assignButton;
+    QPushButton *unassignButton;
+    QTableWidget *assignmentTable;
 
     void setupUi(QWidget *UserManagement)
     {
@@ -357,6 +369,90 @@ public:
         verticalLayout_3->addWidget(channelGroupTable);
 
         tabWidget->addTab(channelTab, QString());
+        assignmentTab = new QWidget();
+        assignmentTab->setObjectName("assignmentTab");
+        verticalLayout_4 = new QVBoxLayout(assignmentTab);
+        verticalLayout_4->setObjectName("verticalLayout_4");
+        assignmentGroupBox = new QGroupBox(assignmentTab);
+        assignmentGroupBox->setObjectName("assignmentGroupBox");
+        formLayout_3 = new QFormLayout(assignmentGroupBox);
+        formLayout_3->setObjectName("formLayout_3");
+        assignUserLabel = new QLabel(assignmentGroupBox);
+        assignUserLabel->setObjectName("assignUserLabel");
+
+        formLayout_3->setWidget(0, QFormLayout::LabelRole, assignUserLabel);
+
+        assignUserCombo = new QComboBox(assignmentGroupBox);
+        assignUserCombo->setObjectName("assignUserCombo");
+
+        formLayout_3->setWidget(0, QFormLayout::FieldRole, assignUserCombo);
+
+        assignGroupLabel = new QLabel(assignmentGroupBox);
+        assignGroupLabel->setObjectName("assignGroupLabel");
+
+        formLayout_3->setWidget(1, QFormLayout::LabelRole, assignGroupLabel);
+
+        assignGroupCombo = new QComboBox(assignmentGroupBox);
+        assignGroupCombo->setObjectName("assignGroupCombo");
+
+        formLayout_3->setWidget(1, QFormLayout::FieldRole, assignGroupCombo);
+
+
+        verticalLayout_4->addWidget(assignmentGroupBox);
+
+        assignmentButtonLayout = new QHBoxLayout();
+        assignmentButtonLayout->setObjectName("assignmentButtonLayout");
+        assignButton = new QPushButton(assignmentTab);
+        assignButton->setObjectName("assignButton");
+        assignButton->setStyleSheet(QString::fromUtf8("\n"
+"             QPushButton {\n"
+"                 background-color: #2ecc71;\n"
+"                 color: white;\n"
+"                 border: none;\n"
+"                 padding: 5px 15px;\n"
+"                 border-radius: 4px;\n"
+"             }\n"
+"             QPushButton:hover {\n"
+"                 background-color: #27ae60;\n"
+"             }\n"
+"            "));
+
+        assignmentButtonLayout->addWidget(assignButton);
+
+        unassignButton = new QPushButton(assignmentTab);
+        unassignButton->setObjectName("unassignButton");
+        unassignButton->setStyleSheet(QString::fromUtf8("\n"
+"             QPushButton {\n"
+"                 background-color: #e74c3c;\n"
+"                 color: white;\n"
+"                 border: none;\n"
+"                 padding: 5px 15px;\n"
+"                 border-radius: 4px;\n"
+"             }\n"
+"             QPushButton:hover {\n"
+"                 background-color: #c0392b;\n"
+"             }\n"
+"            "));
+
+        assignmentButtonLayout->addWidget(unassignButton);
+
+
+        verticalLayout_4->addLayout(assignmentButtonLayout);
+
+        assignmentTable = new QTableWidget(assignmentTab);
+        if (assignmentTable->columnCount() < 2)
+            assignmentTable->setColumnCount(2);
+        QTableWidgetItem *__qtablewidgetitem4 = new QTableWidgetItem();
+        assignmentTable->setHorizontalHeaderItem(0, __qtablewidgetitem4);
+        QTableWidgetItem *__qtablewidgetitem5 = new QTableWidgetItem();
+        assignmentTable->setHorizontalHeaderItem(1, __qtablewidgetitem5);
+        assignmentTable->setObjectName("assignmentTable");
+        assignmentTable->setSelectionBehavior(QAbstractItemView::SelectRows);
+        assignmentTable->setSelectionMode(QAbstractItemView::SingleSelection);
+
+        verticalLayout_4->addWidget(assignmentTable);
+
+        tabWidget->addTab(assignmentTab, QString());
 
         verticalLayout->addWidget(tabWidget);
 
@@ -406,6 +502,16 @@ public:
         QTableWidgetItem *___qtablewidgetitem3 = channelGroupTable->horizontalHeaderItem(1);
         ___qtablewidgetitem3->setText(QCoreApplication::translate("UserManagement", "Channels", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(channelTab), QCoreApplication::translate("UserManagement", "Channel Groups", nullptr));
+        assignmentGroupBox->setTitle(QCoreApplication::translate("UserManagement", "Assign Channel Groups to Users", nullptr));
+        assignUserLabel->setText(QCoreApplication::translate("UserManagement", "User:", nullptr));
+        assignGroupLabel->setText(QCoreApplication::translate("UserManagement", "Channel Group:", nullptr));
+        assignButton->setText(QCoreApplication::translate("UserManagement", "Assign Group to User", nullptr));
+        unassignButton->setText(QCoreApplication::translate("UserManagement", "Remove Assignment", nullptr));
+        QTableWidgetItem *___qtablewidgetitem4 = assignmentTable->horizontalHeaderItem(0);
+        ___qtablewidgetitem4->setText(QCoreApplication::translate("UserManagement", "Username", nullptr));
+        QTableWidgetItem *___qtablewidgetitem5 = assignmentTable->horizontalHeaderItem(1);
+        ___qtablewidgetitem5->setText(QCoreApplication::translate("UserManagement", "Channel Group", nullptr));
+        tabWidget->setTabText(tabWidget->indexOf(assignmentTab), QCoreApplication::translate("UserManagement", "User Assignments", nullptr));
     } // retranslateUi
 
 };

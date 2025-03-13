@@ -32,15 +32,24 @@ UserManagement::UserManagement(QWidget *parent)
     deleteChannelGroupButton = ui->deleteChannelGroupButton;
     clearChannelGroupButton = ui->clearChannelGroupButton;
     
+    // Get references to UI elements for user assignments
+    assignmentTable = ui->assignmentTable;
+    assignUserCombo = ui->assignUserCombo;
+    assignGroupCombo = ui->assignGroupCombo;
+    assignButton = ui->assignButton;
+    unassignButton = ui->unassignButton;
+    
     // Set up tables
     userTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     channelGroupTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    assignmentTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     
     // Set up initial button states
     editButton->setEnabled(false);
     deleteButton->setEnabled(false);
     editChannelGroupButton->setEnabled(false);
     deleteChannelGroupButton->setEnabled(false);
+    unassignButton->setEnabled(false);
     
     // Connect signals for user management
     connect(addButton, &QPushButton::clicked, this, &UserManagement::onAddUserClicked);
@@ -56,9 +65,30 @@ UserManagement::UserManagement(QWidget *parent)
     connect(clearChannelGroupButton, &QPushButton::clicked, this, &UserManagement::clearChannelGroupForm);
     connect(channelGroupTable, &QTableWidget::cellClicked, this, &UserManagement::onChannelGroupTableItemClicked);
     
+    // Connect signals for user assignments
+    connect(assignButton, &QPushButton::clicked, this, &UserManagement::onAssignButtonClicked);
+    connect(unassignButton, &QPushButton::clicked, this, &UserManagement::onUnassignButtonClicked);
+    connect(assignmentTable, &QTableWidget::cellClicked, this, &UserManagement::onAssignmentTableItemClicked);
+    
+    // Connect tab widget signals to refresh data when tab changes
+    connect(ui->tabWidget, &QTabWidget::currentChanged, [this](int index) {
+        if (index == 0) {
+            refreshUserList();
+        } else if (index == 1) {
+            refreshChannelGroupList();
+        } else if (index == 2) {
+            loadUsersInCombo();
+            loadGroupsInCombo();
+            refreshAssignmentList();
+        }
+    });
+    
     // Initial refresh
     refreshUserList();
     refreshChannelGroupList();
+    loadUsersInCombo();
+    loadGroupsInCombo();
+    refreshAssignmentList();
 }
 
 UserManagement::~UserManagement()
@@ -169,6 +199,48 @@ void UserManagement::refreshChannelGroupList()
     }
 }
 
+void UserManagement::refreshAssignmentList()
+{
+    assignmentTable->setRowCount(0);
+    QSqlQuery query("SELECT username, group_name FROM user_channel_groups ORDER BY username");
+    
+    if (!query.exec()) {
+        QMessageBox::warning(this, "Error", "Failed to fetch user assignments: " + query.lastError().text());
+        return;
+    }
+
+    while (query.next()) {
+        int row = assignmentTable->rowCount();
+        assignmentTable->insertRow(row);
+        assignmentTable->setItem(row, 0, new QTableWidgetItem(query.value(0).toString()));
+        assignmentTable->setItem(row, 1, new QTableWidgetItem(query.value(1).toString()));
+    }
+}
+
+void UserManagement::loadUsersInCombo()
+{
+    assignUserCombo->clear();
+    QSqlQuery query("SELECT username FROM users WHERE role = 'user' ORDER BY username");
+    
+    if (query.exec()) {
+        while (query.next()) {
+            assignUserCombo->addItem(query.value(0).toString());
+        }
+    }
+}
+
+void UserManagement::loadGroupsInCombo()
+{
+    assignGroupCombo->clear();
+    QSqlQuery query("SELECT group_name FROM channel_groups ORDER BY group_name");
+    
+    if (query.exec()) {
+        while (query.next()) {
+            assignGroupCombo->addItem(query.value(0).toString());
+        }
+    }
+}
+
 QList<QPair<QString, QStringList>> UserManagement::getChannelGroups()
 {
     QList<QPair<QString, QStringList>> result;
@@ -185,6 +257,48 @@ QList<QPair<QString, QStringList>> UserManagement::getChannelGroups()
     }
     
     return result;
+}
+
+QStringList UserManagement::getUserAssignedChannels(const QString &username)
+{
+    QStringList result;
+    QSet<QString> uniqueChannels;
+    
+    QSqlQuery query;
+    query.prepare("SELECT cg.channels FROM user_channel_groups ucg "
+                 "JOIN channel_groups cg ON ucg.group_name = cg.group_name "
+                 "WHERE ucg.username = :username");
+    query.bindValue(":username", username);
+    
+    if (query.exec()) {
+        while (query.next()) {
+            QString channels = query.value(0).toString();
+            QStringList channelList = channels.split(",", Qt::SkipEmptyParts);
+            for (const QString &channel : channelList) {
+                uniqueChannels.insert(channel.trimmed());
+            }
+        }
+    }
+    
+    // Convert QSet to QStringList manually
+    foreach (const QString &channel, uniqueChannels) {
+        result.append(channel);
+    }
+    
+    return result;
+}
+
+bool UserManagement::isUserAdmin(const QString &username)
+{
+    QSqlQuery query;
+    query.prepare("SELECT role FROM users WHERE username = ?");
+    query.addBindValue(username);
+    
+    if (query.exec() && query.next()) {
+        return query.value(0).toString() == "admin";
+    }
+    
+    return false;
 }
 
 void UserManagement::onAddUserClicked()
@@ -219,6 +333,7 @@ void UserManagement::onAddUserClicked()
         QMessageBox::information(this, "Success", "User added successfully!");
         clearForm();
         refreshUserList();
+        loadUsersInCombo(); // Refresh the user combo box in assignments tab
     } else {
         QMessageBox::warning(this, "Error", "Failed to add user: " + query.lastError().text());
     }
@@ -253,9 +368,20 @@ void UserManagement::onEditUserClicked()
     }
 
     if (query.exec()) {
+        // If username changed, update user_channel_groups table
+        if (username != currentUsername) {
+            QSqlQuery updateAssignments;
+            updateAssignments.prepare("UPDATE user_channel_groups SET username = ? WHERE username = ?");
+            updateAssignments.addBindValue(username);
+            updateAssignments.addBindValue(currentUsername);
+            updateAssignments.exec();
+        }
+        
         QMessageBox::information(this, "Success", "User updated successfully!");
         clearForm();
         refreshUserList();
+        loadUsersInCombo(); // Refresh the user combo box in assignments tab
+        refreshAssignmentList(); // Refresh assignments if username changed
     } else {
         QMessageBox::warning(this, "Error", "Failed to update user: " + query.lastError().text());
     }
@@ -282,6 +408,8 @@ void UserManagement::onDeleteUserClicked()
             QMessageBox::information(this, "Success", "User deleted successfully!");
             clearForm();
             refreshUserList();
+            loadUsersInCombo(); // Refresh the user combo box in assignments tab
+            refreshAssignmentList(); // Refresh assignments as user was deleted
         } else {
             QMessageBox::warning(this, "Error", "Failed to delete user: " + query.lastError().text());
         }
@@ -368,6 +496,7 @@ void UserManagement::onAddChannelGroupClicked()
         QMessageBox::information(this, "Success", "Channel group added successfully!");
         clearChannelGroupForm();
         refreshChannelGroupList();
+        loadGroupsInCombo(); // Refresh the group combo box in assignments tab
         emit channelGroupsChanged();
     } else {
         QMessageBox::warning(this, "Error", "Failed to add channel group: " + query.lastError().text());
@@ -398,10 +527,22 @@ void UserManagement::onEditChannelGroupClicked()
     query.addBindValue(currentGroupName);
 
     if (query.exec()) {
+        // If group name changed, update user_channel_groups table
+        if (groupName != currentGroupName) {
+            QSqlQuery updateAssignments;
+            updateAssignments.prepare("UPDATE user_channel_groups SET group_name = ? WHERE group_name = ?");
+            updateAssignments.addBindValue(groupName);
+            updateAssignments.addBindValue(currentGroupName);
+            updateAssignments.exec();
+        }
+        
         QMessageBox::information(this, "Success", "Channel group updated successfully!");
         clearChannelGroupForm();
         refreshChannelGroupList();
+        loadGroupsInCombo(); // Refresh the group combo box in assignments tab
+        refreshAssignmentList(); // Refresh assignments if group name changed
         emit channelGroupsChanged();
+        emit userAssignmentsChanged();
     } else {
         QMessageBox::warning(this, "Error", "Failed to update channel group: " + query.lastError().text());
     }
@@ -428,7 +569,10 @@ void UserManagement::onDeleteChannelGroupClicked()
             QMessageBox::information(this, "Success", "Channel group deleted successfully!");
             clearChannelGroupForm();
             refreshChannelGroupList();
+            loadGroupsInCombo(); // Refresh the group combo box in assignments tab
+            refreshAssignmentList(); // Refresh assignments as group was deleted
             emit channelGroupsChanged();
+            emit userAssignmentsChanged();
         } else {
             QMessageBox::warning(this, "Error", "Failed to delete channel group: " + query.lastError().text());
         }
@@ -499,4 +643,94 @@ QStringList UserManagement::getSelectedChannels()
     if (channel3Check->isChecked()) channels << "3";
     if (channel4Check->isChecked()) channels << "4";
     return channels;
+}
+
+// User Assignment Methods
+
+void UserManagement::onAssignButtonClicked()
+{
+    if (assignUserCombo->count() == 0 || assignGroupCombo->count() == 0) {
+        QMessageBox::warning(this, "Error", "No users or channel groups available for assignment!");
+        return;
+    }
+    
+    QString username = assignUserCombo->currentText();
+    QString groupName = assignGroupCombo->currentText();
+    
+    // Check if assignment already exists
+    QSqlQuery checkQuery;
+    checkQuery.prepare("SELECT id FROM user_channel_groups WHERE username = ? AND group_name = ?");
+    checkQuery.addBindValue(username);
+    checkQuery.addBindValue(groupName);
+    
+    if (checkQuery.exec() && checkQuery.next()) {
+        QMessageBox::warning(this, "Error", "This user is already assigned to this channel group!");
+        return;
+    }
+    
+    // Add new assignment
+    QSqlQuery query;
+    query.prepare("INSERT INTO user_channel_groups (username, group_name) VALUES (?, ?)");
+    query.addBindValue(username);
+    query.addBindValue(groupName);
+    
+    if (query.exec()) {
+        QMessageBox::information(this, "Success", "Channel group assigned to user successfully!");
+        refreshAssignmentList();
+        emit userAssignmentsChanged();
+    } else {
+        QMessageBox::warning(this, "Error", "Failed to assign channel group: " + query.lastError().text());
+    }
+}
+
+void UserManagement::onUnassignButtonClicked()
+{
+    if (currentAssignmentRow < 0) {
+        return;
+    }
+    
+    QString username = assignmentTable->item(currentAssignmentRow, 0)->text();
+    QString groupName = assignmentTable->item(currentAssignmentRow, 1)->text();
+    
+    QMessageBox::StandardButton reply = QMessageBox::question(this, "Confirm Removal",
+        "Are you sure you want to remove the assignment of channel group '" + groupName + 
+        "' from user '" + username + "'?",
+        QMessageBox::Yes|QMessageBox::No);
+        
+    if (reply == QMessageBox::Yes) {
+        QSqlQuery query;
+        query.prepare("DELETE FROM user_channel_groups WHERE username = ? AND group_name = ?");
+        query.addBindValue(username);
+        query.addBindValue(groupName);
+        
+        if (query.exec()) {
+            QMessageBox::information(this, "Success", "Assignment removed successfully!");
+            currentAssignmentRow = -1;
+            unassignButton->setEnabled(false);
+            refreshAssignmentList();
+            emit userAssignmentsChanged();
+        } else {
+            QMessageBox::warning(this, "Error", "Failed to remove assignment: " + query.lastError().text());
+        }
+    }
+}
+
+void UserManagement::onAssignmentTableItemClicked(int row, int column)
+{
+    currentAssignmentRow = row;
+    unassignButton->setEnabled(true);
+    
+    // Set the combo boxes to the selected values
+    QString username = assignmentTable->item(row, 0)->text();
+    QString groupName = assignmentTable->item(row, 1)->text();
+    
+    int userIndex = assignUserCombo->findText(username);
+    if (userIndex >= 0) {
+        assignUserCombo->setCurrentIndex(userIndex);
+    }
+    
+    int groupIndex = assignGroupCombo->findText(groupName);
+    if (groupIndex >= 0) {
+        assignGroupCombo->setCurrentIndex(groupIndex);
+    }
 }

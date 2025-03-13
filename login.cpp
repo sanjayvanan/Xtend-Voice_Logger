@@ -65,6 +65,15 @@ void login::createTablesIfNotExist()
               "group_name TEXT NOT NULL,"
               "channels TEXT NOT NULL)");  // Comma-separated list of channel numbers
               
+    // Create user_channel_groups table for assignments
+    query.exec("CREATE TABLE IF NOT EXISTS user_channel_groups ("
+              "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+              "username TEXT NOT NULL,"
+              "group_name TEXT NOT NULL,"
+              "FOREIGN KEY (username) REFERENCES users(username) ON DELETE CASCADE,"
+              "FOREIGN KEY (group_name) REFERENCES channel_groups(group_name) ON DELETE CASCADE,"
+              "UNIQUE(username, group_name))");
+              
     // Add default channel groups if they don't exist
     query.prepare("SELECT COUNT(*) FROM channel_groups");
     if (query.exec() && query.next() && query.value(0).toInt() == 0) {
