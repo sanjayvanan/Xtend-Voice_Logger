@@ -288,7 +288,7 @@ QScrollBar::add-line, QScrollBar::sub-line {
 }
 
 /* Remove spin box buttons from pagination */
-#currentPage::up-button, 
+#currentPage::up-button,
 #currentPage::down-button {
     width: 0;
     border: none;
@@ -339,3 +339,5 @@ QScrollBar::add-line, QScrollBar::sub-line {
 #callTypesFrame, #callStatusFrame {
     min-height: 80px; /* Adjust as needed */
 }
+
+

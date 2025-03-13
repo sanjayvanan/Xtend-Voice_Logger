@@ -43,6 +43,8 @@ public:
     QLineEdit *phoneNumber;
     QLabel *labelCallType;
     QComboBox *callTypeCombo;
+    QLabel *labelChannel;
+    QComboBox *channelGroupCombo;
     QLabel *labelPageSize;
     QSpinBox *pageSize;
     QPushButton *searchButton;
@@ -136,10 +138,23 @@ public:
 
         gridLayout->addWidget(callTypeCombo, 1, 3, 1, 1);
 
+        labelChannel = new QLabel(searchGroup);
+        labelChannel->setObjectName("labelChannel");
+
+        gridLayout->addWidget(labelChannel, 2, 0, 1, 1);
+
+        channelGroupCombo = new QComboBox(searchGroup);
+        channelGroupCombo->addItem(QString());
+        channelGroupCombo->setObjectName("channelGroupCombo");
+        sizePolicy.setHeightForWidth(channelGroupCombo->sizePolicy().hasHeightForWidth());
+        channelGroupCombo->setSizePolicy(sizePolicy);
+
+        gridLayout->addWidget(channelGroupCombo, 2, 1, 1, 1);
+
         labelPageSize = new QLabel(searchGroup);
         labelPageSize->setObjectName("labelPageSize");
 
-        gridLayout->addWidget(labelPageSize, 2, 0, 1, 1);
+        gridLayout->addWidget(labelPageSize, 2, 2, 1, 1);
 
         pageSize = new QSpinBox(searchGroup);
         pageSize->setObjectName("pageSize");
@@ -152,14 +167,14 @@ public:
         pageSize->setMaximum(1000);
         pageSize->setValue(50);
 
-        gridLayout->addWidget(pageSize, 2, 1, 1, 1);
+        gridLayout->addWidget(pageSize, 2, 3, 1, 1);
 
         searchButton = new QPushButton(searchGroup);
         searchButton->setObjectName("searchButton");
         sizePolicy1.setHeightForWidth(searchButton->sizePolicy().hasHeightForWidth());
         searchButton->setSizePolicy(sizePolicy1);
 
-        gridLayout->addWidget(searchButton, 2, 3, 1, 1);
+        gridLayout->addWidget(searchButton, 3, 0, 1, 1);
 
 
         verticalLayout->addWidget(searchGroup);
@@ -263,7 +278,7 @@ public:
 
     void retranslateUi(QWidget *TimeTimeCalls)
     {
-        label->setText(QCoreApplication::translate("TimeTimeCalls", "Time to Time Call Search", nullptr));
+        label->setText(QCoreApplication::translate("TimeTimeCalls", "Call History", nullptr));
         searchGroup->setTitle(QCoreApplication::translate("TimeTimeCalls", ".", nullptr));
         labelFromDate->setText(QCoreApplication::translate("TimeTimeCalls", "From Date:", nullptr));
         labelToDate->setText(QCoreApplication::translate("TimeTimeCalls", "To Date:", nullptr));
@@ -272,6 +287,9 @@ public:
         callTypeCombo->setItemText(0, QCoreApplication::translate("TimeTimeCalls", "All", nullptr));
         callTypeCombo->setItemText(1, QCoreApplication::translate("TimeTimeCalls", "Incoming", nullptr));
         callTypeCombo->setItemText(2, QCoreApplication::translate("TimeTimeCalls", "Outgoing", nullptr));
+
+        labelChannel->setText(QCoreApplication::translate("TimeTimeCalls", "Channel Group:", nullptr));
+        channelGroupCombo->setItemText(0, QCoreApplication::translate("TimeTimeCalls", "All", nullptr));
 
         labelPageSize->setText(QCoreApplication::translate("TimeTimeCalls", "Page Size:", nullptr));
         searchButton->setText(QCoreApplication::translate("TimeTimeCalls", "Search", nullptr));

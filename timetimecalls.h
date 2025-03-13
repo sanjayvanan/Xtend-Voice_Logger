@@ -21,6 +21,7 @@ public:
     explicit TimeTimeCalls(QWidget *parent = nullptr);
     ~TimeTimeCalls();
     void setSessionToken(const QString &token);
+    void refreshChannelGroups();
 
 protected:
     void showEvent(QShowEvent *event) override;
@@ -41,12 +42,19 @@ private:
     void performSearch();
     void updatePaginationControls(int totalCalls);
     void initializeDateTimeFields();
+    void loadChannelGroups();
+    void filterCallsByChannelGroup(QJsonArray &callList);
+    
     Ui::TimeTimeCalls *ui;
     APIHandler *apiHandler;
     QString sessionToken;
     QMediaPlayer *mediaPlayer;
     QTemporaryFile *tempWaveFile;
     int totalPages;
+    
+    // Channel group filtering
+    QMap<QString, QStringList> channelGroups;
+    QJsonObject lastCallDetails; // Store the last call details for filtering
 };
 
 #endif // TIMETIMECALLS_H

@@ -23,7 +23,7 @@
       </font>
      </property>
      <property name="text">
-      <string>User Management</string>
+      <string>Administration</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignLeft</set>
@@ -37,165 +37,352 @@
     </widget>
    </item>
    <item>
-    <widget class="QGroupBox" name="formGroupBox">
-     <property name="title">
-      <string>User Details</string>
+    <widget class="QTabWidget" name="tabWidget">
+     <property name="currentIndex">
+      <number>0</number>
      </property>
-     <layout class="QFormLayout" name="formLayout">
-      <item row="0" column="0">
-       <widget class="QLabel" name="usernameLabel">
-        <property name="text">
-         <string>Username:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QLineEdit" name="usernameEdit"/>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="passwordLabel">
-        <property name="text">
-         <string>Password:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QLineEdit" name="passwordEdit">
-        <property name="echoMode">
-         <enum>QLineEdit::Password</enum>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="roleLabel">
-        <property name="text">
-         <string>Role:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
-       <widget class="QComboBox" name="roleCombo">
-        <item>
-         <property name="text">
-          <string>user</string>
+     <widget class="QWidget" name="userTab">
+      <attribute name="title">
+       <string>User Management</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="QGroupBox" name="formGroupBox">
+         <property name="title">
+          <string>User Details</string>
          </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>admin</string>
+         <layout class="QFormLayout" name="formLayout">
+          <item row="0" column="0">
+           <widget class="QLabel" name="usernameLabel">
+            <property name="text">
+             <string>Username:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="usernameEdit"/>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="passwordLabel">
+            <property name="text">
+             <string>Password:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLineEdit" name="passwordEdit">
+            <property name="echoMode">
+             <enum>QLineEdit::Password</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="roleLabel">
+            <property name="text">
+             <string>Role:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QComboBox" name="roleCombo">
+            <item>
+             <property name="text">
+              <string>user</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>admin</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="buttonLayout">
+         <item>
+          <widget class="QPushButton" name="addButton">
+           <property name="text">
+            <string>Add User</string>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">
+             QPushButton {
+                 background-color: #2ecc71;
+                 color: white;
+                 border: none;
+                 padding: 5px 15px;
+                 border-radius: 4px;
+             }
+             QPushButton:hover {
+                 background-color: #27ae60;
+             }
+            </string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="editButton">
+           <property name="text">
+            <string>Update User</string>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">
+             QPushButton {
+                 background-color: #f1c40f;
+                 color: white;
+                 border: none;
+                 padding: 5px 15px;
+                 border-radius: 4px;
+             }
+             QPushButton:hover {
+                 background-color: #f39c12;
+             }
+            </string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="deleteButton">
+           <property name="text">
+            <string>Delete User</string>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">
+             QPushButton {
+                 background-color: #e74c3c;
+                 color: white;
+                 border: none;
+                 padding: 5px 15px;
+                 border-radius: 4px;
+             }
+             QPushButton:hover {
+                 background-color: #c0392b;
+             }
+            </string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="clearButton">
+           <property name="text">
+            <string>Clear Form</string>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">
+             QPushButton {
+                 background-color: #95a5a6;
+                 color: white;
+                 border: none;
+                 padding: 5px 15px;
+                 border-radius: 4px;
+             }
+             QPushButton:hover {
+                 background-color: #7f8c8d;
+             }
+            </string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QTableWidget" name="userTable">
+         <property name="selectionBehavior">
+          <enum>QAbstractItemView::SelectRows</enum>
          </property>
-        </item>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item>
-    <layout class="QHBoxLayout" name="buttonLayout">
-     <item>
-      <widget class="QPushButton" name="addButton">
-       <property name="text">
-        <string>Add User</string>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">
-         QPushButton {
-             background-color: #2ecc71;
-             color: white;
-             border: none;
-             padding: 5px 15px;
-             border-radius: 4px;
-         }
-         QPushButton:hover {
-             background-color: #27ae60;
-         }
-        </string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="editButton">
-       <property name="text">
-        <string>Update User</string>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">
-         QPushButton {
-             background-color: #f1c40f;
-             color: white;
-             border: none;
-             padding: 5px 15px;
-             border-radius: 4px;
-         }
-         QPushButton:hover {
-             background-color: #f39c12;
-         }
-        </string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="deleteButton">
-       <property name="text">
-        <string>Delete User</string>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">
-         QPushButton {
-             background-color: #e74c3c;
-             color: white;
-             border: none;
-             padding: 5px 15px;
-             border-radius: 4px;
-         }
-         QPushButton:hover {
-             background-color: #c0392b;
-         }
-        </string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="clearButton">
-       <property name="text">
-        <string>Clear Form</string>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">
-         QPushButton {
-             background-color: #95a5a6;
-             color: white;
-             border: none;
-             padding: 5px 15px;
-             border-radius: 4px;
-         }
-         QPushButton:hover {
-             background-color: #7f8c8d;
-         }
-        </string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item>
-    <widget class="QTableWidget" name="userTable">
-     <property name="selectionBehavior">
-      <enum>QAbstractItemView::SelectRows</enum>
-     </property>
-     <property name="selectionMode">
-      <enum>QAbstractItemView::SingleSelection</enum>
-     </property>
-     <column>
-      <property name="text">
-       <string>Username</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Role</string>
-      </property>
-     </column>
+         <property name="selectionMode">
+          <enum>QAbstractItemView::SingleSelection</enum>
+         </property>
+         <column>
+          <property name="text">
+           <string>Username</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Role</string>
+          </property>
+         </column>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="channelTab">
+      <attribute name="title">
+       <string>Channel Groups</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <item>
+        <widget class="QGroupBox" name="channelGroupBox">
+         <property name="title">
+          <string>Channel Group Details</string>
+         </property>
+         <layout class="QFormLayout" name="formLayout_2">
+          <item row="0" column="0">
+           <widget class="QLabel" name="groupNameLabel">
+            <property name="text">
+             <string>Group Name:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="groupNameEdit"/>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="channelsLabel">
+            <property name="text">
+             <string>Channels:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <layout class="QHBoxLayout" name="horizontalLayout">
+            <item>
+             <widget class="QCheckBox" name="channel1Check">
+              <property name="text">
+               <string>Channel 1</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="channel2Check">
+              <property name="text">
+               <string>Channel 2</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="channel3Check">
+              <property name="text">
+               <string>Channel 3</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="channel4Check">
+              <property name="text">
+               <string>Channel 4</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="channelButtonLayout">
+         <item>
+          <widget class="QPushButton" name="addChannelGroupButton">
+           <property name="text">
+            <string>Add Group</string>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">
+             QPushButton {
+                 background-color: #2ecc71;
+                 color: white;
+                 border: none;
+                 padding: 5px 15px;
+                 border-radius: 4px;
+             }
+             QPushButton:hover {
+                 background-color: #27ae60;
+             }
+            </string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="editChannelGroupButton">
+           <property name="text">
+            <string>Update Group</string>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">
+             QPushButton {
+                 background-color: #f1c40f;
+                 color: white;
+                 border: none;
+                 padding: 5px 15px;
+                 border-radius: 4px;
+             }
+             QPushButton:hover {
+                 background-color: #f39c12;
+             }
+            </string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="deleteChannelGroupButton">
+           <property name="text">
+            <string>Delete Group</string>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">
+             QPushButton {
+                 background-color: #e74c3c;
+                 color: white;
+                 border: none;
+                 padding: 5px 15px;
+                 border-radius: 4px;
+             }
+             QPushButton:hover {
+                 background-color: #c0392b;
+             }
+            </string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="clearChannelGroupButton">
+           <property name="text">
+            <string>Clear Form</string>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">
+             QPushButton {
+                 background-color: #95a5a6;
+                 color: white;
+                 border: none;
+                 padding: 5px 15px;
+                 border-radius: 4px;
+             }
+             QPushButton:hover {
+                 background-color: #7f8c8d;
+             }
+            </string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QTableWidget" name="channelGroupTable">
+         <property name="selectionBehavior">
+          <enum>QAbstractItemView::SelectRows</enum>
+         </property>
+         <property name="selectionMode">
+          <enum>QAbstractItemView::SingleSelection</enum>
+         </property>
+         <column>
+          <property name="text">
+           <string>Group Name</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Channels</string>
+          </property>
+         </column>
+        </widget>
+       </item>
+      </layout>
+     </widget>
     </widget>
    </item>
   </layout>

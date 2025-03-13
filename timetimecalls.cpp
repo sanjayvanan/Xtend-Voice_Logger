@@ -12,6 +12,8 @@
 #include <QDir>
 #include "audioplayerdialog.h"
 #include <QDateTime>
+#include "usermanagement.h"
+#include <QSqlQuery>
 
 TimeTimeCalls::TimeTimeCalls(QWidget *parent)
     : QWidget(parent)
@@ -25,6 +27,9 @@ TimeTimeCalls::TimeTimeCalls(QWidget *parent)
     
     // Initialize date/time fields
     initializeDateTimeFields();
+    
+    // Load channel groups
+    loadChannelGroups();
     
     // Connect API handler signals
     connect(apiHandler, &APIHandler::callDetailsReceived,
@@ -74,6 +79,40 @@ void TimeTimeCalls::initializeDateTimeFields()
     ui->currentPage->setValue(1);
 }
 
+void TimeTimeCalls::loadChannelGroups()
+{
+    // Clear the combo box except for the "All" item
+    while (ui->channelGroupCombo->count() > 1) {
+        ui->channelGroupCombo->removeItem(1);
+    }
+    
+    // Clear the channel groups map
+    channelGroups.clear();
+    
+    // Add "All" as the first item (already done in UI)
+    
+    // Load channel groups from database
+    QSqlQuery query("SELECT group_name, channels FROM channel_groups");
+    if (query.exec()) {
+        while (query.next()) {
+            QString groupName = query.value(0).toString();
+            QString channelsStr = query.value(1).toString();
+            QStringList channels = channelsStr.split(",");
+            
+            // Add to combo box
+            ui->channelGroupCombo->addItem(groupName);
+            
+            // Add to map
+            channelGroups[groupName] = channels;
+        }
+    }
+}
+
+void TimeTimeCalls::refreshChannelGroups()
+{
+    loadChannelGroups();
+}
+
 void TimeTimeCalls::setSessionToken(const QString &token)
 {
     sessionToken = token;
@@ -85,6 +124,10 @@ void TimeTimeCalls::setSessionToken(const QString &token)
 void TimeTimeCalls::showEvent(QShowEvent *event)
 {
     QWidget::showEvent(event);
+    
+    // Refresh channel groups when shown
+    loadChannelGroups();
+    
     if (!sessionToken.isEmpty()) {
         performSearch();  // Perform search when widget becomes visible
     }
@@ -104,7 +147,53 @@ void TimeTimeCalls::on_searchButton_clicked()
 
 void TimeTimeCalls::handleCallDetails(const QJsonObject &details)
 {
-    updateCallDetailsTable(details);
+    // Store the last call details for filtering
+    lastCallDetails = details;
+    
+    // Check if we need to filter by channel group
+    QString selectedGroup = ui->channelGroupCombo->currentText();
+    if (selectedGroup != "All" && channelGroups.contains(selectedGroup)) {
+        // Create a copy of the details object for filtering
+        QJsonObject filteredDetails = details;
+        QJsonArray callList = filteredDetails["List"].toArray();
+        
+        // Filter the call list
+        filterCallsByChannelGroup(callList);
+        
+        // Update the filtered details
+        filteredDetails["List"] = callList;
+        filteredDetails["TotalCount"] = QString::number(callList.size());
+        
+        // Update the table with filtered data
+        updateCallDetailsTable(filteredDetails);
+    } else {
+        // No filtering needed
+        updateCallDetailsTable(details);
+    }
+}
+
+void TimeTimeCalls::filterCallsByChannelGroup(QJsonArray &callList)
+{
+    QString selectedGroup = ui->channelGroupCombo->currentText();
+    if (selectedGroup == "All" || !channelGroups.contains(selectedGroup)) {
+        return; // No filtering needed
+    }
+    
+    QStringList channels = channelGroups[selectedGroup];
+    QJsonArray filteredList;
+    
+    // Filter calls by channel
+    for (int i = 0; i < callList.size(); i++) {
+        QJsonObject call = callList[i].toObject();
+        QString channel = call["Channel"].toString();
+        
+        if (channels.contains(channel)) {
+            filteredList.append(call);
+        }
+    }
+    
+    // Replace the original list with the filtered one
+    callList = filteredList;
 }
 
 void TimeTimeCalls::handleCallDetailsFailed(const QString &message)
@@ -282,15 +371,18 @@ void TimeTimeCalls::performSearch()
 
     int currentPageValue = ui->currentPage->value() - 1; // API uses 0-based indexing
     
+    // Always fetch all data from API (without channel filtering)
     apiHandler->fetchCallList(
         sessionToken,
         ui->fromDateTime->dateTime(),
         ui->toDateTime->dateTime(),
         ui->phoneNumber->text(),
-        callType, 
+        callType,
         currentPageValue,
         ui->pageSize->value()
     );
+    
+    // The filtering by channel group will be done in handleCallDetails
 }
 
 void TimeTimeCalls::updatePaginationControls(int totalCalls)

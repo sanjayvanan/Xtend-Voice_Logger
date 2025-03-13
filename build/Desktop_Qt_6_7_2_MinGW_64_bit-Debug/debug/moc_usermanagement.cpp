@@ -37,14 +37,20 @@ namespace {
 struct qt_meta_stringdata_CLASSUserManagementENDCLASS_t {};
 constexpr auto qt_meta_stringdata_CLASSUserManagementENDCLASS = QtMocHelpers::stringData(
     "UserManagement",
-    "onAddUserClicked",
+    "channelGroupsChanged",
     "",
+    "onAddUserClicked",
     "onEditUserClicked",
     "onDeleteUserClicked",
     "onTableItemClicked",
     "row",
     "column",
-    "clearForm"
+    "clearForm",
+    "onAddChannelGroupClicked",
+    "onEditChannelGroupClicked",
+    "onDeleteChannelGroupClicked",
+    "onChannelGroupTableItemClicked",
+    "clearChannelGroupForm"
 );
 #else  // !QT_MOC_HAS_STRINGDATA
 #error "qtmochelpers.h not found or too old."
@@ -57,25 +63,41 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSUserManagementENDCLASS[] = {
       12,       // revision
        0,       // classname
        0,    0, // classinfo
-       5,   14, // methods
+      11,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-       0,       // signalCount
+       1,       // signalCount
+
+ // signals: name, argc, parameters, tag, flags, initial metatype offsets
+       1,    0,   80,    2, 0x06,    1 /* Public */,
 
  // slots: name, argc, parameters, tag, flags, initial metatype offsets
-       1,    0,   44,    2, 0x08,    1 /* Private */,
-       3,    0,   45,    2, 0x08,    2 /* Private */,
-       4,    0,   46,    2, 0x08,    3 /* Private */,
-       5,    2,   47,    2, 0x08,    4 /* Private */,
-       8,    0,   52,    2, 0x08,    7 /* Private */,
+       3,    0,   81,    2, 0x08,    2 /* Private */,
+       4,    0,   82,    2, 0x08,    3 /* Private */,
+       5,    0,   83,    2, 0x08,    4 /* Private */,
+       6,    2,   84,    2, 0x08,    5 /* Private */,
+       9,    0,   89,    2, 0x08,    8 /* Private */,
+      10,    0,   90,    2, 0x08,    9 /* Private */,
+      11,    0,   91,    2, 0x08,   10 /* Private */,
+      12,    0,   92,    2, 0x08,   11 /* Private */,
+      13,    2,   93,    2, 0x08,   12 /* Private */,
+      14,    0,   98,    2, 0x08,   15 /* Private */,
+
+ // signals: parameters
+    QMetaType::Void,
 
  // slots: parameters
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
-    QMetaType::Void, QMetaType::Int, QMetaType::Int,    6,    7,
+    QMetaType::Void, QMetaType::Int, QMetaType::Int,    7,    8,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void, QMetaType::Int, QMetaType::Int,    7,    8,
     QMetaType::Void,
 
        0        // eod
@@ -90,6 +112,8 @@ Q_CONSTINIT const QMetaObject UserManagement::staticMetaObject = { {
     qt_incomplete_metaTypeArray<qt_meta_stringdata_CLASSUserManagementENDCLASS_t,
         // Q_OBJECT / Q_GADGET
         QtPrivate::TypeAndForceComplete<UserManagement, std::true_type>,
+        // method 'channelGroupsChanged'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
         // method 'onAddUserClicked'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         // method 'onEditUserClicked'
@@ -101,6 +125,18 @@ Q_CONSTINIT const QMetaObject UserManagement::staticMetaObject = { {
         QtPrivate::TypeAndForceComplete<int, std::false_type>,
         QtPrivate::TypeAndForceComplete<int, std::false_type>,
         // method 'clearForm'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        // method 'onAddChannelGroupClicked'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        // method 'onEditChannelGroupClicked'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        // method 'onDeleteChannelGroupClicked'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        // method 'onChannelGroupTableItemClicked'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        QtPrivate::TypeAndForceComplete<int, std::false_type>,
+        QtPrivate::TypeAndForceComplete<int, std::false_type>,
+        // method 'clearChannelGroupForm'
         QtPrivate::TypeAndForceComplete<void, std::false_type>
     >,
     nullptr
@@ -112,12 +148,27 @@ void UserManagement::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _
         auto *_t = static_cast<UserManagement *>(_o);
         (void)_t;
         switch (_id) {
-        case 0: _t->onAddUserClicked(); break;
-        case 1: _t->onEditUserClicked(); break;
-        case 2: _t->onDeleteUserClicked(); break;
-        case 3: _t->onTableItemClicked((*reinterpret_cast< std::add_pointer_t<int>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[2]))); break;
-        case 4: _t->clearForm(); break;
+        case 0: _t->channelGroupsChanged(); break;
+        case 1: _t->onAddUserClicked(); break;
+        case 2: _t->onEditUserClicked(); break;
+        case 3: _t->onDeleteUserClicked(); break;
+        case 4: _t->onTableItemClicked((*reinterpret_cast< std::add_pointer_t<int>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[2]))); break;
+        case 5: _t->clearForm(); break;
+        case 6: _t->onAddChannelGroupClicked(); break;
+        case 7: _t->onEditChannelGroupClicked(); break;
+        case 8: _t->onDeleteChannelGroupClicked(); break;
+        case 9: _t->onChannelGroupTableItemClicked((*reinterpret_cast< std::add_pointer_t<int>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[2]))); break;
+        case 10: _t->clearChannelGroupForm(); break;
         default: ;
+        }
+    } else if (_c == QMetaObject::IndexOfMethod) {
+        int *result = reinterpret_cast<int *>(_a[0]);
+        {
+            using _t = void (UserManagement::*)();
+            if (_t _q_method = &UserManagement::channelGroupsChanged; *reinterpret_cast<_t *>(_a[1]) == _q_method) {
+                *result = 0;
+                return;
+            }
         }
     }
 }
@@ -141,14 +192,20 @@ int UserManagement::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 5)
+        if (_id < 11)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 5;
+        _id -= 11;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 5)
+        if (_id < 11)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 5;
+        _id -= 11;
     }
     return _id;
+}
+
+// SIGNAL 0
+void UserManagement::channelGroupsChanged()
+{
+    QMetaObject::activate(this, &staticMetaObject, 0, nullptr);
 }
 QT_WARNING_POP

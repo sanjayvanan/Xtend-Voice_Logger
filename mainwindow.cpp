@@ -89,6 +89,10 @@ MainWindow::MainWindow(QWidget *parent)
     // Hide user management button initially
     ui->btnUserManagement->setVisible(false);
 
+    // Connect user management channel groups changed signal to time time calls
+    connect(userManagement, &UserManagement::channelGroupsChanged, 
+            timeTimeCalls, &TimeTimeCalls::refreshChannelGroups);
+
     // Set default view
     ui->stackedWidget->setCurrentWidget(dashboard);
 }

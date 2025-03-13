@@ -58,6 +58,22 @@ void login::createTablesIfNotExist()
               "username TEXT UNIQUE NOT NULL,"
               "password_hash TEXT NOT NULL,"
               "role TEXT NOT NULL)");  // 'admin' or 'user'
+              
+    // Create channel_groups table
+    query.exec("CREATE TABLE IF NOT EXISTS channel_groups ("
+              "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+              "group_name TEXT NOT NULL,"
+              "channels TEXT NOT NULL)");  // Comma-separated list of channel numbers
+              
+    // Add default channel groups if they don't exist
+    query.prepare("SELECT COUNT(*) FROM channel_groups");
+    if (query.exec() && query.next() && query.value(0).toInt() == 0) {
+        // Add default individual channels
+        query.exec("INSERT INTO channel_groups (group_name, channels) VALUES ('Channel 1', '1')");
+        query.exec("INSERT INTO channel_groups (group_name, channels) VALUES ('Channel 2', '2')");
+        query.exec("INSERT INTO channel_groups (group_name, channels) VALUES ('Channel 3', '3')");
+        query.exec("INSERT INTO channel_groups (group_name, channels) VALUES ('Channel 4', '4')");
+    }
 }
 
 // void login::addDefaultUserIfNotExist()

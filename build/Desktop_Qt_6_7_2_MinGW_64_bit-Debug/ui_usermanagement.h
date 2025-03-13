@@ -11,6 +11,7 @@
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QCheckBox>
 #include <QtWidgets/QComboBox>
 #include <QtWidgets/QFormLayout>
 #include <QtWidgets/QGroupBox>
@@ -19,6 +20,7 @@
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QPushButton>
+#include <QtWidgets/QTabWidget>
 #include <QtWidgets/QTableWidget>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
@@ -30,6 +32,9 @@ class Ui_UserManagement
 public:
     QVBoxLayout *verticalLayout;
     QLabel *titleLabel;
+    QTabWidget *tabWidget;
+    QWidget *userTab;
+    QVBoxLayout *verticalLayout_2;
     QGroupBox *formGroupBox;
     QFormLayout *formLayout;
     QLabel *usernameLabel;
@@ -44,6 +49,24 @@ public:
     QPushButton *deleteButton;
     QPushButton *clearButton;
     QTableWidget *userTable;
+    QWidget *channelTab;
+    QVBoxLayout *verticalLayout_3;
+    QGroupBox *channelGroupBox;
+    QFormLayout *formLayout_2;
+    QLabel *groupNameLabel;
+    QLineEdit *groupNameEdit;
+    QLabel *channelsLabel;
+    QHBoxLayout *horizontalLayout;
+    QCheckBox *channel1Check;
+    QCheckBox *channel2Check;
+    QCheckBox *channel3Check;
+    QCheckBox *channel4Check;
+    QHBoxLayout *channelButtonLayout;
+    QPushButton *addChannelGroupButton;
+    QPushButton *editChannelGroupButton;
+    QPushButton *deleteChannelGroupButton;
+    QPushButton *clearChannelGroupButton;
+    QTableWidget *channelGroupTable;
 
     void setupUi(QWidget *UserManagement)
     {
@@ -63,7 +86,13 @@ public:
 
         verticalLayout->addWidget(titleLabel);
 
-        formGroupBox = new QGroupBox(UserManagement);
+        tabWidget = new QTabWidget(UserManagement);
+        tabWidget->setObjectName("tabWidget");
+        userTab = new QWidget();
+        userTab->setObjectName("userTab");
+        verticalLayout_2 = new QVBoxLayout(userTab);
+        verticalLayout_2->setObjectName("verticalLayout_2");
+        formGroupBox = new QGroupBox(userTab);
         formGroupBox->setObjectName("formGroupBox");
         formLayout = new QFormLayout(formGroupBox);
         formLayout->setObjectName("formLayout");
@@ -101,82 +130,82 @@ public:
         formLayout->setWidget(2, QFormLayout::FieldRole, roleCombo);
 
 
-        verticalLayout->addWidget(formGroupBox);
+        verticalLayout_2->addWidget(formGroupBox);
 
         buttonLayout = new QHBoxLayout();
         buttonLayout->setObjectName("buttonLayout");
-        addButton = new QPushButton(UserManagement);
+        addButton = new QPushButton(userTab);
         addButton->setObjectName("addButton");
         addButton->setStyleSheet(QString::fromUtf8("\n"
-"         QPushButton {\n"
-"             background-color: #2ecc71;\n"
-"             color: white;\n"
-"             border: none;\n"
-"             padding: 5px 15px;\n"
-"             border-radius: 4px;\n"
-"         }\n"
-"         QPushButton:hover {\n"
-"             background-color: #27ae60;\n"
-"         }\n"
-"        "));
+"             QPushButton {\n"
+"                 background-color: #2ecc71;\n"
+"                 color: white;\n"
+"                 border: none;\n"
+"                 padding: 5px 15px;\n"
+"                 border-radius: 4px;\n"
+"             }\n"
+"             QPushButton:hover {\n"
+"                 background-color: #27ae60;\n"
+"             }\n"
+"            "));
 
         buttonLayout->addWidget(addButton);
 
-        editButton = new QPushButton(UserManagement);
+        editButton = new QPushButton(userTab);
         editButton->setObjectName("editButton");
         editButton->setStyleSheet(QString::fromUtf8("\n"
-"         QPushButton {\n"
-"             background-color: #f1c40f;\n"
-"             color: white;\n"
-"             border: none;\n"
-"             padding: 5px 15px;\n"
-"             border-radius: 4px;\n"
-"         }\n"
-"         QPushButton:hover {\n"
-"             background-color: #f39c12;\n"
-"         }\n"
-"        "));
+"             QPushButton {\n"
+"                 background-color: #f1c40f;\n"
+"                 color: white;\n"
+"                 border: none;\n"
+"                 padding: 5px 15px;\n"
+"                 border-radius: 4px;\n"
+"             }\n"
+"             QPushButton:hover {\n"
+"                 background-color: #f39c12;\n"
+"             }\n"
+"            "));
 
         buttonLayout->addWidget(editButton);
 
-        deleteButton = new QPushButton(UserManagement);
+        deleteButton = new QPushButton(userTab);
         deleteButton->setObjectName("deleteButton");
         deleteButton->setStyleSheet(QString::fromUtf8("\n"
-"         QPushButton {\n"
-"             background-color: #e74c3c;\n"
-"             color: white;\n"
-"             border: none;\n"
-"             padding: 5px 15px;\n"
-"             border-radius: 4px;\n"
-"         }\n"
-"         QPushButton:hover {\n"
-"             background-color: #c0392b;\n"
-"         }\n"
-"        "));
+"             QPushButton {\n"
+"                 background-color: #e74c3c;\n"
+"                 color: white;\n"
+"                 border: none;\n"
+"                 padding: 5px 15px;\n"
+"                 border-radius: 4px;\n"
+"             }\n"
+"             QPushButton:hover {\n"
+"                 background-color: #c0392b;\n"
+"             }\n"
+"            "));
 
         buttonLayout->addWidget(deleteButton);
 
-        clearButton = new QPushButton(UserManagement);
+        clearButton = new QPushButton(userTab);
         clearButton->setObjectName("clearButton");
         clearButton->setStyleSheet(QString::fromUtf8("\n"
-"         QPushButton {\n"
-"             background-color: #95a5a6;\n"
-"             color: white;\n"
-"             border: none;\n"
-"             padding: 5px 15px;\n"
-"             border-radius: 4px;\n"
-"         }\n"
-"         QPushButton:hover {\n"
-"             background-color: #7f8c8d;\n"
-"         }\n"
-"        "));
+"             QPushButton {\n"
+"                 background-color: #95a5a6;\n"
+"                 color: white;\n"
+"                 border: none;\n"
+"                 padding: 5px 15px;\n"
+"                 border-radius: 4px;\n"
+"             }\n"
+"             QPushButton:hover {\n"
+"                 background-color: #7f8c8d;\n"
+"             }\n"
+"            "));
 
         buttonLayout->addWidget(clearButton);
 
 
-        verticalLayout->addLayout(buttonLayout);
+        verticalLayout_2->addLayout(buttonLayout);
 
-        userTable = new QTableWidget(UserManagement);
+        userTable = new QTableWidget(userTab);
         if (userTable->columnCount() < 2)
             userTable->setColumnCount(2);
         QTableWidgetItem *__qtablewidgetitem = new QTableWidgetItem();
@@ -187,10 +216,155 @@ public:
         userTable->setSelectionBehavior(QAbstractItemView::SelectRows);
         userTable->setSelectionMode(QAbstractItemView::SingleSelection);
 
-        verticalLayout->addWidget(userTable);
+        verticalLayout_2->addWidget(userTable);
+
+        tabWidget->addTab(userTab, QString());
+        channelTab = new QWidget();
+        channelTab->setObjectName("channelTab");
+        verticalLayout_3 = new QVBoxLayout(channelTab);
+        verticalLayout_3->setObjectName("verticalLayout_3");
+        channelGroupBox = new QGroupBox(channelTab);
+        channelGroupBox->setObjectName("channelGroupBox");
+        formLayout_2 = new QFormLayout(channelGroupBox);
+        formLayout_2->setObjectName("formLayout_2");
+        groupNameLabel = new QLabel(channelGroupBox);
+        groupNameLabel->setObjectName("groupNameLabel");
+
+        formLayout_2->setWidget(0, QFormLayout::LabelRole, groupNameLabel);
+
+        groupNameEdit = new QLineEdit(channelGroupBox);
+        groupNameEdit->setObjectName("groupNameEdit");
+
+        formLayout_2->setWidget(0, QFormLayout::FieldRole, groupNameEdit);
+
+        channelsLabel = new QLabel(channelGroupBox);
+        channelsLabel->setObjectName("channelsLabel");
+
+        formLayout_2->setWidget(1, QFormLayout::LabelRole, channelsLabel);
+
+        horizontalLayout = new QHBoxLayout();
+        horizontalLayout->setObjectName("horizontalLayout");
+        channel1Check = new QCheckBox(channelGroupBox);
+        channel1Check->setObjectName("channel1Check");
+
+        horizontalLayout->addWidget(channel1Check);
+
+        channel2Check = new QCheckBox(channelGroupBox);
+        channel2Check->setObjectName("channel2Check");
+
+        horizontalLayout->addWidget(channel2Check);
+
+        channel3Check = new QCheckBox(channelGroupBox);
+        channel3Check->setObjectName("channel3Check");
+
+        horizontalLayout->addWidget(channel3Check);
+
+        channel4Check = new QCheckBox(channelGroupBox);
+        channel4Check->setObjectName("channel4Check");
+
+        horizontalLayout->addWidget(channel4Check);
+
+
+        formLayout_2->setLayout(1, QFormLayout::FieldRole, horizontalLayout);
+
+
+        verticalLayout_3->addWidget(channelGroupBox);
+
+        channelButtonLayout = new QHBoxLayout();
+        channelButtonLayout->setObjectName("channelButtonLayout");
+        addChannelGroupButton = new QPushButton(channelTab);
+        addChannelGroupButton->setObjectName("addChannelGroupButton");
+        addChannelGroupButton->setStyleSheet(QString::fromUtf8("\n"
+"             QPushButton {\n"
+"                 background-color: #2ecc71;\n"
+"                 color: white;\n"
+"                 border: none;\n"
+"                 padding: 5px 15px;\n"
+"                 border-radius: 4px;\n"
+"             }\n"
+"             QPushButton:hover {\n"
+"                 background-color: #27ae60;\n"
+"             }\n"
+"            "));
+
+        channelButtonLayout->addWidget(addChannelGroupButton);
+
+        editChannelGroupButton = new QPushButton(channelTab);
+        editChannelGroupButton->setObjectName("editChannelGroupButton");
+        editChannelGroupButton->setStyleSheet(QString::fromUtf8("\n"
+"             QPushButton {\n"
+"                 background-color: #f1c40f;\n"
+"                 color: white;\n"
+"                 border: none;\n"
+"                 padding: 5px 15px;\n"
+"                 border-radius: 4px;\n"
+"             }\n"
+"             QPushButton:hover {\n"
+"                 background-color: #f39c12;\n"
+"             }\n"
+"            "));
+
+        channelButtonLayout->addWidget(editChannelGroupButton);
+
+        deleteChannelGroupButton = new QPushButton(channelTab);
+        deleteChannelGroupButton->setObjectName("deleteChannelGroupButton");
+        deleteChannelGroupButton->setStyleSheet(QString::fromUtf8("\n"
+"             QPushButton {\n"
+"                 background-color: #e74c3c;\n"
+"                 color: white;\n"
+"                 border: none;\n"
+"                 padding: 5px 15px;\n"
+"                 border-radius: 4px;\n"
+"             }\n"
+"             QPushButton:hover {\n"
+"                 background-color: #c0392b;\n"
+"             }\n"
+"            "));
+
+        channelButtonLayout->addWidget(deleteChannelGroupButton);
+
+        clearChannelGroupButton = new QPushButton(channelTab);
+        clearChannelGroupButton->setObjectName("clearChannelGroupButton");
+        clearChannelGroupButton->setStyleSheet(QString::fromUtf8("\n"
+"             QPushButton {\n"
+"                 background-color: #95a5a6;\n"
+"                 color: white;\n"
+"                 border: none;\n"
+"                 padding: 5px 15px;\n"
+"                 border-radius: 4px;\n"
+"             }\n"
+"             QPushButton:hover {\n"
+"                 background-color: #7f8c8d;\n"
+"             }\n"
+"            "));
+
+        channelButtonLayout->addWidget(clearChannelGroupButton);
+
+
+        verticalLayout_3->addLayout(channelButtonLayout);
+
+        channelGroupTable = new QTableWidget(channelTab);
+        if (channelGroupTable->columnCount() < 2)
+            channelGroupTable->setColumnCount(2);
+        QTableWidgetItem *__qtablewidgetitem2 = new QTableWidgetItem();
+        channelGroupTable->setHorizontalHeaderItem(0, __qtablewidgetitem2);
+        QTableWidgetItem *__qtablewidgetitem3 = new QTableWidgetItem();
+        channelGroupTable->setHorizontalHeaderItem(1, __qtablewidgetitem3);
+        channelGroupTable->setObjectName("channelGroupTable");
+        channelGroupTable->setSelectionBehavior(QAbstractItemView::SelectRows);
+        channelGroupTable->setSelectionMode(QAbstractItemView::SingleSelection);
+
+        verticalLayout_3->addWidget(channelGroupTable);
+
+        tabWidget->addTab(channelTab, QString());
+
+        verticalLayout->addWidget(tabWidget);
 
 
         retranslateUi(UserManagement);
+
+        tabWidget->setCurrentIndex(0);
+
 
         QMetaObject::connectSlotsByName(UserManagement);
     } // setupUi
@@ -198,7 +372,7 @@ public:
     void retranslateUi(QWidget *UserManagement)
     {
         UserManagement->setWindowTitle(QCoreApplication::translate("UserManagement", "User Management", nullptr));
-        titleLabel->setText(QCoreApplication::translate("UserManagement", "User Management", nullptr));
+        titleLabel->setText(QCoreApplication::translate("UserManagement", "Administration", nullptr));
         titleLabel->setProperty("class", QVariant(QCoreApplication::translate("UserManagement", "page-title", nullptr)));
         formGroupBox->setTitle(QCoreApplication::translate("UserManagement", "User Details", nullptr));
         usernameLabel->setText(QCoreApplication::translate("UserManagement", "Username:", nullptr));
@@ -215,6 +389,23 @@ public:
         ___qtablewidgetitem->setText(QCoreApplication::translate("UserManagement", "Username", nullptr));
         QTableWidgetItem *___qtablewidgetitem1 = userTable->horizontalHeaderItem(1);
         ___qtablewidgetitem1->setText(QCoreApplication::translate("UserManagement", "Role", nullptr));
+        tabWidget->setTabText(tabWidget->indexOf(userTab), QCoreApplication::translate("UserManagement", "User Management", nullptr));
+        channelGroupBox->setTitle(QCoreApplication::translate("UserManagement", "Channel Group Details", nullptr));
+        groupNameLabel->setText(QCoreApplication::translate("UserManagement", "Group Name:", nullptr));
+        channelsLabel->setText(QCoreApplication::translate("UserManagement", "Channels:", nullptr));
+        channel1Check->setText(QCoreApplication::translate("UserManagement", "Channel 1", nullptr));
+        channel2Check->setText(QCoreApplication::translate("UserManagement", "Channel 2", nullptr));
+        channel3Check->setText(QCoreApplication::translate("UserManagement", "Channel 3", nullptr));
+        channel4Check->setText(QCoreApplication::translate("UserManagement", "Channel 4", nullptr));
+        addChannelGroupButton->setText(QCoreApplication::translate("UserManagement", "Add Group", nullptr));
+        editChannelGroupButton->setText(QCoreApplication::translate("UserManagement", "Update Group", nullptr));
+        deleteChannelGroupButton->setText(QCoreApplication::translate("UserManagement", "Delete Group", nullptr));
+        clearChannelGroupButton->setText(QCoreApplication::translate("UserManagement", "Clear Form", nullptr));
+        QTableWidgetItem *___qtablewidgetitem2 = channelGroupTable->horizontalHeaderItem(0);
+        ___qtablewidgetitem2->setText(QCoreApplication::translate("UserManagement", "Group Name", nullptr));
+        QTableWidgetItem *___qtablewidgetitem3 = channelGroupTable->horizontalHeaderItem(1);
+        ___qtablewidgetitem3->setText(QCoreApplication::translate("UserManagement", "Channels", nullptr));
+        tabWidget->setTabText(tabWidget->indexOf(channelTab), QCoreApplication::translate("UserManagement", "Channel Groups", nullptr));
     } // retranslateUi
 
 };
