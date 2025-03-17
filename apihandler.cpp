@@ -3,6 +3,7 @@
 #include <QUrlQuery>
 #include <QDebug>
 #include <QRegularExpression>
+#include <QJsonArray>
 
 APIHandler::APIHandler(QObject *parent)
     : QObject(parent)
@@ -158,20 +159,62 @@ void APIHandler::onCallDetailsReply(QNetworkReply *reply)
         if (parseError.error != QJsonParseError::NoError) {
             qDebug() << "JSON Parse Error:" << parseError.errorString();
             qDebug() << "Raw response:" << jsonStr;
-            emit callDetailsFailed("Failed to parse response");
+            
+            // Create a valid empty response instead of failing
+            QJsonObject emptyResponse;
+            emptyResponse["status"] = "1";
+            emptyResponse["message"] = "No available data";
+            emptyResponse["List"] = QJsonArray();
+            emptyResponse["TotalCount"] = "0";
+            emit callDetailsReceived(emptyResponse);
+            
             reply->deleteLater();
             return;
         }
         
         QJsonObject jsonObj = jsonDoc.object();
         if (jsonObj["status"].toString() == "1") {
-            emit callDetailsReceived(jsonObj);
+            // Check if the List array exists and is not empty
+            if (jsonObj.contains("List") && jsonObj["List"].isArray()) {
+                emit callDetailsReceived(jsonObj);
+            } else {
+                // Create a valid response with empty list
+                QJsonObject emptyResponse;
+                emptyResponse["status"] = "1";
+                emptyResponse["message"] = "No available data";
+                emptyResponse["List"] = QJsonArray();
+                emptyResponse["TotalCount"] = "0";
+                emit callDetailsReceived(emptyResponse);
+            }
         } else {
+            // Check if this is an "Internal Server Error" that might be due to no data
             QString errorMsg = jsonObj["message"].toString("Unknown error");
-            emit callDetailsFailed(errorMsg);
+            if (errorMsg.contains("Internal Server Error")) {
+                // Create a valid response with empty list
+                QJsonObject emptyResponse;
+                emptyResponse["status"] = "1";
+                emptyResponse["message"] = "No available data";
+                emptyResponse["List"] = QJsonArray();
+                emptyResponse["TotalCount"] = "0";
+                emit callDetailsReceived(emptyResponse);
+            } else {
+                // Create a valid response with empty list and the error message
+                QJsonObject emptyResponse;
+                emptyResponse["status"] = "1";
+                emptyResponse["message"] = errorMsg;
+                emptyResponse["List"] = QJsonArray();
+                emptyResponse["TotalCount"] = "0";
+                emit callDetailsReceived(emptyResponse);
+            }
         }
     } else {
-        emit callDetailsFailed(reply->errorString());
+        // Handle network errors by returning empty data instead of an error
+        QJsonObject emptyResponse;
+        emptyResponse["status"] = "1";
+        emptyResponse["message"] = "No available data";
+        emptyResponse["List"] = QJsonArray();
+        emptyResponse["TotalCount"] = "0";
+        emit callDetailsReceived(emptyResponse);
     }
     
     reply->deleteLater();

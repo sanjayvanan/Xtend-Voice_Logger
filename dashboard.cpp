@@ -44,6 +44,28 @@ Dashboard::~Dashboard()
 void Dashboard::setSessionToken(const QString &token)
 {
     sessionToken = token;
+    
+    // Reset counters and state when setting a new session token (after login)
+    totalCalls = 0;
+    connectedCalls = 0;
+    missedCalls = 0;
+    incomingCalls = 0;
+    outgoingCalls = 0;
+    
+    // Reset UI labels
+    ui->labelStatTotal->setText("0");
+    ui->labelStatConnected->setText("0");
+    ui->labelStatMissed->setText("0");
+    ui->labelStatActive->setText("0");
+    ui->labelLiveIncoming->setText("0");
+    ui->labelLiveOutgoing->setText("0");
+    
+    // Reset progress bars
+    ui->progressIncoming->setValue(0);
+    ui->progressOutgoing->setValue(0);
+    ui->progressConnected->setValue(0);
+    ui->progressMissed->setValue(0);
+    
     if (!sessionToken.isEmpty()) {
         startMonitoring();
     }

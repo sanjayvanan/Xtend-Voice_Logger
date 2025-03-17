@@ -36,6 +36,9 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     setWindowTitle("Zosh Voice Logger");
 
+    // Set the main window to full screen
+    this->setWindowState(Qt::WindowMaximized); // or use Qt::WindowFullScreen
+
     // Initialize widgets
     dashboard = new Dashboard(this);
     timeTimeCalls = new TimeTimeCalls(this);
@@ -146,6 +149,20 @@ void MainWindow::on_actionLogout_triggered()
 
 void MainWindow::handleLogoutSuccess()
 {
+    // Stop any active monitoring or timers
+    if (dashboard) {
+        dashboard->stopMonitoring();
+    }
+    
+    if (liveCalls) {
+        liveCalls->stopMonitoring();
+    }
+    
+    // Clear session token
+    sessionToken.clear();
+    currentDisplayName.clear();
+    currentUserRole.clear();
+    
     // Create and show new login window
     login *loginWindow = new login();
     connect(loginWindow, &login::loginSuccessful,

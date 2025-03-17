@@ -148,6 +148,17 @@ void TimeTimeCalls::refreshChannelGroups()
 void TimeTimeCalls::setSessionToken(const QString &token)
 {
     sessionToken = token;
+    
+    // Reset search criteria when setting a new session token (after login)
+    initializeDateTimeFields();
+    ui->phoneNumber->clear();
+    ui->callTypeCombo->setCurrentIndex(0); // Reset to "All"
+    ui->currentPage->setValue(1);
+    
+    // Clear any previous search results
+    ui->tableWidget->setRowCount(0);
+    lastCallDetails = QJsonObject();
+    
     if (!sessionToken.isEmpty() && isVisible()) {
         performSearch();  // Perform initial search if widget is visible
     }
@@ -224,18 +235,59 @@ void TimeTimeCalls::updateCallDetailsTable(const QJsonObject &details)
     // Get the call list
     QJsonArray callList = details["List"].toArray();
     
+    // Store the original count before filtering
+    int originalTotalCalls = 0;
+    if (details.contains("TotalCount")) {
+        originalTotalCalls = details["TotalCount"].toString().toInt();
+    } else {
+        originalTotalCalls = callList.size();
+    }
+    
     // Filter calls by channel group
     filterCallsByChannelGroup(callList);
     
     // Clear the table
     ui->tableWidget->setRowCount(0);
     
-    // Update total calls count
-    int totalCalls = callList.size();
+    // Update total calls count - use filtered count when a specific channel group is selected
+    QString selectedGroup = ui->channelGroupCombo->currentText();
+    int totalCalls = 0;
+    
+    if (selectedGroup == "All" || !channelGroups.contains(selectedGroup)) {
+        // If "All" is selected, use the original total count
+        totalCalls = originalTotalCalls;
+    } else {
+        // If a specific channel group is selected, use the filtered count
+        totalCalls = callList.size();
+    }
+    
     ui->labelTotalCalls->setText("Total Connected Calls: " + QString::number(totalCalls));
     
-    // Update pagination controls
+    // Update pagination controls - use filtered count for pagination when a specific channel group is selected
     updatePaginationControls(totalCalls);
+    
+    // Check if we have any data
+    if (callList.isEmpty()) {
+        // Display "No available data" message
+        ui->tableWidget->setRowCount(1);
+        QTableWidgetItem* noDataItem = new QTableWidgetItem("No available data");
+        noDataItem->setTextAlignment(Qt::AlignCenter);
+        
+        // Create a font for the message
+        QFont font = noDataItem->font();
+        font.setBold(true);
+        font.setPointSize(12);
+        noDataItem->setFont(font);
+        
+        // Span all columns
+        ui->tableWidget->setItem(0, 0, noDataItem);
+        ui->tableWidget->setSpan(0, 0, 1, ui->tableWidget->columnCount());
+        
+        return;
+    }
+    
+    // Calculate starting row number based on current page and page size
+    int startingRowNumber = (currentPage - 1) * ui->pageSize->value();
     
     // Populate the table with call details
     for (int i = 0; i < callList.size(); i++) {
@@ -302,10 +354,40 @@ void TimeTimeCalls::updateCallDetailsTable(const QJsonObject &details)
         
         // Channel Hardware
         ui->tableWidget->setItem(row, 10, new QTableWidgetItem(call["Channel-Hardware"].toString()));
+        
+        // Set alignment for all items in this row
+        for (int col = 1; col < ui->tableWidget->columnCount(); col++) {
+            if (ui->tableWidget->item(row, col)) {
+                ui->tableWidget->item(row, col)->setTextAlignment(Qt::AlignCenter);
+            }
+        }
+        
+        // Set row number in the vertical header
+        ui->tableWidget->setVerticalHeaderItem(row, new QTableWidgetItem(QString::number(startingRowNumber + i + 1)));
     }
     
-    // Add debug output to check the JSON structure
-    qDebug() << "First call in list:" << (callList.size() > 0 ? callList[0].toObject() : QJsonObject());
+    // Resize columns to fit content
+    ui->tableWidget->resizeColumnsToContents();
+    
+    // Set horizontal header properties for better alignment
+    ui->tableWidget->horizontalHeader()->setStretchLastSection(true);
+    ui->tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
+    
+    // Set specific column widths if needed
+    ui->tableWidget->setColumnWidth(0, 80);  // Play button
+    ui->tableWidget->setColumnWidth(1, 80);  // Channel
+    ui->tableWidget->setColumnWidth(2, 150); // Call Ref ID
+    ui->tableWidget->setColumnWidth(3, 100); // Call Type
+    ui->tableWidget->setColumnWidth(4, 100); // Call Status
+    ui->tableWidget->setColumnWidth(5, 180); // Call Time
+    ui->tableWidget->setColumnWidth(6, 80);  // Duration
+    
+    // Add alternating row colors for better readability
+    ui->tableWidget->setAlternatingRowColors(true);
+    
+    // Make sure vertical header (row numbers) is visible
+    ui->tableWidget->verticalHeader()->setVisible(true);
+    ui->tableWidget->verticalHeader()->setDefaultSectionSize(30); // Set row height
 }
 
 void TimeTimeCalls::handleTableCellClicked(int row, int column)
@@ -359,18 +441,32 @@ void TimeTimeCalls::performSearch()
         default: callType = ""; break; // All
     }
 
+    // Get current page (1-based for UI, 0-based for API)
     int currentPageValue = ui->currentPage->value() - 1; // API uses 0-based indexing
     
-    // Always fetch all data from API (without channel filtering)
-    apiHandler->fetchCallList(
-        sessionToken,
-        ui->fromDateTime->dateTime(),
-        ui->toDateTime->dateTime(),
-        ui->phoneNumber->text(),
-        callType,
-        currentPageValue,
-        ui->pageSize->value()
-    );
+    // Make sure currentPageValue is not negative
+    if (currentPageValue < 0) {
+        currentPageValue = 0;
+    }
+    
+    // Store current page for row numbering
+    currentPage = ui->currentPage->value();
+    
+    try {
+        // Always fetch all data from API (without channel filtering)
+        apiHandler->fetchCallList(
+            sessionToken,
+            ui->fromDateTime->dateTime(),
+            ui->toDateTime->dateTime(),
+            ui->phoneNumber->text(),
+            callType,
+            currentPageValue,
+            ui->pageSize->value()
+        );
+    } catch (const std::exception& e) {
+        qDebug() << "Exception in performSearch: " << e.what();
+        QMessageBox::warning(this, "Error", "An error occurred while searching: " + QString(e.what()));
+    }
     
     // The filtering by channel group will be done in handleCallDetails
 }

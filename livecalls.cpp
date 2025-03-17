@@ -67,6 +67,14 @@ void LiveCalls::setSessionToken(const QString &token)
 {
     sessionToken = token;
     
+    // Reset any filters or state when setting a new session token (after login)
+    if (ui->channelGroupCombo) {
+        ui->channelGroupCombo->setCurrentIndex(0); // Reset to first item
+    }
+    
+    // Clear the table
+    ui->tableLiveCalls->setRowCount(0);
+    
     // Load channel groups when session token is set
     loadChannelGroups();
     

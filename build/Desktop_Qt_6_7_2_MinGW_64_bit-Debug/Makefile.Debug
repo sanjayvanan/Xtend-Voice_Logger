@@ -2601,7 +2601,9 @@ debug/apihandler.o: ../../apihandler.cpp ../../apihandler.h \
 		C:/QT/6.7.2/mingw_64/include/QtCore/QUrlQuery \
 		C:/QT/6.7.2/mingw_64/include/QtCore/qurlquery.h \
 		C:/QT/6.7.2/mingw_64/include/QtCore/QDebug \
-		C:/QT/6.7.2/mingw_64/include/QtCore/QRegularExpression
+		C:/QT/6.7.2/mingw_64/include/QtCore/QRegularExpression \
+		C:/QT/6.7.2/mingw_64/include/QtCore/QJsonArray \
+		C:/QT/6.7.2/mingw_64/include/QtCore/qjsonarray.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\apihandler.o ..\..\apihandler.cpp
 
 debug/audioplayerdialog.o: ../../audioplayerdialog.cpp ../../audioplayerdialog.h \

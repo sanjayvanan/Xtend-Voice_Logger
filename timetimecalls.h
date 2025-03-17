@@ -52,6 +52,7 @@ private:
     QMediaPlayer *mediaPlayer;
     QTemporaryFile *tempWaveFile;
     int totalPages;
+    int currentPage = 1; // Track current page for row numbering
     
     // Channel group filtering
     QMap<QString, QStringList> channelGroups;

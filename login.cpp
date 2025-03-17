@@ -20,7 +20,10 @@ login::login(QWidget *parent)
 {
     ui->setupUi(this);
     setWindowTitle("Zosh Voice Logger - Login");
-    
+
+    // Set the login window to full screen
+    this->setWindowState(Qt::WindowMaximized); // or use Qt::WindowFullScreen
+
     // Get backend token using admin credentials
     apiHandler->login("admin", APIHandler::hashPassword("admin"));
     connect(apiHandler, &APIHandler::loginSuccessful, 
