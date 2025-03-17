@@ -26,7 +26,7 @@
       <string>Administration</string>
      </property>
      <property name="alignment">
-      <set>Qt::AlignLeft</set>
+      <set>Qt::AlignmentFlag::AlignLeading</set>
      </property>
      <property name="margin">
       <number>0</number>
@@ -72,7 +72,7 @@
           <item row="1" column="1">
            <widget class="QLineEdit" name="passwordEdit">
             <property name="echoMode">
-             <enum>QLineEdit::Password</enum>
+             <enum>QLineEdit::EchoMode::Password</enum>
             </property>
            </widget>
           </item>
@@ -104,9 +104,6 @@
         <layout class="QHBoxLayout" name="buttonLayout">
          <item>
           <widget class="QPushButton" name="addButton">
-           <property name="text">
-            <string>Add User</string>
-           </property>
            <property name="styleSheet">
             <string notr="true">
              QPushButton {
@@ -121,13 +118,13 @@
              }
             </string>
            </property>
+           <property name="text">
+            <string>Add User</string>
+           </property>
           </widget>
          </item>
          <item>
           <widget class="QPushButton" name="editButton">
-           <property name="text">
-            <string>Update User</string>
-           </property>
            <property name="styleSheet">
             <string notr="true">
              QPushButton {
@@ -142,13 +139,13 @@
              }
             </string>
            </property>
+           <property name="text">
+            <string>Update User</string>
+           </property>
           </widget>
          </item>
          <item>
           <widget class="QPushButton" name="deleteButton">
-           <property name="text">
-            <string>Delete User</string>
-           </property>
            <property name="styleSheet">
             <string notr="true">
              QPushButton {
@@ -163,13 +160,13 @@
              }
             </string>
            </property>
+           <property name="text">
+            <string>Delete User</string>
+           </property>
           </widget>
          </item>
          <item>
           <widget class="QPushButton" name="clearButton">
-           <property name="text">
-            <string>Clear Form</string>
-           </property>
            <property name="styleSheet">
             <string notr="true">
              QPushButton {
@@ -184,17 +181,20 @@
              }
             </string>
            </property>
+           <property name="text">
+            <string>Clear Form</string>
+           </property>
           </widget>
          </item>
         </layout>
        </item>
        <item>
         <widget class="QTableWidget" name="userTable">
-         <property name="selectionBehavior">
-          <enum>QAbstractItemView::SelectRows</enum>
-         </property>
          <property name="selectionMode">
-          <enum>QAbstractItemView::SingleSelection</enum>
+          <enum>QAbstractItemView::SelectionMode::SingleSelection</enum>
+         </property>
+         <property name="selectionBehavior">
+          <enum>QAbstractItemView::SelectionBehavior::SelectRows</enum>
          </property>
          <column>
           <property name="text">
@@ -277,9 +277,6 @@
         <layout class="QHBoxLayout" name="channelButtonLayout">
          <item>
           <widget class="QPushButton" name="addChannelGroupButton">
-           <property name="text">
-            <string>Add Group</string>
-           </property>
            <property name="styleSheet">
             <string notr="true">
              QPushButton {
@@ -294,13 +291,13 @@
              }
             </string>
            </property>
+           <property name="text">
+            <string>Add Group</string>
+           </property>
           </widget>
          </item>
          <item>
           <widget class="QPushButton" name="editChannelGroupButton">
-           <property name="text">
-            <string>Update Group</string>
-           </property>
            <property name="styleSheet">
             <string notr="true">
              QPushButton {
@@ -315,13 +312,13 @@
              }
             </string>
            </property>
+           <property name="text">
+            <string>Update Group</string>
+           </property>
           </widget>
          </item>
          <item>
           <widget class="QPushButton" name="deleteChannelGroupButton">
-           <property name="text">
-            <string>Delete Group</string>
-           </property>
            <property name="styleSheet">
             <string notr="true">
              QPushButton {
@@ -336,13 +333,13 @@
              }
             </string>
            </property>
+           <property name="text">
+            <string>Delete Group</string>
+           </property>
           </widget>
          </item>
          <item>
           <widget class="QPushButton" name="clearChannelGroupButton">
-           <property name="text">
-            <string>Clear Form</string>
-           </property>
            <property name="styleSheet">
             <string notr="true">
              QPushButton {
@@ -357,17 +354,20 @@
              }
             </string>
            </property>
+           <property name="text">
+            <string>Clear Form</string>
+           </property>
           </widget>
          </item>
         </layout>
        </item>
        <item>
         <widget class="QTableWidget" name="channelGroupTable">
-         <property name="selectionBehavior">
-          <enum>QAbstractItemView::SelectRows</enum>
-         </property>
          <property name="selectionMode">
-          <enum>QAbstractItemView::SingleSelection</enum>
+          <enum>QAbstractItemView::SelectionMode::SingleSelection</enum>
+         </property>
+         <property name="selectionBehavior">
+          <enum>QAbstractItemView::SelectionBehavior::SelectRows</enum>
          </property>
          <column>
           <property name="text">
@@ -421,9 +421,6 @@
         <layout class="QHBoxLayout" name="assignmentButtonLayout">
          <item>
           <widget class="QPushButton" name="assignButton">
-           <property name="text">
-            <string>Assign Group to User</string>
-           </property>
            <property name="styleSheet">
             <string notr="true">
              QPushButton {
@@ -438,13 +435,13 @@
              }
             </string>
            </property>
+           <property name="text">
+            <string>Assign Group to User</string>
+           </property>
           </widget>
          </item>
          <item>
           <widget class="QPushButton" name="unassignButton">
-           <property name="text">
-            <string>Remove Assignment</string>
-           </property>
            <property name="styleSheet">
             <string notr="true">
              QPushButton {
@@ -459,17 +456,20 @@
              }
             </string>
            </property>
+           <property name="text">
+            <string>Remove Assignment</string>
+           </property>
           </widget>
          </item>
         </layout>
        </item>
        <item>
         <widget class="QTableWidget" name="assignmentTable">
-         <property name="selectionBehavior">
-          <enum>QAbstractItemView::SelectRows</enum>
-         </property>
          <property name="selectionMode">
-          <enum>QAbstractItemView::SingleSelection</enum>
+          <enum>QAbstractItemView::SelectionMode::SingleSelection</enum>
+         </property>
+         <property name="selectionBehavior">
+          <enum>QAbstractItemView::SelectionBehavior::SelectRows</enum>
          </property>
          <column>
           <property name="text">

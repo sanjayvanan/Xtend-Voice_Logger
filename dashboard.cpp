@@ -82,11 +82,13 @@ void Dashboard::refreshUserAssignedChannels()
     // Get the channels assigned to the current user
     assignedChannels = UserManagement::getUserAssignedChannels(currentUsername);
     
-    // If the user is an admin or has no assigned channels, they can see all channels
-    if (UserManagement::isUserAdmin(currentUsername) || assignedChannels.isEmpty()) {
+    // If the user is an admin, they can see all channels
+    if (UserManagement::isUserAdmin(currentUsername)) {
         assignedChannels.clear();
         assignedChannels << "1" << "2" << "3" << "4";
     }
+    // For regular users with no assigned channels, leave the list empty
+    // This will result in no data being shown
     
     // Update the dashboard with the new channel assignments
     updateDashboard();
@@ -194,11 +196,13 @@ void Dashboard::handleCallDetails(const QJsonObject &details)
 
 void Dashboard::filterCallsByAssignedChannels(QJsonArray &callList)
 {
-    // If no assigned channels or user is admin, show all calls
-    if (assignedChannels.isEmpty() || UserManagement::isUserAdmin(currentUsername)) {
+    // If no assigned channels and user is not admin, show no calls
+    if (assignedChannels.isEmpty() && !UserManagement::isUserAdmin(currentUsername)) {
+        callList = QJsonArray(); // Clear the list
         return;
     }
     
+    // If user is admin or has assigned channels, filter the calls
     QJsonArray filteredList;
     
     // Filter calls by channel

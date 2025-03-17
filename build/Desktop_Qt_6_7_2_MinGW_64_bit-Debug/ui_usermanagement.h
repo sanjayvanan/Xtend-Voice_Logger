@@ -93,7 +93,7 @@ public:
         font.setPointSize(16);
         font.setBold(true);
         titleLabel->setFont(font);
-        titleLabel->setAlignment(Qt::AlignLeft);
+        titleLabel->setAlignment(Qt::AlignmentFlag::AlignLeading);
         titleLabel->setMargin(0);
 
         verticalLayout->addWidget(titleLabel);
@@ -125,7 +125,7 @@ public:
 
         passwordEdit = new QLineEdit(formGroupBox);
         passwordEdit->setObjectName("passwordEdit");
-        passwordEdit->setEchoMode(QLineEdit::Password);
+        passwordEdit->setEchoMode(QLineEdit::EchoMode::Password);
 
         formLayout->setWidget(1, QFormLayout::FieldRole, passwordEdit);
 
@@ -225,8 +225,8 @@ public:
         QTableWidgetItem *__qtablewidgetitem1 = new QTableWidgetItem();
         userTable->setHorizontalHeaderItem(1, __qtablewidgetitem1);
         userTable->setObjectName("userTable");
-        userTable->setSelectionBehavior(QAbstractItemView::SelectRows);
-        userTable->setSelectionMode(QAbstractItemView::SingleSelection);
+        userTable->setSelectionMode(QAbstractItemView::SelectionMode::SingleSelection);
+        userTable->setSelectionBehavior(QAbstractItemView::SelectionBehavior::SelectRows);
 
         verticalLayout_2->addWidget(userTable);
 
@@ -363,8 +363,8 @@ public:
         QTableWidgetItem *__qtablewidgetitem3 = new QTableWidgetItem();
         channelGroupTable->setHorizontalHeaderItem(1, __qtablewidgetitem3);
         channelGroupTable->setObjectName("channelGroupTable");
-        channelGroupTable->setSelectionBehavior(QAbstractItemView::SelectRows);
-        channelGroupTable->setSelectionMode(QAbstractItemView::SingleSelection);
+        channelGroupTable->setSelectionMode(QAbstractItemView::SelectionMode::SingleSelection);
+        channelGroupTable->setSelectionBehavior(QAbstractItemView::SelectionBehavior::SelectRows);
 
         verticalLayout_3->addWidget(channelGroupTable);
 
@@ -447,8 +447,8 @@ public:
         QTableWidgetItem *__qtablewidgetitem5 = new QTableWidgetItem();
         assignmentTable->setHorizontalHeaderItem(1, __qtablewidgetitem5);
         assignmentTable->setObjectName("assignmentTable");
-        assignmentTable->setSelectionBehavior(QAbstractItemView::SelectRows);
-        assignmentTable->setSelectionMode(QAbstractItemView::SingleSelection);
+        assignmentTable->setSelectionMode(QAbstractItemView::SelectionMode::SingleSelection);
+        assignmentTable->setSelectionBehavior(QAbstractItemView::SelectionBehavior::SelectRows);
 
         verticalLayout_4->addWidget(assignmentTable);
 

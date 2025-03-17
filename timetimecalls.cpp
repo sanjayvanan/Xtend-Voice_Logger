@@ -131,6 +131,11 @@ void TimeTimeCalls::loadChannelGroups()
         if (ui->channelGroupCombo->count() == 0) {
             ui->channelGroupCombo->addItem("No assigned channels");
             ui->channelGroupCombo->setEnabled(false);
+            
+            // Disable search button for users with no assigned channels
+            ui->searchButton->setEnabled(false);
+        } else {
+            ui->searchButton->setEnabled(true);
         }
     }
     
@@ -202,27 +207,50 @@ void TimeTimeCalls::filterCallsByChannelGroup(QJsonArray &callList)
     // Get the selected channel group
     QString selectedGroup = ui->channelGroupCombo->currentText();
     
-    // If "All" is selected or no channel groups are available, return all calls
-    if (selectedGroup == "All" || !channelGroups.contains(selectedGroup)) {
+    // If "No assigned channels" is selected, clear the list
+    if (selectedGroup == "No assigned channels") {
+        callList = QJsonArray(); // Clear the list
         return;
     }
     
-    // Get the channels for the selected group
-    QStringList channels = channelGroups[selectedGroup];
-    
-    // Filter the call list
-    QJsonArray filteredList;
-    for (int i = 0; i < callList.size(); i++) {
-        QJsonObject call = callList[i].toObject();
-        QString channel = call["Channel"].toString();
+    // If "All" is selected and user is admin, return all calls
+    if (selectedGroup == "All") {
+        // Get the current username from the main window
+        QString currentUsername;
+        QWidget* parent = this->parentWidget();
+        while (parent) {
+            MainWindow* mainWindow = qobject_cast<MainWindow*>(parent);
+            if (mainWindow) {
+                currentUsername = mainWindow->getCurrentUsername();
+                break;
+            }
+            parent = parent->parentWidget();
+        }
         
-        if (channels.contains(channel)) {
-            filteredList.append(call);
+        // Only admins should see all calls
+        if (UserManagement::isUserAdmin(currentUsername)) {
+            return;
         }
     }
     
-    // Replace the original list with the filtered one
-    callList = filteredList;
+    // If a specific channel group is selected, filter by those channels
+    if (channelGroups.contains(selectedGroup)) {
+        QStringList channels = channelGroups[selectedGroup];
+        
+        // Filter the call list
+        QJsonArray filteredList;
+        for (int i = 0; i < callList.size(); i++) {
+            QJsonObject call = callList[i].toObject();
+            QString channel = call["Channel"].toString();
+            
+            if (channels.contains(channel)) {
+                filteredList.append(call);
+            }
+        }
+        
+        // Replace the original list with the filtered one
+        callList = filteredList;
+    }
 }
 
 void TimeTimeCalls::handleCallDetailsFailed(const QString &message)
@@ -434,6 +462,32 @@ void TimeTimeCalls::handleWaveFileFailed(const QString &message)
 
 void TimeTimeCalls::performSearch()
 {
+    // Check if the user has any assigned channels
+    if (ui->channelGroupCombo->currentText() == "No assigned channels") {
+        // Display "No available data" message
+        ui->tableWidget->setRowCount(1);
+        QTableWidgetItem* noDataItem = new QTableWidgetItem("No assigned channels");
+        noDataItem->setTextAlignment(Qt::AlignCenter);
+        
+        // Create a font for the message
+        QFont font = noDataItem->font();
+        font.setBold(true);
+        font.setPointSize(12);
+        noDataItem->setFont(font);
+        
+        // Span all columns
+        ui->tableWidget->setItem(0, 0, noDataItem);
+        ui->tableWidget->setSpan(0, 0, 1, ui->tableWidget->columnCount());
+        
+        // Update total calls count
+        ui->labelTotalCalls->setText("Total Connected Calls: 0");
+        
+        // Update pagination controls
+        updatePaginationControls(0);
+        
+        return;
+    }
+
     QString callType;
     switch(ui->callTypeCombo->currentIndex()) {
         case 1: callType = "I"; break; // Incoming
