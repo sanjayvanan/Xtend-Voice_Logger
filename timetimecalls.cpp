@@ -15,6 +15,7 @@
 #include "usermanagement.h"
 #include <QSqlQuery>
 #include "mainwindow.h"
+#include <QCalendarWidget>
 
 TimeTimeCalls::TimeTimeCalls(QWidget *parent)
     : QWidget(parent)
@@ -25,6 +26,9 @@ TimeTimeCalls::TimeTimeCalls(QWidget *parent)
     , totalPages(0)
 {
     ui->setupUi(this);
+    
+    // Enable sorting for the table widget
+    ui->tableWidget->setSortingEnabled(true); // Enable sorting
     
     // Initialize date/time fields
     initializeDateTimeFields();
@@ -48,6 +52,27 @@ TimeTimeCalls::TimeTimeCalls(QWidget *parent)
     
     // Load channel groups
     loadChannelGroups();
+    
+    // Initialize calendar widgets
+    fromDateCalendar = new QCalendarWidget(this);
+    fromDateCalendar->setWindowFlags(Qt::Popup);
+    fromDateCalendar->hide();
+    
+    toDateCalendar = new QCalendarWidget(this);
+    toDateCalendar->setWindowFlags(Qt::Popup);
+    toDateCalendar->hide();
+    
+    // Connect calendar signals
+    connect(fromDateCalendar, &QCalendarWidget::clicked, this, &TimeTimeCalls::onFromDateSelected);
+    connect(toDateCalendar, &QCalendarWidget::clicked, this, &TimeTimeCalls::onToDateSelected);
+    
+    // Connect date edit click events to show calendars
+    ui->fromDateTime->installEventFilter(this);
+    ui->toDateTime->installEventFilter(this);
+    
+    // Optional: Remove complex styles to see if it resolves the dropdown issue
+    // fromDateCalendar->setStyleSheet(""); // Clear any custom styles
+    // toDateCalendar->setStyleSheet(""); // Clear any custom styles
 }
 
 TimeTimeCalls::~TimeTimeCalls()
@@ -568,5 +593,73 @@ void TimeTimeCalls::onChannelGroupChanged(int index)
     if (!lastCallDetails.isEmpty()) {
         updateCallDetailsTable(lastCallDetails);
     }
+}
+
+bool TimeTimeCalls::eventFilter(QObject *obj, QEvent *event)
+{
+    if (event->type() == QEvent::MouseButtonPress) {
+        if (obj == ui->fromDateTime) {
+            showFromDateCalendar();
+            return true;
+        } else if (obj == ui->toDateTime) {
+            showToDateCalendar();
+            return true;
+        }
+    }
+    return QWidget::eventFilter(obj, event);
+}
+
+void TimeTimeCalls::showFromDateCalendar()
+{
+    QDateTime currentDate = ui->fromDateTime->dateTime();
+    fromDateCalendar->setSelectedDate(currentDate.date());
+    
+    // Position the calendar under the date edit widget
+    QPoint pos = ui->fromDateTime->mapToGlobal(ui->fromDateTime->rect().bottomLeft());
+    fromDateCalendar->move(pos);
+    fromDateCalendar->show();
+}
+
+void TimeTimeCalls::showToDateCalendar()
+{
+    QDateTime currentDate = ui->toDateTime->dateTime();
+    toDateCalendar->setSelectedDate(currentDate.date());
+    
+    // Position the calendar under the date edit widget
+    QPoint pos = ui->toDateTime->mapToGlobal(ui->toDateTime->rect().bottomLeft());
+    toDateCalendar->move(pos);
+    toDateCalendar->show();
+}
+
+void TimeTimeCalls::onFromDateSelected()
+{
+    // Get the selected date from the calendar
+    QDate selectedDate = fromDateCalendar->selectedDate();
+    
+    // Preserve the time part from the existing date time
+    QTime time = ui->fromDateTime->time();
+    
+    // Set the new date time
+    QDateTime newDateTime(selectedDate, time);
+    ui->fromDateTime->setDateTime(newDateTime);
+    
+    // Hide the calendar
+    fromDateCalendar->hide();
+}
+
+void TimeTimeCalls::onToDateSelected()
+{
+    // Get the selected date from the calendar
+    QDate selectedDate = toDateCalendar->selectedDate();
+    
+    // Preserve the time part from the existing date time
+    QTime time = ui->toDateTime->time();
+    
+    // Set the new date time
+    QDateTime newDateTime(selectedDate, time);
+    ui->toDateTime->setDateTime(newDateTime);
+    
+    // Hide the calendar
+    toDateCalendar->hide();
 }
 

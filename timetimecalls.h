@@ -8,6 +8,7 @@
 #include <QTemporaryFile>
 #include <QAudioOutput>
 #include <QDir>
+#include <QCalendarWidget>
 
 namespace Ui {
 class TimeTimeCalls;
@@ -25,6 +26,7 @@ public:
 
 protected:
     void showEvent(QShowEvent *event) override;
+    bool eventFilter(QObject *obj, QEvent *event) override;
 
 private slots:
     void on_searchButton_clicked();
@@ -38,6 +40,10 @@ private slots:
     void handleWaveFile(const QByteArray &waveData);
     void handleWaveFileFailed(const QString &message);
     void onChannelGroupChanged(int index);
+    void showFromDateCalendar();
+    void showToDateCalendar();
+    void onFromDateSelected();
+    void onToDateSelected();
 
 private:
     void performSearch();
@@ -53,6 +59,10 @@ private:
     QTemporaryFile *tempWaveFile;
     int totalPages;
     int currentPage = 1; // Track current page for row numbering
+    
+    // Calendar widgets
+    QCalendarWidget *fromDateCalendar;
+    QCalendarWidget *toDateCalendar;
     
     // Channel group filtering
     QMap<QString, QStringList> channelGroups;

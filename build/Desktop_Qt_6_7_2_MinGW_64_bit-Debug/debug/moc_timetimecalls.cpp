@@ -55,7 +55,11 @@ constexpr auto qt_meta_stringdata_CLASSTimeTimeCallsENDCLASS = QtMocHelpers::str
     "waveData",
     "handleWaveFileFailed",
     "onChannelGroupChanged",
-    "index"
+    "index",
+    "showFromDateCalendar",
+    "showToDateCalendar",
+    "onFromDateSelected",
+    "onToDateSelected"
 );
 #else  // !QT_MOC_HAS_STRINGDATA
 #error "qtmochelpers.h not found or too old."
@@ -68,7 +72,7 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSTimeTimeCallsENDCLASS[] = {
       12,       // revision
        0,       // classname
        0,    0, // classinfo
-      11,   14, // methods
+      15,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -76,17 +80,21 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSTimeTimeCallsENDCLASS[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags, initial metatype offsets
-       1,    0,   80,    2, 0x08,    1 /* Private */,
-       3,    0,   81,    2, 0x08,    2 /* Private */,
-       4,    0,   82,    2, 0x08,    3 /* Private */,
-       5,    1,   83,    2, 0x08,    4 /* Private */,
-       7,    1,   86,    2, 0x08,    6 /* Private */,
-       9,    1,   89,    2, 0x08,    8 /* Private */,
-      11,    1,   92,    2, 0x08,   10 /* Private */,
-      12,    2,   95,    2, 0x08,   12 /* Private */,
-      15,    1,  100,    2, 0x08,   15 /* Private */,
-      17,    1,  103,    2, 0x08,   17 /* Private */,
-      18,    1,  106,    2, 0x08,   19 /* Private */,
+       1,    0,  104,    2, 0x08,    1 /* Private */,
+       3,    0,  105,    2, 0x08,    2 /* Private */,
+       4,    0,  106,    2, 0x08,    3 /* Private */,
+       5,    1,  107,    2, 0x08,    4 /* Private */,
+       7,    1,  110,    2, 0x08,    6 /* Private */,
+       9,    1,  113,    2, 0x08,    8 /* Private */,
+      11,    1,  116,    2, 0x08,   10 /* Private */,
+      12,    2,  119,    2, 0x08,   12 /* Private */,
+      15,    1,  124,    2, 0x08,   15 /* Private */,
+      17,    1,  127,    2, 0x08,   17 /* Private */,
+      18,    1,  130,    2, 0x08,   19 /* Private */,
+      20,    0,  133,    2, 0x08,   21 /* Private */,
+      21,    0,  134,    2, 0x08,   22 /* Private */,
+      22,    0,  135,    2, 0x08,   23 /* Private */,
+      23,    0,  136,    2, 0x08,   24 /* Private */,
 
  // slots: parameters
     QMetaType::Void,
@@ -100,6 +108,10 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSTimeTimeCallsENDCLASS[] = {
     QMetaType::Void, QMetaType::QByteArray,   16,
     QMetaType::Void, QMetaType::QString,   10,
     QMetaType::Void, QMetaType::Int,   19,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
 
        0        // eod
 };
@@ -143,7 +155,15 @@ Q_CONSTINIT const QMetaObject TimeTimeCalls::staticMetaObject = { {
         QtPrivate::TypeAndForceComplete<const QString &, std::false_type>,
         // method 'onChannelGroupChanged'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
-        QtPrivate::TypeAndForceComplete<int, std::false_type>
+        QtPrivate::TypeAndForceComplete<int, std::false_type>,
+        // method 'showFromDateCalendar'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        // method 'showToDateCalendar'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        // method 'onFromDateSelected'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        // method 'onToDateSelected'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>
     >,
     nullptr
 } };
@@ -165,6 +185,10 @@ void TimeTimeCalls::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _i
         case 8: _t->handleWaveFile((*reinterpret_cast< std::add_pointer_t<QByteArray>>(_a[1]))); break;
         case 9: _t->handleWaveFileFailed((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
         case 10: _t->onChannelGroupChanged((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
+        case 11: _t->showFromDateCalendar(); break;
+        case 12: _t->showToDateCalendar(); break;
+        case 13: _t->onFromDateSelected(); break;
+        case 14: _t->onToDateSelected(); break;
         default: ;
         }
     }
@@ -189,13 +213,13 @@ int TimeTimeCalls::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 11)
+        if (_id < 15)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 11;
+        _id -= 15;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 11)
+        if (_id < 15)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 11;
+        _id -= 15;
     }
     return _id;
 }
