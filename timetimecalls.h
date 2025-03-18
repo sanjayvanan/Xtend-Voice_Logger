@@ -9,6 +9,8 @@
 #include <QAudioOutput>
 #include <QDir>
 #include <QCalendarWidget>
+#include <QCompleter>
+#include <QStringListModel>
 
 namespace Ui {
 class TimeTimeCalls;
@@ -67,6 +69,15 @@ private:
     // Channel group filtering
     QMap<QString, QStringList> channelGroups;
     QJsonObject lastCallDetails; // Store the last call details for filtering
+    
+    // New methods for phone number autocomplete
+    void setupPhoneNumberAutocomplete();
+    void updatePhoneNumberSuggestions();
+    QStringList fetchUniquePhoneNumbers();
+    
+    // New member variables
+    QCompleter *phoneCompleter;
+    QStringListModel *phoneNumbersModel;
 };
 
 #endif // TIMETIMECALLS_H

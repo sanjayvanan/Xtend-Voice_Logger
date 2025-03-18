@@ -16,6 +16,10 @@
 #include <QSqlQuery>
 #include "mainwindow.h"
 #include <QCalendarWidget>
+#include <QCompleter>
+#include <QStringListModel>
+#include <QSet>
+#include <QTimer>
 
 TimeTimeCalls::TimeTimeCalls(QWidget *parent)
     : QWidget(parent)
@@ -24,6 +28,8 @@ TimeTimeCalls::TimeTimeCalls(QWidget *parent)
     , mediaPlayer(new QMediaPlayer(this))
     , tempWaveFile(nullptr)
     , totalPages(0)
+    , phoneCompleter(nullptr)
+    , phoneNumbersModel(new QStringListModel(this))
 {
     ui->setupUi(this);
     
@@ -120,6 +126,13 @@ TimeTimeCalls::TimeTimeCalls(QWidget *parent)
             ui->pageSize->setCurrentText("50");
         }
     });
+    
+    // Set up phone number autocomplete
+    setupPhoneNumberAutocomplete();
+    
+    // Connect date fields to update phone number suggestions
+    connect(ui->fromDateTime, &QDateTimeEdit::dateTimeChanged, this, &TimeTimeCalls::updatePhoneNumberSuggestions);
+    connect(ui->toDateTime, &QDateTimeEdit::dateTimeChanged, this, &TimeTimeCalls::updatePhoneNumberSuggestions);
 }
 
 TimeTimeCalls::~TimeTimeCalls()
@@ -262,6 +275,12 @@ void TimeTimeCalls::on_searchButton_clicked()
 
     // Reset pagination to first page when searching
     ui->currentPage->setText("1");
+    
+    // If the phone number is empty after a search, update the suggestions
+    if (ui->phoneNumber->text().isEmpty()) {
+        updatePhoneNumberSuggestions();
+    }
+    
     performSearch();
 }
 
@@ -692,6 +711,30 @@ bool TimeTimeCalls::eventFilter(QObject *obj, QEvent *event)
         } else if (obj == ui->toDateTime) {
             showToDateCalendar();
             return true;
+        } else if (obj == ui->phoneNumber) {
+            // When phone number field is clicked, show all suggestions
+            if (phoneCompleter && phoneNumbersModel) {
+                // Clear the current text to show all suggestions
+                bool hadText = !ui->phoneNumber->text().isEmpty();
+                QString savedText = ui->phoneNumber->text();
+                
+                // Temporarily clear the text to show all options
+                ui->phoneNumber->clear();
+                
+                // Show the completer popup with all suggestions
+                phoneCompleter->complete();
+                
+                // If there was text, restore it
+                if (hadText) {
+                    QTimer::singleShot(10, this, [this, savedText]() {
+                        ui->phoneNumber->setText(savedText);
+                        // Re-show the completer with the filter applied
+                        phoneCompleter->complete();
+                    });
+                }
+                
+                return true;
+            }
         }
     }
     return QWidget::eventFilter(obj, event);
@@ -733,6 +776,9 @@ void TimeTimeCalls::onFromDateSelected()
     
     // Hide the calendar
     fromDateCalendar->hide();
+    
+    // Update phone number suggestions for the new date range
+    updatePhoneNumberSuggestions();
 }
 
 void TimeTimeCalls::onToDateSelected()
@@ -749,6 +795,9 @@ void TimeTimeCalls::onToDateSelected()
     
     // Hide the calendar
     toDateCalendar->hide();
+    
+    // Update phone number suggestions for the new date range
+    updatePhoneNumberSuggestions();
 }
 
 void TimeTimeCalls::applyClientSidePagination(const QJsonArray &filteredList)
@@ -931,5 +980,87 @@ void TimeTimeCalls::applyClientSidePagination(const QJsonArray &filteredList)
     // Make sure vertical header (row numbers) is visible
     ui->tableWidget->verticalHeader()->setVisible(true);
     ui->tableWidget->verticalHeader()->setDefaultSectionSize(30); // Set row height
+}
+
+void TimeTimeCalls::setupPhoneNumberAutocomplete()
+{
+    // Create a completer for the phone number field
+    phoneCompleter = new QCompleter(phoneNumbersModel, this);
+    phoneCompleter->setCaseSensitivity(Qt::CaseInsensitive);
+    phoneCompleter->setFilterMode(Qt::MatchContains); // Show matches that contain the typed text
+    phoneCompleter->setCompletionMode(QCompleter::PopupCompletion); // Show popup on user request
+    
+    // Set the completer for the phone number field
+    ui->phoneNumber->setCompleter(phoneCompleter);
+    
+    // Install event filter to show all suggestions when clicked
+    ui->phoneNumber->installEventFilter(this);
+    
+    // Initially populate the phone number suggestions
+    updatePhoneNumberSuggestions();
+}
+
+void TimeTimeCalls::updatePhoneNumberSuggestions()
+{
+    // Don't try to update if no session token
+    if (sessionToken.isEmpty()) {
+        return;
+    }
+    
+    // Show a loading indicator in the completer model
+    QStringList loadingList = {"Loading phone numbers..."};
+    phoneNumbersModel->setStringList(loadingList);
+    
+    // Fetch data from API using current date range
+    apiHandler->fetchCallList(
+        sessionToken,
+        ui->fromDateTime->dateTime(),
+        ui->toDateTime->dateTime(),
+        "", // No phone filter
+        "", // No call type filter
+        0,  // Page 0
+        1000 // Get up to 1000 records
+    );
+    
+    // Create a one-time connection to process the results
+    QMetaObject::Connection* connection = new QMetaObject::Connection;
+    *connection = connect(apiHandler, &APIHandler::callDetailsReceived, this, 
+        [this, connection](const QJsonObject &details) {
+            // Disconnect after receiving the response
+            QObject::disconnect(*connection);
+            delete connection;
+            
+            // Create a set to store unique phone numbers
+            QSet<QString> uniqueNumbers;
+            
+            // Process the response
+            if (details.contains("List") && details["List"].isArray()) {
+                QJsonArray callList = details["List"].toArray();
+                
+                // Extract phone numbers from calls
+                for (int i = 0; i < callList.size(); i++) {
+                    QJsonObject call = callList[i].toObject();
+                    
+                    // Get both caller and called IDs
+                    if (call.contains("Called-ID") && !call["Called-ID"].toString().isEmpty()) {
+                        uniqueNumbers.insert(call["Called-ID"].toString());
+                    }
+                    
+                    if (call.contains("Caller-ID") && !call["Caller-ID"].toString().isEmpty()) {
+                        uniqueNumbers.insert(call["Caller-ID"].toString());
+                    }
+                }
+            }
+            
+            // Convert set to sorted list for better user experience
+            QStringList phoneList = uniqueNumbers.values();
+            std::sort(phoneList.begin(), phoneList.end());
+            
+            // Update the model with new phone numbers
+            phoneNumbersModel->setStringList(phoneList);
+            
+            // Debug output
+            qDebug() << "Updated phone number suggestions with" << uniqueNumbers.count() << "unique numbers";
+        });
 }
 
