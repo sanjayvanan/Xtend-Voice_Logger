@@ -176,22 +176,52 @@
        </widget>
       </item>
       <item row="2" column="3">
-       <widget class="QSpinBox" name="pageSize">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
+       <widget class="QComboBox" name="pageSize">
+        <property name="minimumSize">
+         <size>
+          <width>80</width>
+          <height>30</height>
+         </size>
         </property>
-        <property name="minimum">
-         <number>1</number>
+        <property name="maximumSize">
+         <size>
+          <width>100</width>
+          <height>30</height>
+         </size>
         </property>
-        <property name="maximum">
-         <number>1000</number>
+        <property name="font">
+         <font>
+          <pointsize>10</pointsize>
+         </font>
         </property>
-        <property name="value">
-         <number>50</number>
+        <property name="editable">
+         <bool>true</bool>
         </property>
+        <item>
+         <property name="text">
+          <string>20</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>40</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>60</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>80</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>100</string>
+         </property>
+        </item>
        </widget>
       </item>
       <item row="3" column="0">
@@ -280,8 +310,14 @@
       </widget>
      </item>
      <item>
-      <widget class="QSpinBox" name="currentPage">
+      <widget class="QLineEdit" name="currentPage">
        <property name="minimumSize">
+        <size>
+         <width>50</width>
+         <height>30</height>
+        </size>
+       </property>
+       <property name="maximumSize">
         <size>
          <width>70</width>
          <height>30</height>
@@ -295,11 +331,11 @@
        <property name="styleSheet">
         <string notr="true">padding: 2px 5px;</string>
        </property>
-       <property name="minimum">
-        <number>1</number>
+       <property name="text">
+        <string>1</string>
        </property>
-       <property name="maximum">
-        <number>999999</number>
+       <property name="alignment">
+        <set>Qt::AlignmentFlag::AlignCenter</set>
        </property>
       </widget>
      </item>

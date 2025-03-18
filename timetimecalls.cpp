@@ -28,7 +28,23 @@ TimeTimeCalls::TimeTimeCalls(QWidget *parent)
     ui->setupUi(this);
     
     // Enable sorting for the table widget
-    ui->tableWidget->setSortingEnabled(true); // Enable sorting
+    ui->tableWidget->setSortingEnabled(true);
+    
+    // Check if pageSize is available in the UI - some debug info
+    if (!ui->pageSize) {
+        qDebug() << "WARNING: pageSize combo box not found in UI!";
+    } else {
+        qDebug() << "Page size combo found with" << ui->pageSize->count() << "items";
+        
+        // Check if page size items need to be added (in case they're not in UI file)
+        if (ui->pageSize->count() == 0) {
+            ui->pageSize->addItem("20");
+            ui->pageSize->addItem("40");
+            ui->pageSize->addItem("60");
+            ui->pageSize->addItem("80");
+            ui->pageSize->addItem("100");
+        }
+    }
     
     // Initialize date/time fields
     initializeDateTimeFields();
@@ -73,6 +89,37 @@ TimeTimeCalls::TimeTimeCalls(QWidget *parent)
     // Optional: Remove complex styles to see if it resolves the dropdown issue
     // fromDateCalendar->setStyleSheet(""); // Clear any custom styles
     // toDateCalendar->setStyleSheet(""); // Clear any custom styles
+    
+    // Connect page size change event - make sure this works properly
+    connect(ui->pageSize, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [this](int index) {
+        // Handle page size change
+        if (!lastCallDetails.isEmpty()) {
+            ui->currentPage->setText("1"); // Reset to page 1
+            QJsonArray callList = lastCallDetails["List"].toArray();
+            filterCallsByChannelGroup(callList);
+            applyClientSidePagination(callList);
+        }
+    });
+    
+    // Connect editable combo box text changed event
+    connect(ui->pageSize->lineEdit(), &QLineEdit::editingFinished, this, [this]() {
+        // Get the new page size
+        bool ok = false;
+        int newSize = ui->pageSize->currentText().toInt(&ok);
+        
+        // Validate and update
+        if (ok && newSize > 0) {
+            if (!lastCallDetails.isEmpty()) {
+                ui->currentPage->setText("1"); // Reset to page 1
+                QJsonArray callList = lastCallDetails["List"].toArray();
+                filterCallsByChannelGroup(callList);
+                applyClientSidePagination(callList);
+            }
+        } else {
+            // Invalid input, reset to 50
+            ui->pageSize->setCurrentText("50");
+        }
+    });
 }
 
 TimeTimeCalls::~TimeTimeCalls()
@@ -92,9 +139,9 @@ void TimeTimeCalls::initializeDateTimeFields()
     // Set the to date to current date/time
     ui->toDateTime->setDateTime(QDateTime::currentDateTime());
     
-    // Set default values
-    ui->pageSize->setValue(50);
-    ui->currentPage->setValue(1);
+    // Set default values - ensure the page size has a proper default value
+    ui->pageSize->setCurrentIndex(2); // Select the 3rd item (60)
+    ui->currentPage->setText("1");
 }
 
 void TimeTimeCalls::loadChannelGroups()
@@ -183,7 +230,7 @@ void TimeTimeCalls::setSessionToken(const QString &token)
     initializeDateTimeFields();
     ui->phoneNumber->clear();
     ui->callTypeCombo->setCurrentIndex(0); // Reset to "All"
-    ui->currentPage->setValue(1);
+    ui->currentPage->setText("1");
     
     // Clear any previous search results
     ui->tableWidget->setRowCount(0);
@@ -214,7 +261,7 @@ void TimeTimeCalls::on_searchButton_clicked()
     }
 
     // Reset pagination to first page when searching
-    ui->currentPage->setValue(1);
+    ui->currentPage->setText("1");
     performSearch();
 }
 
@@ -354,7 +401,8 @@ void TimeTimeCalls::updateCallDetailsTable(const QJsonObject &details)
     }
     
     // Calculate starting row number based on current page and page size
-    int startingRowNumber = (currentPage - 1) * ui->pageSize->value();
+    int pageSize = ui->pageSize->currentText().toInt();
+    int startingRowNumber = (currentPage - 1) * pageSize;
     
     // Populate the table with call details
     for (int i = 0; i < callList.size(); i++) {
@@ -557,37 +605,65 @@ void TimeTimeCalls::performSearch()
 
 void TimeTimeCalls::updatePaginationControls(int totalCalls)
 {
-    int pageSize = ui->pageSize->value();
-    totalPages = (totalCalls + pageSize - 1) / pageSize;
+    // Get current page size (from combo box)
+    int pageSize = 50; // Default
+    bool ok = false;
+    QString pageSizeText = ui->pageSize->currentText();
     
-    ui->currentPage->setMaximum(totalPages);
-    ui->btnPrevPage->setEnabled(ui->currentPage->value() > 1);
-    ui->btnNextPage->setEnabled(ui->currentPage->value() < totalPages);
+    if (!pageSizeText.isEmpty()) {
+        int size = pageSizeText.toInt(&ok);
+        if (ok && size > 0) {
+            pageSize = size;
+        } else {
+            ui->pageSize->setCurrentText("50");
+        }
+    } else {
+        ui->pageSize->setCurrentText("50");
+    }
+    
+    // Calculate total pages (minimum 1 page)
+    totalPages = qMax(1, (totalCalls + pageSize - 1) / pageSize);
+    
+    // Get current page from text field
+    bool conversionOk = false;
+    int currentPageValue = ui->currentPage->text().toInt(&conversionOk);
+    
+    // Ensure current page is valid
+    if (!conversionOk || currentPageValue < 1) {
+        currentPageValue = 1;
+        ui->currentPage->setText("1");
+    } else if (currentPageValue > totalPages) {
+        currentPageValue = totalPages;
+        ui->currentPage->setText(QString::number(totalPages));
+    }
+    
+    // Update button states
+    ui->btnPrevPage->setEnabled(currentPageValue > 1);
+    ui->btnNextPage->setEnabled(currentPageValue < totalPages);
 }
 
 void TimeTimeCalls::on_btnPrevPage_clicked()
 {
-    if (ui->currentPage->value() > 1) {
-        ui->currentPage->setValue(ui->currentPage->value() - 1);
-        performSearch();
+    bool conversionOk = false;
+    int currentPageValue = ui->currentPage->text().toInt(&conversionOk);
+    
+    if (conversionOk && currentPageValue > 1) {
+        ui->currentPage->setText(QString::number(currentPageValue - 1));
+        // Handle page change
+        QJsonArray callList = lastCallDetails["List"].toArray();
+        filterCallsByChannelGroup(callList);
+        applyClientSidePagination(callList);
     }
 }
 
 void TimeTimeCalls::on_btnNextPage_clicked()
 {
-    if (ui->currentPage->value() < totalPages) {
-        ui->currentPage->setValue(ui->currentPage->value() + 1);
-        performSearch();
-    }
-}
-
-void TimeTimeCalls::on_currentPage_valueChanged(int value)
-{
-    ui->btnPrevPage->setEnabled(value > 1);
-    ui->btnNextPage->setEnabled(value < totalPages);
+    bool conversionOk = false;
+    int currentPageValue = ui->currentPage->text().toInt(&conversionOk);
     
-    // Only reapply pagination if the widget is visible and we have data
-    if (isVisible() && !lastCallDetails.isEmpty()) {
+    if (conversionOk && currentPageValue < totalPages) {
+        ui->currentPage->setText(QString::number(currentPageValue + 1));
+        // Handle page change
         QJsonArray callList = lastCallDetails["List"].toArray();
         filterCallsByChannelGroup(callList);
         applyClientSidePagination(callList);
@@ -598,6 +674,9 @@ void TimeTimeCalls::onChannelGroupChanged(int index)
 {
     // If we have stored call details, apply filtering and pagination
     if (!lastCallDetails.isEmpty()) {
+        // Reset to page 1 when changing channel groups
+        ui->currentPage->setText("1");
+        
         QJsonArray callList = lastCallDetails["List"].toArray();
         filterCallsByChannelGroup(callList);
         applyClientSidePagination(callList);
@@ -674,6 +753,10 @@ void TimeTimeCalls::onToDateSelected()
 
 void TimeTimeCalls::applyClientSidePagination(const QJsonArray &filteredList)
 {
+    // Debug output
+    qDebug() << "Applying pagination with page size:" << ui->pageSize->currentText();
+    qDebug() << "Current page:" << ui->currentPage->text();
+    
     // Clear the table
     ui->tableWidget->setRowCount(0);
     
@@ -684,11 +767,40 @@ void TimeTimeCalls::applyClientSidePagination(const QJsonArray &filteredList)
     // Update pagination controls with the filtered count
     updatePaginationControls(totalFilteredCalls);
     
+    // Get current page number from input field
+    bool conversionOk = false;
+    int currentPageValue = ui->currentPage->text().toInt(&conversionOk);
+    if (!conversionOk || currentPageValue < 1) {
+        currentPageValue = 1;
+        ui->currentPage->setText("1");
+    }
+    
+    // Get page size from combo box
+    int pageSize = 50; // Default
+    QString pageSizeText = ui->pageSize->currentText();
+    
+    if (!pageSizeText.isEmpty()) {
+        int size = pageSizeText.toInt(&conversionOk);
+        if (conversionOk && size > 0) {
+            pageSize = size;
+        } else {
+            ui->pageSize->setCurrentText("50");
+        }
+    } else {
+        ui->pageSize->setCurrentText("50");
+    }
+    
+    // Update the currentPage member variable to keep track of current page
+    currentPage = currentPageValue;
+    
     // Calculate start and end indices for the current page
-    int pageSize = ui->pageSize->value();
-    int startIndex = (ui->currentPage->value() - 1) * pageSize;
+    int startIndex = (currentPage - 1) * pageSize;
     int endIndex = qMin(startIndex + pageSize, totalFilteredCalls);
     
+    // Debug output
+    qDebug() << "Using page size:" << pageSize << "for range" << startIndex << "to" << endIndex 
+             << "of" << totalFilteredCalls << "records";
+             
     // Check if we have any data
     if (filteredList.isEmpty()) {
         // Display "No available data" message
@@ -710,10 +822,14 @@ void TimeTimeCalls::applyClientSidePagination(const QJsonArray &filteredList)
     }
     
     // Check if current page is now invalid (could happen after filtering)
-    if (startIndex >= totalFilteredCalls) {
+    if (startIndex >= totalFilteredCalls && totalFilteredCalls > 0) {
         // Adjust to the last valid page
-        ui->currentPage->setValue(qMax(1, (totalFilteredCalls + pageSize - 1) / pageSize));
-        return; // This will trigger on_currentPage_valueChanged which will call this function again
+        currentPageValue = qMax(1, (totalFilteredCalls + pageSize - 1) / pageSize);
+        ui->currentPage->setText(QString::number(currentPageValue));
+        
+        // Recalculate the indices
+        startIndex = (currentPageValue - 1) * pageSize;
+        endIndex = qMin(startIndex + pageSize, totalFilteredCalls);
     }
     
     // Populate the table with the paginated subset of filtered call details

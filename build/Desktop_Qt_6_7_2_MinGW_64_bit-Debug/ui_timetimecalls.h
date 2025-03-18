@@ -21,7 +21,6 @@
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QSpacerItem>
-#include <QtWidgets/QSpinBox>
 #include <QtWidgets/QTableWidget>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
@@ -46,14 +45,14 @@ public:
     QLabel *labelChannel;
     QComboBox *channelGroupCombo;
     QLabel *labelPageSize;
-    QSpinBox *pageSize;
+    QComboBox *pageSize;
     QPushButton *searchButton;
     QHBoxLayout *paginationLayout;
     QLabel *labelTotalCalls;
     QSpacerItem *horizontalSpacer;
     QLabel *labelPage;
     QPushButton *btnPrevPage;
-    QSpinBox *currentPage;
+    QLineEdit *currentPage;
     QPushButton *btnNextPage;
     QTableWidget *tableWidget;
 
@@ -156,21 +155,27 @@ public:
 
         gridLayout->addWidget(labelPageSize, 2, 2, 1, 1);
 
-        pageSize = new QSpinBox(searchGroup);
+        pageSize = new QComboBox(searchGroup);
+        pageSize->addItem(QString());
+        pageSize->addItem(QString());
+        pageSize->addItem(QString());
+        pageSize->addItem(QString());
+        pageSize->addItem(QString());
         pageSize->setObjectName("pageSize");
-        QSizePolicy sizePolicy1(QSizePolicy::Policy::Minimum, QSizePolicy::Policy::Fixed);
-        sizePolicy1.setHorizontalStretch(0);
-        sizePolicy1.setVerticalStretch(0);
-        sizePolicy1.setHeightForWidth(pageSize->sizePolicy().hasHeightForWidth());
-        pageSize->setSizePolicy(sizePolicy1);
-        pageSize->setMinimum(1);
-        pageSize->setMaximum(1000);
-        pageSize->setValue(50);
+        pageSize->setMinimumSize(QSize(80, 30));
+        pageSize->setMaximumSize(QSize(100, 30));
+        QFont font1;
+        font1.setPointSize(10);
+        pageSize->setFont(font1);
+        pageSize->setEditable(true);
 
         gridLayout->addWidget(pageSize, 2, 3, 1, 1);
 
         searchButton = new QPushButton(searchGroup);
         searchButton->setObjectName("searchButton");
+        QSizePolicy sizePolicy1(QSizePolicy::Policy::Minimum, QSizePolicy::Policy::Fixed);
+        sizePolicy1.setHorizontalStretch(0);
+        sizePolicy1.setVerticalStretch(0);
         sizePolicy1.setHeightForWidth(searchButton->sizePolicy().hasHeightForWidth());
         searchButton->setSizePolicy(sizePolicy1);
 
@@ -183,10 +188,10 @@ public:
         paginationLayout->setObjectName("paginationLayout");
         labelTotalCalls = new QLabel(TimeTimeCalls);
         labelTotalCalls->setObjectName("labelTotalCalls");
-        QFont font1;
-        font1.setPointSize(10);
-        font1.setBold(true);
-        labelTotalCalls->setFont(font1);
+        QFont font2;
+        font2.setPointSize(10);
+        font2.setBold(true);
+        labelTotalCalls->setFont(font2);
 
         paginationLayout->addWidget(labelTotalCalls);
 
@@ -196,7 +201,7 @@ public:
 
         labelPage = new QLabel(TimeTimeCalls);
         labelPage->setObjectName("labelPage");
-        labelPage->setFont(font1);
+        labelPage->setFont(font2);
 
         paginationLayout->addWidget(labelPage);
 
@@ -204,20 +209,18 @@ public:
         btnPrevPage->setObjectName("btnPrevPage");
         btnPrevPage->setMinimumSize(QSize(40, 30));
         btnPrevPage->setMaximumSize(QSize(40, 30));
-        btnPrevPage->setFont(font1);
+        btnPrevPage->setFont(font2);
         btnPrevPage->setStyleSheet(QString::fromUtf8("background-color: #3498db; color: white; border-radius: 4px;"));
 
         paginationLayout->addWidget(btnPrevPage);
 
-        currentPage = new QSpinBox(TimeTimeCalls);
+        currentPage = new QLineEdit(TimeTimeCalls);
         currentPage->setObjectName("currentPage");
-        currentPage->setMinimumSize(QSize(70, 30));
-        QFont font2;
-        font2.setPointSize(10);
-        currentPage->setFont(font2);
+        currentPage->setMinimumSize(QSize(50, 30));
+        currentPage->setMaximumSize(QSize(70, 30));
+        currentPage->setFont(font1);
         currentPage->setStyleSheet(QString::fromUtf8("padding: 2px 5px;"));
-        currentPage->setMinimum(1);
-        currentPage->setMaximum(999999);
+        currentPage->setAlignment(Qt::AlignmentFlag::AlignCenter);
 
         paginationLayout->addWidget(currentPage);
 
@@ -225,7 +228,7 @@ public:
         btnNextPage->setObjectName("btnNextPage");
         btnNextPage->setMinimumSize(QSize(40, 30));
         btnNextPage->setMaximumSize(QSize(40, 30));
-        btnNextPage->setFont(font1);
+        btnNextPage->setFont(font2);
         btnNextPage->setStyleSheet(QString::fromUtf8("background-color: #3498db; color: white; border-radius: 4px;"));
 
         paginationLayout->addWidget(btnNextPage);
@@ -292,10 +295,17 @@ public:
         channelGroupCombo->setItemText(0, QCoreApplication::translate("TimeTimeCalls", "All", nullptr));
 
         labelPageSize->setText(QCoreApplication::translate("TimeTimeCalls", "Page Size:", nullptr));
+        pageSize->setItemText(0, QCoreApplication::translate("TimeTimeCalls", "20", nullptr));
+        pageSize->setItemText(1, QCoreApplication::translate("TimeTimeCalls", "40", nullptr));
+        pageSize->setItemText(2, QCoreApplication::translate("TimeTimeCalls", "60", nullptr));
+        pageSize->setItemText(3, QCoreApplication::translate("TimeTimeCalls", "80", nullptr));
+        pageSize->setItemText(4, QCoreApplication::translate("TimeTimeCalls", "100", nullptr));
+
         searchButton->setText(QCoreApplication::translate("TimeTimeCalls", "Search", nullptr));
         labelTotalCalls->setText(QCoreApplication::translate("TimeTimeCalls", "Total Connected Calls: 0", nullptr));
         labelPage->setText(QCoreApplication::translate("TimeTimeCalls", "Page:", nullptr));
         btnPrevPage->setText(QCoreApplication::translate("TimeTimeCalls", "<", nullptr));
+        currentPage->setText(QCoreApplication::translate("TimeTimeCalls", "1", nullptr));
         btnNextPage->setText(QCoreApplication::translate("TimeTimeCalls", ">", nullptr));
         QTableWidgetItem *___qtablewidgetitem = tableWidget->horizontalHeaderItem(0);
         ___qtablewidgetitem->setText(QCoreApplication::translate("TimeTimeCalls", "Play", nullptr));

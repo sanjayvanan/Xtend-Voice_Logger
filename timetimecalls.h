@@ -32,7 +32,6 @@ private slots:
     void on_searchButton_clicked();
     void on_btnPrevPage_clicked();
     void on_btnNextPage_clicked();
-    void on_currentPage_valueChanged(int value);
     void handleCallDetails(const QJsonObject &details);
     void handleCallDetailsFailed(const QString &message);
     void updateCallDetailsTable(const QJsonObject &details);
