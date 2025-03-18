@@ -51,6 +51,7 @@ private:
     void initializeDateTimeFields();
     void loadChannelGroups();
     void filterCallsByChannelGroup(QJsonArray &callList);
+    void applyClientSidePagination(const QJsonArray &filteredList);
     
     Ui::TimeTimeCalls *ui;
     APIHandler *apiHandler;

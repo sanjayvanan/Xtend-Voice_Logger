@@ -220,11 +220,25 @@ void TimeTimeCalls::on_searchButton_clicked()
 
 void TimeTimeCalls::handleCallDetails(const QJsonObject &details)
 {
-    // Store the call details for filtering
+    // Store the original call details
     lastCallDetails = details;
     
-    // Update the table with the call details
-    updateCallDetailsTable(details);
+    // Get the original call list
+    QJsonArray callList = details["List"].toArray();
+    
+    // Store the original count before filtering
+    int originalTotalCalls = 0;
+    if (details.contains("TotalCount")) {
+        originalTotalCalls = details["TotalCount"].toString().toInt();
+    } else {
+        originalTotalCalls = callList.size();
+    }
+    
+    // Filter calls by channel group
+    filterCallsByChannelGroup(callList);
+    
+    // After filtering, apply client-side pagination
+    applyClientSidePagination(callList);
 }
 
 void TimeTimeCalls::filterCallsByChannelGroup(QJsonArray &callList)
@@ -513,6 +527,7 @@ void TimeTimeCalls::performSearch()
         return;
     }
 
+    // Determine the call type filter
     QString callType;
     switch(ui->callTypeCombo->currentIndex()) {
         case 1: callType = "I"; break; // Incoming
@@ -520,34 +535,24 @@ void TimeTimeCalls::performSearch()
         default: callType = ""; break; // All
     }
 
-    // Get current page (1-based for UI, 0-based for API)
-    int currentPageValue = ui->currentPage->value() - 1; // API uses 0-based indexing
-    
-    // Make sure currentPageValue is not negative
-    if (currentPageValue < 0) {
-        currentPageValue = 0;
-    }
-    
-    // Store current page for row numbering
-    currentPage = ui->currentPage->value();
-    
     try {
-        // Always fetch all data from API (without channel filtering)
+        // Use a large page size to retrieve all data at once
+        // This approach works well for reasonably sized datasets
+        const int largePageSize = 10000; // Adjust as needed for your application
+        
         apiHandler->fetchCallList(
             sessionToken,
             ui->fromDateTime->dateTime(),
             ui->toDateTime->dateTime(),
             ui->phoneNumber->text(),
             callType,
-            currentPageValue,
-            ui->pageSize->value()
+            0, // Always start from the first page
+            largePageSize // Request a large number of records
         );
     } catch (const std::exception& e) {
         qDebug() << "Exception in performSearch: " << e.what();
         QMessageBox::warning(this, "Error", "An error occurred while searching: " + QString(e.what()));
     }
-    
-    // The filtering by channel group will be done in handleCallDetails
 }
 
 void TimeTimeCalls::updatePaginationControls(int totalCalls)
@@ -581,17 +586,21 @@ void TimeTimeCalls::on_currentPage_valueChanged(int value)
     ui->btnPrevPage->setEnabled(value > 1);
     ui->btnNextPage->setEnabled(value < totalPages);
     
-    // Only perform search if the widget is visible
-    if (isVisible()) {
-        performSearch();
+    // Only reapply pagination if the widget is visible and we have data
+    if (isVisible() && !lastCallDetails.isEmpty()) {
+        QJsonArray callList = lastCallDetails["List"].toArray();
+        filterCallsByChannelGroup(callList);
+        applyClientSidePagination(callList);
     }
 }
 
 void TimeTimeCalls::onChannelGroupChanged(int index)
 {
-    // If we have stored call details, update the table with the new filter
+    // If we have stored call details, apply filtering and pagination
     if (!lastCallDetails.isEmpty()) {
-        updateCallDetailsTable(lastCallDetails);
+        QJsonArray callList = lastCallDetails["List"].toArray();
+        filterCallsByChannelGroup(callList);
+        applyClientSidePagination(callList);
     }
 }
 
@@ -661,5 +670,150 @@ void TimeTimeCalls::onToDateSelected()
     
     // Hide the calendar
     toDateCalendar->hide();
+}
+
+void TimeTimeCalls::applyClientSidePagination(const QJsonArray &filteredList)
+{
+    // Clear the table
+    ui->tableWidget->setRowCount(0);
+    
+    // Update total calls count
+    int totalFilteredCalls = filteredList.size();
+    ui->labelTotalCalls->setText("Total Connected Calls: " + QString::number(totalFilteredCalls));
+    
+    // Update pagination controls with the filtered count
+    updatePaginationControls(totalFilteredCalls);
+    
+    // Calculate start and end indices for the current page
+    int pageSize = ui->pageSize->value();
+    int startIndex = (ui->currentPage->value() - 1) * pageSize;
+    int endIndex = qMin(startIndex + pageSize, totalFilteredCalls);
+    
+    // Check if we have any data
+    if (filteredList.isEmpty()) {
+        // Display "No available data" message
+        ui->tableWidget->setRowCount(1);
+        QTableWidgetItem* noDataItem = new QTableWidgetItem("No available data");
+        noDataItem->setTextAlignment(Qt::AlignCenter);
+        
+        // Create a font for the message
+        QFont font = noDataItem->font();
+        font.setBold(true);
+        font.setPointSize(12);
+        noDataItem->setFont(font);
+        
+        // Span all columns
+        ui->tableWidget->setItem(0, 0, noDataItem);
+        ui->tableWidget->setSpan(0, 0, 1, ui->tableWidget->columnCount());
+        
+        return;
+    }
+    
+    // Check if current page is now invalid (could happen after filtering)
+    if (startIndex >= totalFilteredCalls) {
+        // Adjust to the last valid page
+        ui->currentPage->setValue(qMax(1, (totalFilteredCalls + pageSize - 1) / pageSize));
+        return; // This will trigger on_currentPage_valueChanged which will call this function again
+    }
+    
+    // Populate the table with the paginated subset of filtered call details
+    for (int i = startIndex; i < endIndex; i++) {
+        QJsonObject call = filteredList[i].toObject();
+        
+        int row = ui->tableWidget->rowCount();
+        ui->tableWidget->insertRow(row);
+        
+        // Play button - Use the correct key "CallRef-ID"
+        QPushButton *playButton = new QPushButton("Play", ui->tableWidget);
+        playButton->setProperty("callRefId", call["CallRef-ID"].toString());
+        playButton->setProperty("wavPass", call["Wav-Pass"].toString());
+        connect(playButton, &QPushButton::clicked, this, [this, playButton]() {
+            QString callRefId = playButton->property("callRefId").toString();
+            QString wavPass = playButton->property("wavPass").toString();
+            apiHandler->streamWaveFile(sessionToken, callRefId, wavPass);
+        });
+        ui->tableWidget->setCellWidget(row, 0, playButton);
+        
+        // Set other columns (same as in updateCallDetailsTable)
+        ui->tableWidget->setItem(row, 1, new QTableWidgetItem(call["Channel"].toString()));
+        
+        // Determine which ID to display
+        QString displayId;
+        if (call.contains("Called-ID") && !call["Called-ID"].toString().isEmpty()) {
+            displayId = call["Called-ID"].toString();
+        } else if (call.contains("Caller-ID") && !call["Caller-ID"].toString().isEmpty()) {
+            displayId = call["Caller-ID"].toString();
+        } else {
+            displayId = call["CallRef-ID"].toString();
+        }
+        ui->tableWidget->setItem(row, 2, new QTableWidgetItem(displayId)); // Display ID
+        
+        // Call Type (I/O to Incoming/Outgoing)
+        QString callType = call["Call-Type"].toString();
+        if (callType == "I") {
+            callType = "Incoming";
+        } else if (callType == "O") {
+            callType = "Outgoing";
+        }
+        ui->tableWidget->setItem(row, 3, new QTableWidgetItem(callType));
+        
+        // Call Status
+        QString callStatus = call["Call-Status"].toString();
+        ui->tableWidget->setItem(row, 4, new QTableWidgetItem(callStatus));
+        
+        // Format call time
+        QString callTimeStr = call["Call-Time"].toString();
+        QDateTime callTime = QDateTime::fromString(callTimeStr, "yyyyMMddhhmmss");
+        ui->tableWidget->setItem(row, 5, new QTableWidgetItem(callTime.toString("yyyy-MM-dd hh:mm:ss")));
+        
+        // Duration - Use Connect-Duration for the duration column
+        QString duration = call["Connect-Duration"].toString();
+        ui->tableWidget->setItem(row, 6, new QTableWidgetItem(duration));
+        
+        // Ring Duration
+        ui->tableWidget->setItem(row, 7, new QTableWidgetItem(call["Ring-Duration"].toString()));
+        
+        // Connect Duration
+        ui->tableWidget->setItem(row, 8, new QTableWidgetItem(call["Connect-Duration"].toString()));
+        
+        // Compression
+        ui->tableWidget->setItem(row, 9, new QTableWidgetItem(call["Compression"].toString()));
+        
+        // Channel Hardware
+        ui->tableWidget->setItem(row, 10, new QTableWidgetItem(call["Channel-Hardware"].toString()));
+        
+        // Set alignment for all items in this row
+        for (int col = 1; col < ui->tableWidget->columnCount(); col++) {
+            if (ui->tableWidget->item(row, col)) {
+                ui->tableWidget->item(row, col)->setTextAlignment(Qt::AlignCenter);
+            }
+        }
+        
+        // Set row number in the vertical header
+        ui->tableWidget->setVerticalHeaderItem(row, new QTableWidgetItem(QString::number(i + 1)));
+    }
+    
+    // Resize columns to fit content
+    ui->tableWidget->resizeColumnsToContents();
+    
+    // Set horizontal header properties for better alignment
+    ui->tableWidget->horizontalHeader()->setStretchLastSection(true);
+    ui->tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
+    
+    // Set specific column widths if needed
+    ui->tableWidget->setColumnWidth(0, 80);  // Play button
+    ui->tableWidget->setColumnWidth(1, 80);  // Channel
+    ui->tableWidget->setColumnWidth(2, 150); // Call Ref ID
+    ui->tableWidget->setColumnWidth(3, 100); // Call Type
+    ui->tableWidget->setColumnWidth(4, 100); // Call Status
+    ui->tableWidget->setColumnWidth(5, 180); // Call Time
+    ui->tableWidget->setColumnWidth(6, 80);  // Duration
+    
+    // Add alternating row colors for better readability
+    ui->tableWidget->setAlternatingRowColors(true);
+    
+    // Make sure vertical header (row numbers) is visible
+    ui->tableWidget->verticalHeader()->setVisible(true);
+    ui->tableWidget->verticalHeader()->setDefaultSectionSize(30); // Set row height
 }
 
