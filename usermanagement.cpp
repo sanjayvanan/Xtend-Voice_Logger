@@ -3,6 +3,7 @@
 #include <QCryptographicHash>
 #include <QSqlError>
 #include <QDebug>
+#include <QHBoxLayout>
 
 UserManagement::UserManagement(QWidget *parent)
     : QWidget(parent)
@@ -23,14 +24,16 @@ UserManagement::UserManagement(QWidget *parent)
     // Get references to UI elements for channel group management
     channelGroupTable = ui->channelGroupTable;
     groupNameEdit = ui->groupNameEdit;
-    channel1Check = ui->channel1Check;
-    channel2Check = ui->channel2Check;
-    channel3Check = ui->channel3Check;
-    channel4Check = ui->channel4Check;
     addChannelGroupButton = ui->addChannelGroupButton;
     editChannelGroupButton = ui->editChannelGroupButton;
     deleteChannelGroupButton = ui->deleteChannelGroupButton;
     clearChannelGroupButton = ui->clearChannelGroupButton;
+    
+    // Initialize channel management
+    channelsContainer = ui->channelsContainer;
+    channelsContainerLayout = qobject_cast<QVBoxLayout*>(channelsContainer->layout());
+    newChannelEdit = ui->newChannelEdit;
+    addChannelButton = ui->addChannelButton;
     
     // Get references to UI elements for user assignments
     assignmentTable = ui->assignmentTable;
@@ -39,11 +42,6 @@ UserManagement::UserManagement(QWidget *parent)
     assignButton = ui->assignButton;
     unassignButton = ui->unassignButton;
     
-    // Set up tables
-    userTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-    channelGroupTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-    assignmentTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-    
     // Set up initial button states
     editButton->setEnabled(false);
     deleteButton->setEnabled(false);
@@ -51,39 +49,27 @@ UserManagement::UserManagement(QWidget *parent)
     deleteChannelGroupButton->setEnabled(false);
     unassignButton->setEnabled(false);
     
-    // Connect signals for user management
+    // Connect signals
     connect(addButton, &QPushButton::clicked, this, &UserManagement::onAddUserClicked);
     connect(editButton, &QPushButton::clicked, this, &UserManagement::onEditUserClicked);
     connect(deleteButton, &QPushButton::clicked, this, &UserManagement::onDeleteUserClicked);
     connect(clearButton, &QPushButton::clicked, this, &UserManagement::clearForm);
     connect(userTable, &QTableWidget::cellClicked, this, &UserManagement::onTableItemClicked);
     
-    // Connect signals for channel group management
     connect(addChannelGroupButton, &QPushButton::clicked, this, &UserManagement::onAddChannelGroupClicked);
     connect(editChannelGroupButton, &QPushButton::clicked, this, &UserManagement::onEditChannelGroupClicked);
     connect(deleteChannelGroupButton, &QPushButton::clicked, this, &UserManagement::onDeleteChannelGroupClicked);
     connect(clearChannelGroupButton, &QPushButton::clicked, this, &UserManagement::clearChannelGroupForm);
     connect(channelGroupTable, &QTableWidget::cellClicked, this, &UserManagement::onChannelGroupTableItemClicked);
     
-    // Connect signals for user assignments
+    connect(addChannelButton, &QPushButton::clicked, this, &UserManagement::onAddChannelClicked);
+    
     connect(assignButton, &QPushButton::clicked, this, &UserManagement::onAssignButtonClicked);
     connect(unassignButton, &QPushButton::clicked, this, &UserManagement::onUnassignButtonClicked);
     connect(assignmentTable, &QTableWidget::cellClicked, this, &UserManagement::onAssignmentTableItemClicked);
     
-    // Connect tab widget signals to refresh data when tab changes
-    connect(ui->tabWidget, &QTabWidget::currentChanged, [this](int index) {
-        if (index == 0) {
-            refreshUserList();
-        } else if (index == 1) {
-            refreshChannelGroupList();
-        } else if (index == 2) {
-            loadUsersInCombo();
-            loadGroupsInCombo();
-            refreshAssignmentList();
-        }
-    });
-    
-    // Initial refresh
+    // Load initial data
+    loadAvailableChannels();
     refreshUserList();
     refreshChannelGroupList();
     loadUsersInCombo();
@@ -586,19 +572,19 @@ void UserManagement::onChannelGroupTableItemClicked(int row, int column)
     
     // Get channels for this group
     QString channelsStr = channelGroupTable->item(row, 1)->text();
-    QStringList channels = channelsStr.split(",");
+    QStringList selectedChannels = channelsStr.split(",");
     
-    // Reset checkboxes
-    channel1Check->setChecked(false);
-    channel2Check->setChecked(false);
-    channel3Check->setChecked(false);
-    channel4Check->setChecked(false);
+    // Reset all checkboxes
+    for (QCheckBox *checkbox : channelCheckboxes) {
+        checkbox->setChecked(false);
+    }
     
-    // Set checkboxes based on channels
-    if (channels.contains("1")) channel1Check->setChecked(true);
-    if (channels.contains("2")) channel2Check->setChecked(true);
-    if (channels.contains("3")) channel3Check->setChecked(true);
-    if (channels.contains("4")) channel4Check->setChecked(true);
+    // Set selected checkboxes
+    for (const QString &channelId : selectedChannels) {
+        if (channelCheckboxes.contains(channelId.toInt())) {
+            channelCheckboxes[channelId.toInt()]->setChecked(true);
+        }
+    }
     
     editChannelGroupButton->setEnabled(true);
     deleteChannelGroupButton->setEnabled(true);
@@ -608,12 +594,13 @@ void UserManagement::onChannelGroupTableItemClicked(int row, int column)
 void UserManagement::clearChannelGroupForm()
 {
     groupNameEdit->clear();
-    channel1Check->setChecked(false);
-    channel2Check->setChecked(false);
-    channel3Check->setChecked(false);
-    channel4Check->setChecked(false);
-    currentChannelGroupRow = -1;
     
+    // Uncheck all checkboxes
+    for (QCheckBox *checkbox : channelCheckboxes) {
+        checkbox->setChecked(false);
+    }
+    
+    currentChannelGroupRow = -1;
     editChannelGroupButton->setEnabled(false);
     deleteChannelGroupButton->setEnabled(false);
     addChannelGroupButton->setEnabled(true);
@@ -626,8 +613,15 @@ bool UserManagement::validateChannelGroupInput()
         return false;
     }
 
-    if (!channel1Check->isChecked() && !channel2Check->isChecked() && 
-        !channel3Check->isChecked() && !channel4Check->isChecked()) {
+    bool hasSelectedChannel = false;
+    for (QCheckBox *checkbox : channelCheckboxes) {
+        if (checkbox->isChecked()) {
+            hasSelectedChannel = true;
+            break;
+        }
+    }
+    
+    if (!hasSelectedChannel) {
         QMessageBox::warning(this, "Validation Error", "Please select at least one channel!");
         return false;
     }
@@ -638,10 +632,11 @@ bool UserManagement::validateChannelGroupInput()
 QStringList UserManagement::getSelectedChannels()
 {
     QStringList channels;
-    if (channel1Check->isChecked()) channels << "1";
-    if (channel2Check->isChecked()) channels << "2";
-    if (channel3Check->isChecked()) channels << "3";
-    if (channel4Check->isChecked()) channels << "4";
+    for (auto it = channelCheckboxes.begin(); it != channelCheckboxes.end(); ++it) {
+        if (it.value()->isChecked()) {
+            channels << QString::number(it.key());
+        }
+    }
     return channels;
 }
 
@@ -732,5 +727,135 @@ void UserManagement::onAssignmentTableItemClicked(int row, int column)
     int groupIndex = assignGroupCombo->findText(groupName);
     if (groupIndex >= 0) {
         assignGroupCombo->setCurrentIndex(groupIndex);
+    }
+}
+
+void UserManagement::onAddChannelClicked()
+{
+    QString channelName = newChannelEdit->text().trimmed();
+    if (channelName.isEmpty()) {
+        QMessageBox::warning(this, "Error", "Please enter a channel name!");
+        return;
+    }
+    
+    // Get next available channel ID
+    QSqlQuery maxIdQuery;
+    int nextId = 1;
+    if (maxIdQuery.exec("SELECT COALESCE(MAX(channel_id), 0) FROM channels")) {
+        if (maxIdQuery.next()) {
+            nextId = maxIdQuery.value(0).toInt() + 1;
+        }
+    }
+    
+    // Add channel to database
+    QSqlQuery insertQuery;
+    insertQuery.prepare("INSERT INTO channels (channel_id, channel_name) VALUES (?, ?)");
+    insertQuery.addBindValue(nextId);
+    insertQuery.addBindValue(channelName);
+    
+    if (insertQuery.exec()) {
+        addChannelCheckbox(nextId, channelName);
+        newChannelEdit->clear();
+        QMessageBox::information(this, "Success", "Channel added successfully!");
+    } else {
+        QMessageBox::warning(this, "Error", "Failed to add channel: " + insertQuery.lastError().text());
+    }
+}
+
+void UserManagement::onDeleteChannelClicked(int channelId)
+{
+    QMessageBox::StandardButton reply = QMessageBox::question(this, "Confirm Delete",
+        "Are you sure you want to delete this channel? This will also remove it from any channel groups.",
+        QMessageBox::Yes|QMessageBox::No);
+        
+    if (reply == QMessageBox::Yes) {
+        QSqlQuery query;
+        query.prepare("DELETE FROM channels WHERE channel_id = ?");
+        query.addBindValue(channelId);
+        
+        if (query.exec()) {
+            // Remove checkbox and delete button
+            if (channelCheckboxes.contains(channelId)) {
+                delete channelCheckboxes[channelId];
+                channelCheckboxes.remove(channelId);
+            }
+            if (channelDeleteButtons.contains(channelId)) {
+                delete channelDeleteButtons[channelId];
+                channelDeleteButtons.remove(channelId);
+            }
+            
+            // Refresh channel groups that might have contained this channel
+            refreshChannelGroupList();
+            emit channelGroupsChanged();
+        } else {
+            QMessageBox::warning(this, "Error", "Failed to delete channel: " + query.lastError().text());
+        }
+    }
+}
+
+void UserManagement::loadAvailableChannels()
+{
+    clearChannelCheckboxes();
+    
+    QSqlQuery query;
+    if (query.exec("SELECT channel_id, channel_name FROM channels ORDER BY channel_id")) {
+        while (query.next()) {
+            int channelId = query.value(0).toInt();
+            QString channelName = query.value(1).toString();
+            addChannelCheckbox(channelId, channelName);
+        }
+    } else {
+        qDebug() << "Error loading channels:" << query.lastError().text();
+    }
+}
+
+void UserManagement::addChannelCheckbox(int channelId, const QString &channelName)
+{
+    // Create container widget for checkbox and delete button
+    QWidget *container = new QWidget(channelsContainer);
+    QHBoxLayout *layout = new QHBoxLayout(container);
+    layout->setContentsMargins(0, 0, 0, 0);
+    
+    // Create checkbox
+    QCheckBox *checkbox = new QCheckBox(channelName, container);
+    layout->addWidget(checkbox);
+    
+    // Create delete button
+    QPushButton *deleteButton = new QPushButton("Delete", container);
+    deleteButton->setStyleSheet("QPushButton { background-color: #e74c3c; color: white; border: none; padding: 5px 10px; border-radius: 3px; } "
+                              "QPushButton:hover { background-color: #c0392b; }");
+    layout->addWidget(deleteButton);
+    
+    // Add spacer to push delete button to the right
+    layout->addStretch();
+    
+    // Store references
+    channelCheckboxes[channelId] = checkbox;
+    channelDeleteButtons[channelId] = deleteButton;
+    
+    // Connect delete button
+    connect(deleteButton, &QPushButton::clicked, this, [this, channelId]() {
+        onDeleteChannelClicked(channelId);
+    });
+    
+    // Add to layout
+    channelsContainerLayout->addWidget(container);
+}
+
+void UserManagement::clearChannelCheckboxes()
+{
+    // Clear all existing checkboxes and delete buttons
+    qDeleteAll(channelCheckboxes);
+    qDeleteAll(channelDeleteButtons);
+    channelCheckboxes.clear();
+    channelDeleteButtons.clear();
+    
+    // Clear the layout
+    QLayoutItem *child;
+    while ((child = channelsContainerLayout->takeAt(0)) != nullptr) {
+        if (child->widget()) {
+            delete child->widget();
+        }
+        delete child;
     }
 }

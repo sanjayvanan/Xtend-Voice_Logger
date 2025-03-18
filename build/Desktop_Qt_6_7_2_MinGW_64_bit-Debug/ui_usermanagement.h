@@ -11,7 +11,6 @@
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
-#include <QtWidgets/QCheckBox>
 #include <QtWidgets/QComboBox>
 #include <QtWidgets/QFormLayout>
 #include <QtWidgets/QGroupBox>
@@ -20,6 +19,7 @@
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QPushButton>
+#include <QtWidgets/QScrollArea>
 #include <QtWidgets/QTabWidget>
 #include <QtWidgets/QTableWidget>
 #include <QtWidgets/QVBoxLayout>
@@ -56,11 +56,15 @@ public:
     QLabel *groupNameLabel;
     QLineEdit *groupNameEdit;
     QLabel *channelsLabel;
-    QHBoxLayout *horizontalLayout;
-    QCheckBox *channel1Check;
-    QCheckBox *channel2Check;
-    QCheckBox *channel3Check;
-    QCheckBox *channel4Check;
+    QScrollArea *channelsScrollArea;
+    QWidget *channelsScrollAreaContents;
+    QVBoxLayout *channelsLayout;
+    QWidget *channelsContainer;
+    QVBoxLayout *channelsContainerLayout;
+    QGroupBox *channelManagementBox;
+    QHBoxLayout *horizontalLayout_2;
+    QLineEdit *newChannelEdit;
+    QPushButton *addChannelButton;
     QHBoxLayout *channelButtonLayout;
     QPushButton *addChannelGroupButton;
     QPushButton *editChannelGroupButton;
@@ -254,33 +258,57 @@ public:
 
         formLayout_2->setWidget(1, QFormLayout::LabelRole, channelsLabel);
 
-        horizontalLayout = new QHBoxLayout();
-        horizontalLayout->setObjectName("horizontalLayout");
-        channel1Check = new QCheckBox(channelGroupBox);
-        channel1Check->setObjectName("channel1Check");
+        channelsScrollArea = new QScrollArea(channelGroupBox);
+        channelsScrollArea->setObjectName("channelsScrollArea");
+        channelsScrollArea->setWidgetResizable(true);
+        channelsScrollAreaContents = new QWidget();
+        channelsScrollAreaContents->setObjectName("channelsScrollAreaContents");
+        channelsScrollAreaContents->setGeometry(QRect(0, 0, 627, 83));
+        channelsLayout = new QVBoxLayout(channelsScrollAreaContents);
+        channelsLayout->setObjectName("channelsLayout");
+        channelsContainer = new QWidget(channelsScrollAreaContents);
+        channelsContainer->setObjectName("channelsContainer");
+        channelsContainerLayout = new QVBoxLayout(channelsContainer);
+        channelsContainerLayout->setObjectName("channelsContainerLayout");
+        channelsContainerLayout->setContentsMargins(0, 0, 0, 0);
 
-        horizontalLayout->addWidget(channel1Check);
+        channelsLayout->addWidget(channelsContainer);
 
-        channel2Check = new QCheckBox(channelGroupBox);
-        channel2Check->setObjectName("channel2Check");
+        channelsScrollArea->setWidget(channelsScrollAreaContents);
 
-        horizontalLayout->addWidget(channel2Check);
-
-        channel3Check = new QCheckBox(channelGroupBox);
-        channel3Check->setObjectName("channel3Check");
-
-        horizontalLayout->addWidget(channel3Check);
-
-        channel4Check = new QCheckBox(channelGroupBox);
-        channel4Check->setObjectName("channel4Check");
-
-        horizontalLayout->addWidget(channel4Check);
-
-
-        formLayout_2->setLayout(1, QFormLayout::FieldRole, horizontalLayout);
+        formLayout_2->setWidget(1, QFormLayout::FieldRole, channelsScrollArea);
 
 
         verticalLayout_3->addWidget(channelGroupBox);
+
+        channelManagementBox = new QGroupBox(channelTab);
+        channelManagementBox->setObjectName("channelManagementBox");
+        horizontalLayout_2 = new QHBoxLayout(channelManagementBox);
+        horizontalLayout_2->setObjectName("horizontalLayout_2");
+        newChannelEdit = new QLineEdit(channelManagementBox);
+        newChannelEdit->setObjectName("newChannelEdit");
+
+        horizontalLayout_2->addWidget(newChannelEdit);
+
+        addChannelButton = new QPushButton(channelManagementBox);
+        addChannelButton->setObjectName("addChannelButton");
+        addChannelButton->setStyleSheet(QString::fromUtf8("\n"
+"              QPushButton {\n"
+"                  background-color: #2ecc71;\n"
+"                  color: white;\n"
+"                  border: none;\n"
+"                  padding: 5px 15px;\n"
+"                  border-radius: 4px;\n"
+"              }\n"
+"              QPushButton:hover {\n"
+"                  background-color: #27ae60;\n"
+"              }\n"
+"             "));
+
+        horizontalLayout_2->addWidget(addChannelButton);
+
+
+        verticalLayout_3->addWidget(channelManagementBox);
 
         channelButtonLayout = new QHBoxLayout();
         channelButtonLayout->setObjectName("channelButtonLayout");
@@ -459,7 +487,7 @@ public:
 
         retranslateUi(UserManagement);
 
-        tabWidget->setCurrentIndex(0);
+        tabWidget->setCurrentIndex(1);
 
 
         QMetaObject::connectSlotsByName(UserManagement);
@@ -489,10 +517,9 @@ public:
         channelGroupBox->setTitle(QCoreApplication::translate("UserManagement", "Channel Group Details", nullptr));
         groupNameLabel->setText(QCoreApplication::translate("UserManagement", "Group Name:", nullptr));
         channelsLabel->setText(QCoreApplication::translate("UserManagement", "Channels:", nullptr));
-        channel1Check->setText(QCoreApplication::translate("UserManagement", "Channel 1", nullptr));
-        channel2Check->setText(QCoreApplication::translate("UserManagement", "Channel 2", nullptr));
-        channel3Check->setText(QCoreApplication::translate("UserManagement", "Channel 3", nullptr));
-        channel4Check->setText(QCoreApplication::translate("UserManagement", "Channel 4", nullptr));
+        channelManagementBox->setTitle(QCoreApplication::translate("UserManagement", "Channel Management", nullptr));
+        newChannelEdit->setPlaceholderText(QCoreApplication::translate("UserManagement", "Enter new channel name", nullptr));
+        addChannelButton->setText(QCoreApplication::translate("UserManagement", "Add Channel", nullptr));
         addChannelGroupButton->setText(QCoreApplication::translate("UserManagement", "Add Group", nullptr));
         editChannelGroupButton->setText(QCoreApplication::translate("UserManagement", "Update Group", nullptr));
         deleteChannelGroupButton->setText(QCoreApplication::translate("UserManagement", "Delete Group", nullptr));

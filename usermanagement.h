@@ -17,6 +17,8 @@
 #include <QHeaderView>
 #include <QCheckBox>
 #include <QTabWidget>
+#include <QScrollArea>
+#include <QMap>
 
 namespace Ui {
 class UserManagement;
@@ -58,6 +60,11 @@ private slots:
     void onChannelGroupTableItemClicked(int row, int column);
     void clearChannelGroupForm();
     
+    // Channel management slots
+    void onAddChannelClicked();
+    void onDeleteChannelClicked(int channelId);
+    void loadAvailableChannels();
+    
     // User assignment slots
     void onAssignButtonClicked();
     void onUnassignButtonClicked();
@@ -83,15 +90,19 @@ private:
     // Channel group management variables
     QTableWidget *channelGroupTable;
     QLineEdit *groupNameEdit;
-    QCheckBox *channel1Check;
-    QCheckBox *channel2Check;
-    QCheckBox *channel3Check;
-    QCheckBox *channel4Check;
     QPushButton *addChannelGroupButton;
     QPushButton *editChannelGroupButton;
     QPushButton *deleteChannelGroupButton;
     QPushButton *clearChannelGroupButton;
     int currentChannelGroupRow = -1;
+    
+    // Channel management variables
+    QLineEdit *newChannelEdit;
+    QPushButton *addChannelButton;
+    QWidget *channelsContainer;
+    QVBoxLayout *channelsContainerLayout;
+    QMap<int, QCheckBox*> channelCheckboxes;
+    QMap<int, QPushButton*> channelDeleteButtons;
     
     // User assignment variables
     QTableWidget *assignmentTable;
@@ -108,8 +119,10 @@ private:
     void updateButtonStates();
     void updateChannelGroupButtonStates();
     
-    // Helper method to get selected channels
+    // Helper methods for channel management
+    void addChannelCheckbox(int channelId, const QString &channelName);
     QStringList getSelectedChannels();
+    void clearChannelCheckboxes();
 };
 
 #endif // USERMANAGEMENT_H

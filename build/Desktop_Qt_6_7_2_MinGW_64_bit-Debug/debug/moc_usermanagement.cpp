@@ -52,6 +52,10 @@ constexpr auto qt_meta_stringdata_CLASSUserManagementENDCLASS = QtMocHelpers::st
     "onDeleteChannelGroupClicked",
     "onChannelGroupTableItemClicked",
     "clearChannelGroupForm",
+    "onAddChannelClicked",
+    "onDeleteChannelClicked",
+    "channelId",
+    "loadAvailableChannels",
     "onAssignButtonClicked",
     "onUnassignButtonClicked",
     "onAssignmentTableItemClicked",
@@ -69,7 +73,7 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSUserManagementENDCLASS[] = {
       12,       // revision
        0,       // classname
        0,    0, // classinfo
-      17,   14, // methods
+      20,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -77,25 +81,28 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSUserManagementENDCLASS[] = {
        2,       // signalCount
 
  // signals: name, argc, parameters, tag, flags, initial metatype offsets
-       1,    0,  116,    2, 0x06,    1 /* Public */,
-       3,    0,  117,    2, 0x06,    2 /* Public */,
+       1,    0,  134,    2, 0x06,    1 /* Public */,
+       3,    0,  135,    2, 0x06,    2 /* Public */,
 
  // slots: name, argc, parameters, tag, flags, initial metatype offsets
-       4,    0,  118,    2, 0x08,    3 /* Private */,
-       5,    0,  119,    2, 0x08,    4 /* Private */,
-       6,    0,  120,    2, 0x08,    5 /* Private */,
-       7,    2,  121,    2, 0x08,    6 /* Private */,
-      10,    0,  126,    2, 0x08,    9 /* Private */,
-      11,    0,  127,    2, 0x08,   10 /* Private */,
-      12,    0,  128,    2, 0x08,   11 /* Private */,
-      13,    0,  129,    2, 0x08,   12 /* Private */,
-      14,    2,  130,    2, 0x08,   13 /* Private */,
-      15,    0,  135,    2, 0x08,   16 /* Private */,
-      16,    0,  136,    2, 0x08,   17 /* Private */,
-      17,    0,  137,    2, 0x08,   18 /* Private */,
-      18,    2,  138,    2, 0x08,   19 /* Private */,
-      19,    0,  143,    2, 0x08,   22 /* Private */,
-      20,    0,  144,    2, 0x08,   23 /* Private */,
+       4,    0,  136,    2, 0x08,    3 /* Private */,
+       5,    0,  137,    2, 0x08,    4 /* Private */,
+       6,    0,  138,    2, 0x08,    5 /* Private */,
+       7,    2,  139,    2, 0x08,    6 /* Private */,
+      10,    0,  144,    2, 0x08,    9 /* Private */,
+      11,    0,  145,    2, 0x08,   10 /* Private */,
+      12,    0,  146,    2, 0x08,   11 /* Private */,
+      13,    0,  147,    2, 0x08,   12 /* Private */,
+      14,    2,  148,    2, 0x08,   13 /* Private */,
+      15,    0,  153,    2, 0x08,   16 /* Private */,
+      16,    0,  154,    2, 0x08,   17 /* Private */,
+      17,    1,  155,    2, 0x08,   18 /* Private */,
+      19,    0,  158,    2, 0x08,   20 /* Private */,
+      20,    0,  159,    2, 0x08,   21 /* Private */,
+      21,    0,  160,    2, 0x08,   22 /* Private */,
+      22,    2,  161,    2, 0x08,   23 /* Private */,
+      23,    0,  166,    2, 0x08,   26 /* Private */,
+      24,    0,  167,    2, 0x08,   27 /* Private */,
 
  // signals: parameters
     QMetaType::Void,
@@ -111,6 +118,9 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSUserManagementENDCLASS[] = {
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void, QMetaType::Int, QMetaType::Int,    8,    9,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void, QMetaType::Int,   18,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
@@ -158,6 +168,13 @@ Q_CONSTINIT const QMetaObject UserManagement::staticMetaObject = { {
         QtPrivate::TypeAndForceComplete<int, std::false_type>,
         // method 'clearChannelGroupForm'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        // method 'onAddChannelClicked'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        // method 'onDeleteChannelClicked'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        QtPrivate::TypeAndForceComplete<int, std::false_type>,
+        // method 'loadAvailableChannels'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
         // method 'onAssignButtonClicked'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         // method 'onUnassignButtonClicked'
@@ -192,11 +209,14 @@ void UserManagement::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _
         case 9: _t->onDeleteChannelGroupClicked(); break;
         case 10: _t->onChannelGroupTableItemClicked((*reinterpret_cast< std::add_pointer_t<int>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[2]))); break;
         case 11: _t->clearChannelGroupForm(); break;
-        case 12: _t->onAssignButtonClicked(); break;
-        case 13: _t->onUnassignButtonClicked(); break;
-        case 14: _t->onAssignmentTableItemClicked((*reinterpret_cast< std::add_pointer_t<int>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[2]))); break;
-        case 15: _t->loadUsersInCombo(); break;
-        case 16: _t->loadGroupsInCombo(); break;
+        case 12: _t->onAddChannelClicked(); break;
+        case 13: _t->onDeleteChannelClicked((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
+        case 14: _t->loadAvailableChannels(); break;
+        case 15: _t->onAssignButtonClicked(); break;
+        case 16: _t->onUnassignButtonClicked(); break;
+        case 17: _t->onAssignmentTableItemClicked((*reinterpret_cast< std::add_pointer_t<int>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[2]))); break;
+        case 18: _t->loadUsersInCombo(); break;
+        case 19: _t->loadGroupsInCombo(); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -237,13 +257,13 @@ int UserManagement::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 17)
+        if (_id < 20)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 17;
+        _id -= 20;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 17)
+        if (_id < 20)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 17;
+        _id -= 20;
     }
     return _id;
 }

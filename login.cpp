@@ -88,6 +88,11 @@ void login::createTablesIfNotExist()
         query.exec("INSERT INTO channel_groups (group_name, channels) VALUES ('Channel 3', '3')");
         query.exec("INSERT INTO channel_groups (group_name, channels) VALUES ('Channel 4', '4')");
     }
+
+    // Add channels table
+    query.exec("CREATE TABLE IF NOT EXISTS channels ("
+               "channel_id INTEGER PRIMARY KEY, "
+               "channel_name TEXT NOT NULL UNIQUE)");
 }
 
 // void login::addDefaultUserIfNotExist()
